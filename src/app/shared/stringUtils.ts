@@ -7,7 +7,7 @@ export class StringUtils {
             const re = new RegExp(textoBusqueda);
             return texto.replace(re, textoRemplazo);
         }
-        return null;
+        return texto;
     }
     static quitarTildes(me: string): string {
         let ms = this.replace(me, 'á', 'a');
