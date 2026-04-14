@@ -1,0 +1,12 @@
+
+{
+    "Promotick":{
+        "UrlService":"http://apijames.promotick.com.pe/api/",
+        "User":"api-james-promotick",
+        "Pwd":"hkIUtJmnq5sda"
+    },
+    "WSUrls":{
+        "Server":"http://localhost:53627/",
+        "Promotick":"api/promotick"
+    }
+}
