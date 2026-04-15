@@ -5,8 +5,8 @@
   align-items: center;
 
   // fondo moderno
-  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-              url('/bg2.jpg') no-repeat center center;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('/bg2.jpg') no-repeat center center;
   background-size: cover;
 }
 
@@ -16,13 +16,15 @@
   border-radius: 20px;
 
   backdrop-filter: blur(12px);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 1);
 
-  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
 
   h2 {
     text-align: center;
     margin-bottom: 0.5rem;
+    font-weight: 500;
+    padding-bottom: 20px;
   }
 
   .subtitle {
@@ -35,14 +37,4 @@
 .full-width {
   width: 100%;
   margin-bottom: 1rem;
-}
-
-.links {
-  margin-top: 1rem;
-  text-align: center;
-
-  a {
-    color: #1976d2;
-    text-decoration: none;
-  }
 }

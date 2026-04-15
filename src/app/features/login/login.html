@@ -1,42 +1,44 @@
 <div class="login-container">
   <mat-card class="login-card">
 
-    <h2>Login</h2>
+    <h2>{{ enviroment.empresaNombre }} ! Login</h2>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
 
       <!-- Email -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Usuario</mat-label>
-        <input matInput formControlName="email" placeholder="Ingresa tu usuario">
+        <input matInput formControlName="username" placeholder="Ingresa tu usuario">
         <mat-icon matPrefix>person</mat-icon>
+        @if (form.get('username')?.hasError('required') && form.get('username')?.touched) {
+        <mat-error>El usuario es requerido</mat-error>
+        }
       </mat-form-field>
 
       <!-- Password -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Contraseña</mat-label>
-        <input matInput
-               [type]="hide() ? 'password' : 'text'"
-               formControlName="password"
-               placeholder="Ingresa tu contraseña">
+        <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password"
+          placeholder="Ingresa tu contraseña">
 
         <mat-icon matPrefix>lock</mat-icon>
 
         <button mat-icon-button matSuffix type="button" (click)="togglePassword()">
           <mat-icon>{{ hide() ? 'visibility' : 'visibility_off' }}</mat-icon>
         </button>
+        @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
+        <mat-error>La contraseña es requerida</mat-error>
+        }
       </mat-form-field>
 
       <!-- Checkbox -->
-      <mat-checkbox>Recordar</mat-checkbox>
+      <!-- <mat-checkbox>Recordar</mat-checkbox> -->
 
       <!-- Button -->
-      <button mat-raised-button color="primary" class="full-width">
-        Ingresar
-      </button>
+      <app-button-loader [isLoading]="isLoading()" text="Ingresar" icon="login" color="primary"
+        waitingText="Espere un momento...">
+      </app-button-loader>
 
     </form>
-
-
   </mat-card>
 </div>

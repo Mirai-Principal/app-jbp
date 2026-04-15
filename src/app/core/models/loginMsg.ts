@@ -1,5 +1,8 @@
-import { FormControl } from "@angular/forms";
 
+export interface LoginMsg {
+    User: string;
+    Pwd: string;
+}
 export interface RespAuthMsg {
     IdUsuario: number;
     Nombre: string;
@@ -7,9 +10,4 @@ export interface RespAuthMsg {
     correo: string;
     UserName: string;
     GruposDirectorioActivo: string[];
-}
-
-export interface LoginData {
-  username: FormControl<string | null>;
-  password: FormControl<string | null>;
 }
