@@ -9,5 +9,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('jbpFrontEnd');
+  protected readonly title = signal(' App JBP');
 }

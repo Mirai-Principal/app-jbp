@@ -1,17 +1,48 @@
-.mat-button{
-  color : #fff;
-  background-color: rgba(10, 64, 116, 0.96);
-  font-size: 16px;
-}
-mat-card{
-    background-color: rgba($color: #fff, $alpha: 0.7)
-}
 .login-container {
-    width: 100%;
-}
-@media screen and (min-width: 500px){
-    .login-container {
-        width: 500px;
-    }
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  // fondo moderno
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+              url('/bg2.jpg') no-repeat center center;
+  background-size: cover;
 }
 
+.login-card {
+  width: 400px;
+  padding: 2rem;
+  border-radius: 20px;
+
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.9);
+
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+
+  h2 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: gray;
+  }
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.links {
+  margin-top: 1rem;
+  text-align: center;
+
+  a {
+    color: #1976d2;
+    text-decoration: none;
+  }
+}
