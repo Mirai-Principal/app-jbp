@@ -1,80 +1,63 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, map } from 'rxjs';
+import { Observable, BehaviorSubject, map, tap } from 'rxjs';
 
-import { RespAuthMsg } from '../../features/login/models/login.model';
 import { GetUrlEndpointService } from '../services/get-url-endpoint.service';
+import { LoginMsg, RespAuthMsg } from '../models/loginMsg';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private http = inject(HttpClient);
+  private currentUserSubject: BehaviorSubject<RespAuthMsg>;
+  public currentUser: Observable<any>;
 
-  // estado inicial desde localStorage
-  private currentUserSubject = new BehaviorSubject<RespAuthMsg | null>(
-    this.getUserFromStorage()
-  );
-
-  // observable público
-  currentUser$ = this.currentUserSubject.asObservable();
-
-  currentUserSignal = signal<RespAuthMsg | null>(
-    this.getUserFromStorage()
-  );
-
-  get currentUserValue(): RespAuthMsg | null {
+  constructor(
+    private http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<any>(
+      JSON.parse(localStorage.getItem('currentUser') || '{}'));
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
+  public get currentUserValue(): any {
     return this.currentUserSubject.value;
   }
 
-  login(me: any): Observable<boolean> {
-
-    const url = `${GetUrlEndpointService.getUrlFromEndPointName('user')}/login`;
-
-    return this.http.post<RespAuthMsg>(url, me).pipe(
-      map(resp => {
-
-        if (resp && resp.Nombre) {
-
-          // guardar en localStorage
-          localStorage.setItem('currentUser', JSON.stringify(resp));
-
-          // actualizar estado
-          this.currentUserSubject.next(resp);
-          this.currentUserSignal.set(resp);
-
-          return true;
-        }
-
-        return false;
-      })
-    );
-  }
-
   getModulos(): Observable<string[]> {
-
-    const url = `${GetUrlEndpointService.getUrlFromEndPointName('user')}/getModulosAcceso`;
-
-    return this.http.get<string[]>(url);
+    let url = GetUrlEndpointService.getUrlFromEndPointName('user')
+    url += '/getModulosAcceso';
+    return this.http.get<any>(url as string);
   }
 
-  getUserDetails(username: string): Observable<RespAuthMsg> {
+  login(me: LoginMsg): Observable<boolean> {
+    console.log(me);
 
-    const url = `${GetUrlEndpointService.getUrlFromEndPointName('user')}/GetUserDetails/${username}`;
-
-    return this.http.get<RespAuthMsg>(url);
+    let url: String | null = GetUrlEndpointService.getUrlFromEndPointName('user')
+    url += '/login';
+    console.log(url);
+    return this.http.post<RespAuthMsg>(url as string, me)
+      .pipe(// permite transformar el tipo de dato de retorno del observable
+        map(resp => {
+          console.log(resp);
+          if (resp && (resp as any).Nombre) {
+            localStorage.setItem('Nombre', (resp as any).Nombre);
+            localStorage.setItem('currentUser', JSON.stringify(resp));
+            // this.auth.isLoged = true;
+            this.currentUserSubject.next(resp as RespAuthMsg);
+            return true;
+          }
+          return false;
+        })
+      );
   }
-
-  logout(): void {
+  getUserDetails(username: string): Observable<any> {
+    const url = GetUrlEndpointService.getUrlFromEndPointName('user') + '/GetUserDetails/' + username;
+    return this.http.get<any>(url);
+  }
+  logout() {
+    // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
-
-    this.currentUserSubject.next(null);
-    this.currentUserSignal.set(null);
-  }
-
-  private getUserFromStorage(): RespAuthMsg | null {
-    const data = localStorage.getItem('currentUser');
-    return data ? JSON.parse(data) : null;
+    localStorage.removeItem('Nombre');
+    this.currentUserSubject.next({} as RespAuthMsg);
   }
 }

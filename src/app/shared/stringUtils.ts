@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class StringUtils {
     static replace(texto: string, textoBusqueda: string, textoRemplazo: string): string {
         if (texto && texto !== '') {
@@ -25,23 +27,23 @@ export class StringUtils {
         return ms;
     }
     static getTwoDigitNumber(me: number) {
-        if ( me < 10) {
+        if (me < 10) {
             return '0' + me;
         }
         return me;
     }
-    static getCurrentDate(){
-        const year=new Date().getFullYear();
-        const month= StringUtils.getTwoDigitNumber(new Date().getMonth()+1);
-        const day=StringUtils.getTwoDigitNumber(new Date().getDate());
-        const time=new Date().toLocaleTimeString();
-        return year+'-'+month+'-'+day+' '+time;
+    static getCurrentDate() {
+        const year = new Date().getFullYear();
+        const month = StringUtils.getTwoDigitNumber(new Date().getMonth() + 1);
+        const day = StringUtils.getTwoDigitNumber(new Date().getDate());
+        const time = new Date().toLocaleTimeString();
+        return year + '-' + month + '-' + day + ' ' + time;
     }
-    static getUnicKey(){
+    static getUnicKey() {
         return '_' + Math.random().toString(36).substr(2, 9);
     }
-    static contains(texto: string, textoBusqueda: string){
-        if(texto && texto.indexOf(textoBusqueda)==0)
+    static contains(texto: string, textoBusqueda: string) {
+        if (texto && texto.indexOf(textoBusqueda) == 0)
             return true;
         return false;
     }

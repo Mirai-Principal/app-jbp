@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { LoginData } from './models/login.model';
 import { UserService } from '../../core/services/user.service';
 import { ButtonLoader } from '../../shared/button-loader/button-loader';
 import { Router } from '@angular/router';
@@ -40,14 +39,18 @@ export class Login {
 
   hide = signal(true);
 
-  form: FormGroup<LoginData>;
+  form: FormGroup;
 
-  constructor(private fb: FormBuilder, private userService: UserService, private router: Router, private dialog: MatDialog) {
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private router: Router,
+    private dialog: MatDialog) {
 
     // validar el formulario
-    this.form = this.fb.group<LoginData>({
-      username: this.fb.control('', [Validators.required]),
-      password: this.fb.control('', [Validators.required])
+    this.form = this.fb.group({
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]]
     });
   }
 
@@ -59,7 +62,8 @@ export class Login {
     if (this.form.valid) {
       // console.log(this.form.value);
       this.isLoading.set(true);
-      this.userService.login(this.form.value).subscribe({
+      const { password, username } = this.form.value;
+      this.userService.login({ pwd: password, user: username }).subscribe({
         next: (loginOk) => {
           this.isLoading.set(false);
           if (loginOk) {

@@ -1,12 +1,12 @@
 import { FormControl } from "@angular/forms";
 
 export interface RespAuthMsg {
-    IdUsuario: number;
-    Nombre: string;
-    Perfiles: string[];
-    correo: string;
-    UserName: string;
-    GruposDirectorioActivo: string[];
+  IdUsuario: number;
+  Nombre: string;
+  Perfiles: string[];
+  correo: string;
+  UserName: string;
+  GruposDirectorioActivo: string[];
 }
 
 export interface LoginData {
