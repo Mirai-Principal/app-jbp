@@ -1,0 +1,39 @@
+.main-layout {
+    display: flex;
+    min-height: 100vh;
+    transition: all 0.3s ease;
+}
+
+.content {
+    flex: 1;
+    margin-left: 260px;
+    /* Same width as expanded sidebar */
+    transition: margin-left 0.3s ease;
+}
+
+/* When sidebar is collapsed */
+.main-layout.sidebar-collapsed .content {
+    margin-left: 50px;
+    /* Same width as collapsed sidebar */
+}
+
+/* Full width content when no sidebar */
+.content-full {
+    margin-left: 0 !important;
+    padding: 0;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .content {
+        margin-left: 0;
+    }
+
+    .main-layout.sidebar-collapsed .content {
+        margin-left: 0;
+    }
+
+    .content-full {
+        padding: 0;
+    }
+}

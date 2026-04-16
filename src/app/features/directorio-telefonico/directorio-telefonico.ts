@@ -6,4 +6,4 @@ import { Component } from '@angular/core';
   templateUrl: './directorio-telefonico.html',
   styleUrl: './directorio-telefonico.scss',
 })
-export class DirectorioTelefonico {}
+export class DirectorioTelefonico { }
