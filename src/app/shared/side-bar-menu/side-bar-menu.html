@@ -1,0 +1,72 @@
+<!-- BOTÓN MOBILE -->
+<button class="menu-btn" (click)="toggleMobile()">
+    <mat-icon>menu</mat-icon>
+</button>
+
+<div class="overlay" *ngIf="isMobile() && mobileOpen()" (click)="toggleMobile()"></div>
+
+<div class="sidebar" [class.collapsed]="collapsed()" [class.mobile]="isMobile()" [class.open]="mobileOpen()">
+
+    <!-- HEADER -->
+    <div class="logo" (click)="toggleSidebar()">
+        <mat-icon>menu</mat-icon>
+        @if(!collapsed()) {
+        <span>{{ companyName }}</span>
+        }
+    </div>
+
+    @if(!collapsed()) {
+    <div class="user-info">
+        <span>Bienvenido {{ usuario }}</span>
+    </div>
+    }
+
+    <mat-nav-list>
+
+        <ng-container *ngFor="let item of menu()">
+
+            <div class="menu-item" (click)="item.children ? toggle(item) : null">
+
+                <!-- ITEM NORMAL -->
+                <a *ngIf="!item.children" [routerLink]="item.url" [class.active]="isActive(item.url)">
+                    <mat-icon>{{ item.icon }}</mat-icon>
+                    <span *ngIf="!collapsed()">{{ item.name }}</span>
+                </a>
+
+                <!-- ITEM CON SUBMENU -->
+                <div *ngIf="item.children" class="parent" [class.active]="isParentActive(item)"
+                    (click)="handleNavigation()">
+                    <mat-icon>{{ item.icon }}</mat-icon>
+                    <span *ngIf="!collapsed()">{{ item.name }}</span>
+
+                    <mat-icon *ngIf="!collapsed()" class="arrow">
+                        {{ isExpanded(item.name) ? 'expand_less' : 'expand_more' }}
+                    </mat-icon>
+                </div>
+            </div>
+
+            <!-- SUBMENU -->
+            <div class="submenu" *ngIf="!collapsed()" [class.open]="isExpanded(item.name)">
+                <a *ngFor="let sub of item.children" [routerLink]="sub.url" class="submenu-item"
+                    [class.active]="isActive(sub.url)">
+
+                    <mat-icon>{{ sub.icon }}</mat-icon>
+                    <span>{{ sub.name }}</span>
+
+                </a>
+            </div>
+
+        </ng-container>
+
+    </mat-nav-list>
+
+    <div class="sidebar-footer">
+
+        <button class="logout-btn" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span *ngIf="!collapsed()">Logout</span>
+        </button>
+
+    </div>
+
+</div>
