@@ -70,6 +70,9 @@ export class DirectorioTelefonico {
           }
         });
         console.error('Error al obtener los datos: ', error);
+      },
+      complete: () => {
+        this.isLoading.set(false);
       }
     })
   }
