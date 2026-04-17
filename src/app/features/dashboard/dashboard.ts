@@ -1,20 +1,15 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
+import { DashboardLista } from './components/dashboard-lista/dashboard-lista';
 import { Header } from "../../shared/header/header";
-import { LoaderPage } from "../../shared/loader-page/loader-page";
+import { MatCard, MatCardContent } from "@angular/material/card";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Header, LoaderPage],
+  imports: [DashboardLista, Header, MatCard, MatCardContent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
 export class Dashboard {
-  isLoading = signal(false);
 
-  constructor() {
-    this.isLoading.set(true);
-    setTimeout(() => {
-      this.isLoading.set(false);
-    }, 2000);
-  }
+
 }

@@ -1,0 +1,74 @@
+@use '../../../../shared/styles/colors' as *;
+
+.dashboard-lista-container {
+    padding: 20px;
+
+    .dashboard-header {
+        background-color: $primary;
+        color: $white;
+        padding: 15px;
+        border-radius: $border-radius;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 1.2rem;
+    }
+
+    .dashboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: $border-radius;
+        overflow: hidden;
+        box-shadow: 0 4px 12px $primary-alpha-10;
+
+        .header-row {
+            background-color: $gray-700;
+            color: $white;
+        }
+
+        .data-row {
+            &:hover {
+                background-color: $gray-100;
+                transition: $transition-fast;
+            }
+        }
+    }
+
+    .dashboard-cell {
+        padding: 12px 15px;
+        border-bottom: 1px solid $gray-300;
+
+        &:first-child {
+            border-top-left-radius: $border-radius;
+        }
+
+        &:last-child {
+            border-bottom: none;
+            border-bottom-right-radius: $border-radius;
+        }
+    }
+
+    .dashboard-link {
+        color: $primary;
+        text-decoration: none;
+        font-weight: 500;
+
+        &:hover {
+            color: $primary-dark;
+            text-decoration: underline;
+        }
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: $gray-600;
+        font-style: italic;
+    }
+}

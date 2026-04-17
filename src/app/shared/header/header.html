@@ -1,10 +1,14 @@
 <mat-toolbar [color]="color" class="header-toolbar">
     <div class="header-content">
         <div class="header-left">
-            <mat-icon *ngIf="icon" class="header-icon">{{ icon }}</mat-icon>
+            @if (icon) {
+            <mat-icon class="header-icon">{{ icon }}</mat-icon>
+            }
             <div class="header-text">
                 <h1 class="header-title">{{ title }}</h1>
-                <h2 *ngIf="subtitle" class="header-subtitle">{{ subtitle }}</h2>
+                @if (subtitle) {
+                <h2 class="header-subtitle">{{ subtitle }}</h2>
+                }
             </div>
         </div>
         <div class="header-right">

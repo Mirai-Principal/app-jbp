@@ -1,0 +1,44 @@
+@if (isLoading()) {
+<app-loader-page message="Cargando dashboards..." icon="dashboard" />
+}
+@if (dashBoards.length > 0) {
+<div class="dashboard-lista-container">
+    <div class="dashboard-header">
+        Dashboards Disponibles
+    </div>
+    <div class="dashboard-table">
+        <table>
+            <tr class="header-row">
+                <th class="dashboard-cell">Dashboard</th>
+                <th class="dashboard-cell">Módulos Permitidos</th>
+                <th class="dashboard-cell">Acciones</th>
+            </tr>
+            <tbody>
+                @for (d of dashBoards; track d) {
+                <tr class="data-row">
+                    <td class="dashboard-cell">
+                        <a href="{{d.url}}" target="_blank" class="dashboard-link">{{d.nombre}}</a>
+                    </td>
+                    <td class="dashboard-cell">{{d.modulosStr}}</td>
+                    <td class="dashboard-cell">
+                        <div class="action-buttons">
+                            <button (click)="editar(d)" mat-button color="primary" aria-label="Editar dashboard">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button (click)="borrar(d)" mat-button color="warn" aria-label="Eliminar dashboard">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+} @else {
+<div class="empty-state">
+    <mat-icon>dashboard</mat-icon>
+    <p>No hay dashboards disponibles</p>
+</div>
+}

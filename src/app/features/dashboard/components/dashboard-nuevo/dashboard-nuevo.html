@@ -1,0 +1,51 @@
+<div fxLayout="column" fxLayoutAlign="center none">
+    <table>
+        <tr>
+            <td>
+                Modulos en los que será visible el Dashboard:
+                @for (modulo of dash.modulos; track modulo) {
+                <div>
+                    <mat-checkbox [(ngModel)]="modulo.Checked">
+                        {{modulo.Name}}
+                    </mat-checkbox>
+                </div>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td width="100%">
+                <mat-form-field style="width: 100%;">
+                    <input matInput placeholder="Nombre" [(ngModel)]="dash.nombre">
+                </mat-form-field>
+            </td>
+        </tr>
+        <tr>
+            <td width="100%">
+                <mat-form-field style="width: 100%;">
+                    <input matInput placeholder="Url" [(ngModel)]="dash.url">
+                </mat-form-field>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            <button [disabled]="procesando" class="registro" mat-button (click)="registrar()">{{editing
+                                ? 'Aceptar': 'Registrar DashBoard'}}</button>
+                            @if (procesando) {
+                            <div>
+                                <mat-progress-spinner [mode]="'indeterminate'" [diameter]="30"></mat-progress-spinner>
+                            </div>
+                            }
+                            @if (editing) {
+                        <td style="padding-left: 10px;">
+                            <button class="registro" mat-button (click)="clearDash()">Cancelar</button>
+                        </td>
+                        }
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>

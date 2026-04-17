@@ -14,7 +14,8 @@ export class UserService {
   public currentUser: Observable<any>;
 
   constructor(
-    private http: HttpClient) {
+    private http: HttpClient,
+    private getUrlEndpointService: GetUrlEndpointService) {
     this.currentUserSubject = new BehaviorSubject<any>(
       JSON.parse(localStorage.getItem('currentUser') || '{}'));
     this.currentUser = this.currentUserSubject.asObservable();
@@ -24,7 +25,7 @@ export class UserService {
   }
 
   getModulos(): Observable<string[]> {
-    let url = GetUrlEndpointService.getUrlFromEndPointName('user')
+    let url = this.getUrlEndpointService.getUrlFromEndPointName('user')
     url += '/getModulosAcceso';
     return this.http.get<any>(url as string);
   }
@@ -32,7 +33,7 @@ export class UserService {
   login(me: LoginMsg): Observable<boolean> {
     console.log(me);
 
-    let url: String | null = GetUrlEndpointService.getUrlFromEndPointName('user')
+    let url: String | null = this.getUrlEndpointService.getUrlFromEndPointName('user')
     url += '/login';
     console.log(url);
     return this.http.post<RespAuthMsg>(url as string, me)
@@ -51,7 +52,7 @@ export class UserService {
       );
   }
   getUserDetails(username: string): Observable<any> {
-    const url = GetUrlEndpointService.getUrlFromEndPointName('user') + '/GetUserDetails/' + username;
+    const url = this.getUrlEndpointService.getUrlFromEndPointName('user') + '/GetUserDetails/' + username;
     return this.http.get<any>(url);
   }
   logout() {
