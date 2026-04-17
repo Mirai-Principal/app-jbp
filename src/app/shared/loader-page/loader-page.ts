@@ -12,6 +12,6 @@ import { MatIconModule } from '@angular/material/icon';
 export class LoaderPage {
   @Input() message: string = 'Cargando...';
   @Input() showLogo: boolean = true;
+  @Input() icon: string = 'loading';
   @Input() backgroundColor: string = 'rgba(255, 255, 255, 0.95)';
-  @Input() spinnerColor: string = 'primary';
 }

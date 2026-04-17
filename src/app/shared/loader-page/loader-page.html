@@ -2,13 +2,11 @@
     <div class="loader-container">
         <div class="loader-content">
             <!-- Logo or Icon -->
-            <div class="logo-section" *ngIf="showLogo">
-                <mat-icon class="logo-icon">phone_in_talk</mat-icon>
+            @if (showLogo) {
+            <div class="logo-section">
+                <mat-icon class="logo-icon">{{ icon }}</mat-icon>
             </div>
-
-            <!-- Spinner -->
-            <mat-spinner [diameter]="60" [mode]="'indeterminate'" [color]="spinnerColor" class="loading-spinner">
-            </mat-spinner>
+            }
 
             <!-- Loading Message -->
             <div class="message-section">
