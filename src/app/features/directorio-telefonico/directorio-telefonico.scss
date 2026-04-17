@@ -1,7 +1,9 @@
+@use '../../shared/styles/colors' as *;
+
 mat-card {
-    background-color: rgba($color: #fff, $alpha: 0.9);
+    background-color: rgba($color: $white, $alpha: 0.9);
     border-radius: 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px $primary-alpha-10;
     overflow: hidden;
     padding: 0;
 
@@ -31,7 +33,7 @@ mat-card {
     margin-top: 16px;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px $primary-alpha-10;
     width: 100%;
 
     // Horizontal scroll for mobile
@@ -57,16 +59,16 @@ mat-card {
         }
 
         &::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
+            background: $gray-100;
             border-radius: 3px;
         }
 
         &::-webkit-scrollbar-thumb {
-            background: rgba(103, 126, 234, 0.5);
+            background: $primary-alpha-60;
             border-radius: 3px;
 
             &:hover {
-                background: rgba(103, 126, 234, 0.7);
+                background: $primary-alpha-80;
             }
         }
     }
@@ -90,7 +92,7 @@ mat-card {
 
     // Header styling
     .header-row {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: $gradient-soft;
 
         .table-header {
             padding: 16px 12px;
@@ -156,12 +158,12 @@ mat-card {
     // Data row styling
     .data-row {
         transition: all 0.2s ease-in-out;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        border-bottom: 1px solid $gray-200;
 
         &:hover {
-            background-color: rgba(103, 126, 234, 0.04);
+            background-color: $primary-alpha-10;
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(103, 126, 234, 0.1);
+            box-shadow: 0 2px 8px $primary-alpha-20;
         }
 
         .table-cell {
@@ -175,17 +177,17 @@ mat-card {
 
                 .primary-text {
                     font-weight: 500;
-                    color: #2c3e50;
+                    color: $gray-800;
                     font-size: 14px;
                 }
 
                 .secondary-text {
-                    color: #5a6c7d;
+                    color: $gray-600;
                     font-size: 13px;
                 }
 
                 .extension-badge {
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: $gradient-primary;
                     color: white;
                     padding: 4px 10px;
                     border-radius: 20px;
@@ -194,18 +196,18 @@ mat-card {
                     display: inline-block;
                     min-width: 60px;
                     text-align: center;
-                    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+                    box-shadow: 0 2px 4px $primary-alpha-30;
                 }
 
                 .plant-indicator {
-                    background: rgba(76, 175, 80, 0.1);
-                    color: #4caf50;
+                    background: $primary-100;
+                    color: $primary-700;
                     padding: 4px 8px;
-                    border-radius: 4px;
+                    border-radius: $border-radius;
                     font-size: 12px;
                     font-weight: 500;
                     display: inline-block;
-                    border: 1px solid rgba(76, 175, 80, 0.2);
+                    border: 1px solid $primary-200;
                 }
             }
         }
@@ -213,12 +215,12 @@ mat-card {
 
     // Alternating row colors
     .data-row:nth-child(even) {
-        background-color: rgba(248, 249, 250, 0.5);
+        background-color: $gray-100;
     }
 
     // Focus states
     .data-row:focus {
-        outline: 2px solid #667eea;
+        outline: 2px solid $primary;
         outline-offset: -2px;
     }
 }
@@ -231,22 +233,14 @@ mat-card {
     .search-field {
         width: 100%;
 
-        .mat-mdc-text-field-wrapper {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid transparent;
-
-            &:hover {
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-                border-color: rgba(102, 126, 234, 0.1);
-            }
+        &.mat-focused .mat-mdc-text-field-wrapper {
+            border-color: $primary;
+            box-shadow: 0 0 0 3px $primary-alpha-20, 0 4px 12px $primary-alpha-40;
         }
 
-        &.mat-focused .mat-mdc-text-field-wrapper {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 4px 12px rgba(0, 0, 0, 0.12);
+        .mat-mdc-text-field-wrapper {
+            background-color: white;
+            box-shadow: 0 0 0 3px $primary-alpha-20, 0 4px 12px $primary-alpha-40;
         }
 
         .mat-mdc-form-field-flex {
@@ -261,7 +255,7 @@ mat-card {
         }
 
         .search-icon {
-            color: #667eea;
+            color: $primary;
             font-size: 20px;
             width: 20px;
             height: 20px;
@@ -271,7 +265,7 @@ mat-card {
         }
 
         .clear-icon {
-            color: #9ca3af;
+            color: $gray-500;
             font-size: 18px;
             width: 18px;
             height: 18px;
@@ -282,25 +276,24 @@ mat-card {
             transition: all 0.2s ease;
 
             &:hover {
-                color: #667eea;
-                background-color: rgba(102, 126, 234, 0.1);
+                color: $primary;
+                background-color: rgba($primary, 0.1);
             }
         }
 
         input.mat-mdc-input-element {
             font-size: 15px;
-            color: #2c3e50;
+            color: $gray-800;
             font-weight: 400;
             letter-spacing: 0.2px;
 
             &::placeholder {
-                color: #9ca3af;
-                font-weight: 400;
+                color: $gray-400;
             }
         }
 
         .mat-mdc-form-field-label {
-            color: #9ca3af;
+            color: $gray-500;
             font-weight: 400;
             font-size: 15px;
         }
