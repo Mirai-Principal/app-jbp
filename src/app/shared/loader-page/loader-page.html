@@ -1,0 +1,27 @@
+<div class="loader-overlay" [style.background-color]="backgroundColor">
+    <div class="loader-container">
+        <div class="loader-content">
+            <!-- Logo or Icon -->
+            <div class="logo-section" *ngIf="showLogo">
+                <mat-icon class="logo-icon">phone_in_talk</mat-icon>
+            </div>
+
+            <!-- Spinner -->
+            <mat-spinner [diameter]="60" [mode]="'indeterminate'" [color]="spinnerColor" class="loading-spinner">
+            </mat-spinner>
+
+            <!-- Loading Message -->
+            <div class="message-section">
+                <h2 class="loading-title">{{ message }}</h2>
+                <div class="loading-dots">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+
+            <!-- Additional loading text -->
+            <p class="loading-subtitle">Por favor, espera un momento...</p>
+        </div>
+    </div>
+</div>
