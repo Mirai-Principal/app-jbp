@@ -30,8 +30,11 @@ $primary-900: #400000;
 
 $primary-alpha-10: rgba(193, 14, 14, 0.1);
 $primary-alpha-20: rgba(193, 14, 14, 0.2);
+$primary-alpha-30: rgba(193, 14, 14, 0.3);
 $primary-alpha-40: rgba(193, 14, 14, 0.4);
+$primary-alpha-50: rgba(193, 14, 14, 0.5);
 $primary-alpha-60: rgba(193, 14, 14, 0.6);
+$primary-alpha-70: rgba(193, 14, 14, 0.7);
 $primary-alpha-80: rgba(193, 14, 14, 0.8);
 
 // =============================
@@ -58,8 +61,8 @@ $gray-900: #121212;
 $gradient-primary: linear-gradient(135deg, #c10e0e, #8b0000);
 
 $gradient-soft: linear-gradient(135deg,
-        rgba(193, 14, 14, 0.7),
-        rgba(193, 14, 14, 0.3));
+        $primary-alpha-70,
+        $primary-alpha-30);
 
 $gradient-dark: linear-gradient(135deg,
         #0f0f0f,
