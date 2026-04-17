@@ -3,7 +3,7 @@ import { DirectorioTelefonicoService } from './services/directorio-telefonico.se
 import { DirectorioMsg } from '../../core/models/directorioMsg';
 import { Observable } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { map, startWith, debounceTime } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 import { ArrayUtils } from '../../shared/arrayUtils';
 import { MatCardContent, MatCard } from "@angular/material/card";
 import { MatFormField, MatInputModule } from "@angular/material/input";
@@ -12,12 +12,23 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Header } from '../../shared/header/header';
 import { LoaderPage } from '../../shared/loader-page/loader-page';
-import { Alert } from '../../shared/alert/alert';
 import { MatDialog } from '@angular/material/dialog';
+import { Alert } from '../../shared/alert/alert';
 
 @Component({
   selector: 'app-directorio-telefonico',
-  imports: [CommonModule, Header, MatCardContent, MatFormField, MatInputModule, MatCard, MatTableModule, MatIconModule, ReactiveFormsModule, LoaderPage, Alert],
+  imports: [
+    CommonModule,
+    Header,
+    MatCardContent,
+    MatFormField,
+    MatInputModule,
+    MatCard,
+    MatTableModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    LoaderPage,
+  ],
   templateUrl: './directorio-telefonico.html',
   styleUrl: './directorio-telefonico.scss',
 })
@@ -37,19 +48,6 @@ export class DirectorioTelefonico {
 
   constructor(private directorioService: DirectorioTelefonicoService, private dialog: MatDialog) {
     this.cargarContactos();
-
-    // this.contactosFiltered = this.txtSearch.valueChanges.pipe(
-    //   startWith(''),
-    //   debounceTime(300),
-    //   map(value => {
-    //     const filterValue = value?.toLowerCase() || '';
-    //     return this.contactos.filter(item =>
-    //       item.CONTACTO.toLowerCase().includes(filterValue) ||
-    //       item.DEPARTAMENTO.toLowerCase().includes(filterValue) ||
-    //       item.PLANTA.toLowerCase().includes(filterValue)
-    //     );
-    //   })
-    // );
   }
 
   cargarContactos() {

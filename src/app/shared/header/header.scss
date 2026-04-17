@@ -4,7 +4,7 @@
 
     .header-content {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         width: 100%;
 
@@ -52,6 +52,8 @@
         padding: 0 16px;
 
         .header-content {
+            justify-content: flex-end;
+
             .header-left {
                 gap: 12px;
 
@@ -75,11 +77,12 @@
 
         .header-content {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: flex-end;
             gap: 8px;
 
             .header-left {
                 width: 100%;
+                justify-content: flex-end;
             }
 
             .header-right {

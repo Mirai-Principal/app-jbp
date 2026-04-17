@@ -3,7 +3,9 @@
     <mat-icon>menu</mat-icon>
 </button>
 
-<div class="overlay" *ngIf="isMobile() && mobileOpen()" (click)="toggleMobile()"></div>
+@if(isMobile() && mobileOpen()) {
+<div class="overlay" (click)="toggleMobile()"></div>
+}
 
 <div class="sidebar" [class.collapsed]="collapsed()" [class.mobile]="isMobile()" [class.open]="mobileOpen()">
 
@@ -28,34 +30,46 @@
             <div class="menu-item" (click)="item.children ? toggle(item) : null">
 
                 <!-- ITEM NORMAL -->
-                <a *ngIf="!item.children" [routerLink]="item.url" [class.active]="isActive(item.url)">
+                @if(!item.children) {
+                <a [routerLink]="item.url" [class.active]="isActive(item.url)">
                     <mat-icon>{{ item.icon }}</mat-icon>
-                    <span *ngIf="!collapsed()">{{ item.name }}</span>
+                    @if(!collapsed()) {
+                    <span>{{ item.name }}</span>
+                    }
                 </a>
+                }
 
                 <!-- ITEM CON SUBMENU -->
-                <div *ngIf="item.children" class="parent" [class.active]="isParentActive(item)"
-                    (click)="handleNavigation()">
+                @if(item.children) {
+                <div class="parent" [class.active]="isParentActive(item)" (click)="handleNavigation()">
                     <mat-icon>{{ item.icon }}</mat-icon>
-                    <span *ngIf="!collapsed()">{{ item.name }}</span>
+                    @if(!collapsed()) {
+                    <span>{{ item.name }}</span>
+                    }
 
-                    <mat-icon *ngIf="!collapsed()" class="arrow">
+                    @if(!collapsed()) {
+                    <mat-icon class="arrow">
                         {{ isExpanded(item.name) ? 'expand_less' : 'expand_more' }}
                     </mat-icon>
+                    }
                 </div>
+                }
             </div>
 
             <!-- SUBMENU -->
-            <div class="submenu" *ngIf="!collapsed()" [class.open]="isExpanded(item.name)">
-                <a *ngFor="let sub of item.children" [routerLink]="sub.url" class="submenu-item"
-                    [class.active]="isActive(sub.url)">
-
+            @if(!collapsed()) {
+            <div class="submenu" [class.open]="isExpanded(item.name)">
+                @for(sub of item.children; track sub) {
+                <a [routerLink]="sub.url" class="submenu-item" [class.active]="isActive(sub.url)">
                     <mat-icon>{{ sub.icon }}</mat-icon>
+                    @if(!collapsed()) {
                     <span>{{ sub.name }}</span>
+                    }
 
                 </a>
+                }
             </div>
-
+            }
         </ng-container>
 
     </mat-nav-list>
@@ -64,7 +78,9 @@
 
         <button class="logout-btn" (click)="logout()">
             <mat-icon>logout</mat-icon>
-            <span *ngIf="!collapsed()">Logout</span>
+            @if(!collapsed()) {
+            <span>Logout</span>
+            }
         </button>
 
     </div>

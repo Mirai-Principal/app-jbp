@@ -11,17 +11,17 @@ export class SidebarMenuService {
             url: '/directorio'
         },
         {
+            name: 'Dashboard',
+            icon: 'dashboard',
+            url: '/dashboard'
+        },
+        {
             name: 'Products',
             icon: 'inventory',
             children: [
                 { name: 'List', icon: 'list', url: '/login' },
                 { name: 'Create', icon: 'add', url: '/products/create' }
             ]
-        },
-        {
-            name: 'Categories',
-            icon: 'category',
-            url: '/login'
         },
         {
             name: 'Orders',

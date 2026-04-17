@@ -1,0 +1,99 @@
+// =============================
+// COLORES CORPORATIVOS
+// =============================
+
+// =============================
+// 🎨 PALETA PRINCIPAL
+// =============================
+
+$primary: #c10e0e;
+$primary-light: #e53935;
+$primary-dark: #8b0000;
+
+// =============================
+// 🎨 VARIACIONES DEL ROJO
+// =============================
+
+$primary-100: #ffe5e5;
+$primary-200: #ffb3b3;
+$primary-300: #ff8080;
+$primary-400: #ff4d4d;
+$primary-500: #c10e0e; // base
+$primary-600: #a50c0c;
+$primary-700: #8b0000;
+$primary-800: #660000;
+$primary-900: #400000;
+
+// =============================
+// 🎨 TRANSPARENCIAS
+// =============================
+
+$primary-alpha-10: rgba(193, 14, 14, 0.1);
+$primary-alpha-20: rgba(193, 14, 14, 0.2);
+$primary-alpha-40: rgba(193, 14, 14, 0.4);
+$primary-alpha-60: rgba(193, 14, 14, 0.6);
+$primary-alpha-80: rgba(193, 14, 14, 0.8);
+
+// =============================
+// 🎨 COLORES NEUTROS
+// =============================
+
+$white: #ffffff;
+$black: #0f0f0f;
+
+$gray-100: #f5f5f5;
+$gray-200: #e0e0e0;
+$gray-300: #c2c2c2;
+$gray-400: #9e9e9e;
+$gray-500: #757575;
+$gray-600: #525252;
+$gray-700: #3a3a3a;
+$gray-800: #1f1f1f;
+$gray-900: #121212;
+
+// =============================
+// 🎨 GRADIENTES
+// =============================
+
+$gradient-primary: linear-gradient(135deg, #c10e0e, #8b0000);
+
+$gradient-soft: linear-gradient(135deg,
+        rgba(193, 14, 14, 0.7),
+        rgba(193, 14, 14, 0.3));
+
+$gradient-dark: linear-gradient(135deg,
+        #0f0f0f,
+        #2a2a2a);
+
+$gradient-light: linear-gradient(135deg,
+        #ffffff,
+        #f5f5f5);
+
+// =============================
+// 🎨 UTILIDADES
+// =============================
+
+$border-radius: 10px;
+$transition-fast: 0.2s ease;
+$transition-normal: 0.3s ease;
+
+// =============================
+// 🎨 EJEMPLO DE USO
+// =============================
+
+@mixin card-style {
+    background: $white;
+    border-radius: $border-radius;
+    box-shadow: 0 4px 12px $primary-alpha-10;
+}
+
+@mixin button-primary {
+    background: $primary;
+    color: $white;
+    border-radius: $border-radius;
+    transition: $transition-fast;
+
+    &:hover {
+        background: $primary-dark;
+    }
+}
