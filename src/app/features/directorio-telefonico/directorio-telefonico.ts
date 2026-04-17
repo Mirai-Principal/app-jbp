@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { DirectorioTelefonicoService } from './services/directorio-telefonico.service';
 import { DirectorioMsg } from '../../core/models/directorioMsg';
 import { Observable } from 'rxjs';
@@ -11,10 +11,13 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Header } from '../../shared/header/header';
+import { LoaderPage } from '../../shared/loader-page/loader-page';
+import { Alert } from '../../shared/alert/alert';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-directorio-telefonico',
-  imports: [CommonModule, Header, MatCardContent, MatFormField, MatInputModule, MatCard, MatTableModule, MatIconModule, ReactiveFormsModule],
+  imports: [CommonModule, Header, MatCardContent, MatFormField, MatInputModule, MatCard, MatTableModule, MatIconModule, ReactiveFormsModule, LoaderPage, Alert],
   templateUrl: './directorio-telefonico.html',
   styleUrl: './directorio-telefonico.scss',
 })
@@ -28,8 +31,11 @@ export class DirectorioTelefonico {
   // Sorting properties
   activeSortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
+  // Estado de carga
+  isLoading = signal(false);
 
-  constructor(private directorioService: DirectorioTelefonicoService) {
+
+  constructor(private directorioService: DirectorioTelefonicoService, private dialog: MatDialog) {
     this.cargarContactos();
 
     // this.contactosFiltered = this.txtSearch.valueChanges.pipe(
@@ -47,6 +53,8 @@ export class DirectorioTelefonico {
   }
 
   cargarContactos() {
+    this.isLoading.set(true);
+
     this.directorioService.getDirectorio().subscribe({
       next: (contactos) => {
         //console.log(contactos);
@@ -54,6 +62,15 @@ export class DirectorioTelefonico {
         this.mostrarResultadoBusqueda();
       },
       error: (error) => {
+        this.isLoading.set(false);
+
+        this.dialog.open(Alert, {
+          data: {
+            title: 'Error',
+            message: "Error al cargar el directorio",
+            type: 'error'
+          }
+        });
         console.error('Error al obtener los datos: ', error);
       }
     })
