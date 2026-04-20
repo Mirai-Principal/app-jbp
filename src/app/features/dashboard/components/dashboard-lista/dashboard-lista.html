@@ -9,9 +9,34 @@
     <div class="dashboard-table">
         <table>
             <tr class="header-row">
-                <th class="dashboard-cell">Dashboard</th>
-                <th class="dashboard-cell">Módulos Permitidos</th>
-                <th class="dashboard-cell">Acciones</th>
+                <th class="dashboard-cell clickable-header" (click)="sortByColumn('nombre')">
+                    <div class="header-cell-content">
+                        <mat-icon class="header-icon">dashboard</mat-icon>
+                        <span>Dashboard</span>
+                        <mat-icon class="sort-indicator" [class.active]="activeSortColumn === 'nombre'"
+                            [class.inactive]="activeSortColumn !== 'nombre'">
+                            {{activeSortColumn === 'nombre' ? (sortDirection === 'asc' ? 'arrow_upward' :
+                            'arrow_downward') : 'arrow_upward'}}
+                        </mat-icon>
+                    </div>
+                </th>
+                <th class="dashboard-cell clickable-header" (click)="sortByColumn('modulosStr')">
+                    <div class="header-cell-content">
+                        <mat-icon class="header-icon">apps</mat-icon>
+                        <span>Módulos Permitidos</span>
+                        <mat-icon class="sort-indicator" [class.active]="activeSortColumn === 'modulosStr'"
+                            [class.inactive]="activeSortColumn !== 'modulosStr'">
+                            {{activeSortColumn === 'modulosStr' ? (sortDirection === 'asc' ? 'arrow_upward' :
+                            'arrow_downward') : 'arrow_upward'}}
+                        </mat-icon>
+                    </div>
+                </th>
+                <th class="dashboard-cell">
+                    <div class="header-cell-content">
+                        <mat-icon class="header-icon">settings</mat-icon>
+                        <span>Acciones</span>
+                    </div>
+                </th>
             </tr>
             <tbody>
                 @for (d of dashBoards; track d) {

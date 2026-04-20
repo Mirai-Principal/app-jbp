@@ -60,17 +60,25 @@ $gray-900: #121212;
 
 $gradient-primary: linear-gradient(135deg, #c10e0e, #8b0000);
 
+$gradient-secondary: linear-gradient(135deg,
+                $primary-alpha-80,
+                $primary-alpha-30);
+
 $gradient-soft: linear-gradient(135deg,
-        $primary-alpha-70,
-        $primary-alpha-30);
+                $primary-alpha-70,
+                $primary-alpha-30);
+
+$gradient-clear: linear-gradient(135deg,
+                $white,
+                $gray-100);
 
 $gradient-dark: linear-gradient(135deg,
-        #0f0f0f,
-        #2a2a2a);
+                #0f0f0f,
+                #2a2a2a);
 
 $gradient-light: linear-gradient(135deg,
-        #ffffff,
-        #f5f5f5);
+                #ffffff,
+                #f5f5f5);
 
 // =============================
 // 🎨 UTILIDADES
@@ -85,18 +93,18 @@ $transition-normal: 0.3s ease;
 // =============================
 
 @mixin card-style {
-    background: $white;
-    border-radius: $border-radius;
-    box-shadow: 0 4px 12px $primary-alpha-10;
+        background: $white;
+        border-radius: $border-radius;
+        box-shadow: 0 4px 12px $primary-alpha-10;
 }
 
 @mixin button-primary {
-    background: $primary;
-    color: $white;
-    border-radius: $border-radius;
-    transition: $transition-fast;
+        background: $primary;
+        color: $white;
+        border-radius: $border-radius;
+        transition: $transition-fast;
 
-    &:hover {
-        background: $primary-dark;
-    }
+        &:hover {
+                background: $primary-dark;
+        }
 }

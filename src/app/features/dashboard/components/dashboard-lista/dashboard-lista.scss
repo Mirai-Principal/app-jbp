@@ -4,7 +4,7 @@
     padding: 20px;
 
     .dashboard-header {
-        background-color: $primary;
+        background-color: $primary-light;
         color: $white;
         padding: 15px;
         border-radius: $border-radius;
@@ -22,13 +22,16 @@
         box-shadow: 0 4px 12px $primary-alpha-10;
 
         .header-row {
-            background-color: $gray-700;
             color: $white;
+
+            .dashboard-cell {
+                background: $gradient-secondary;
+            }
         }
 
         .data-row {
             &:hover {
-                background-color: $gray-100;
+                background-color: $gray-200;
                 transition: $transition-fast;
             }
         }
@@ -44,7 +47,7 @@
 
         &:last-child {
             border-bottom: none;
-            border-bottom-right-radius: $border-radius;
+            border-top-right-radius: $border-radius;
         }
     }
 
@@ -52,10 +55,12 @@
         color: $primary;
         text-decoration: none;
         font-weight: 500;
+        padding: 10px;
+        margin-right: 40px;
 
         &:hover {
             color: $primary-dark;
-            text-decoration: underline;
+            font-size: 1.01em;
         }
     }
 
@@ -70,5 +75,47 @@
         padding: 40px 20px;
         color: $gray-600;
         font-style: italic;
+    }
+
+    .clickable-header {
+        cursor: pointer;
+        user-select: none;
+        transition: $transition-fast;
+
+        &:hover {
+            background-color: $gray-600;
+        }
+
+        .header-cell-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+
+            .header-icon {
+                font-size: 18px;
+                color: $white;
+            }
+
+            span {
+                flex: 1;
+                font-weight: 500;
+            }
+
+            .sort-indicator {
+                font-size: 16px;
+                transition: $transition-fast;
+
+                &.active {
+                    color: $primary-500;
+                    opacity: 1;
+                }
+
+                &.inactive {
+                    color: $gray-900;
+                    opacity: 0.5;
+                }
+            }
+        }
     }
 }

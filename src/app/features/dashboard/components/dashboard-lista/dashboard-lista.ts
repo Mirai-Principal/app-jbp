@@ -20,6 +20,10 @@ export class DashboardLista {
   modulosEmpty: any[] = [];
   editing: boolean = false;
 
+  // Sorting properties
+  activeSortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
   constructor(private dashboardService: DashboardService, private dialog: MatDialog) {
     this.cargarDashboards();
   }
@@ -39,6 +43,46 @@ export class DashboardLista {
       this.isLoading.set(false);
     }
     );
+  }
+
+  sortByColumn(column: string): void {
+    // If clicking the same column, toggle direction
+    if (this.activeSortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // If clicking different column, set to ascending
+      this.activeSortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    // Apply sorting
+    this.dashBoards.sort((a: any, b: any) => {
+      let aValue: any;
+      let bValue: any;
+
+      // Get values based on column
+      switch (this.activeSortColumn) {
+        case 'nombre':
+          aValue = a.nombre?.toLowerCase() || '';
+          bValue = b.nombre?.toLowerCase() || '';
+          break;
+        case 'modulosStr':
+          aValue = a.modulosStr?.toLowerCase() || '';
+          bValue = b.modulosStr?.toLowerCase() || '';
+          break;
+        default:
+          return 0;
+      }
+
+      // Compare values
+      if (aValue < bValue) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
   }
 
 
