@@ -1,0 +1,81 @@
+<app-header title="Entregas Urbano" icon="local_shipping"></app-header>
+
+<mat-card>
+    <mat-card-content>
+        <div [formGroup]="form" fxLayout="column">
+            <mat-form-field appearance="fill">
+                <mat-label>Fecha Desde</mat-label>
+                <input matInput [matDatepicker]="fechaDesde" formControlName="fechaDesde">
+                <mat-datepicker-toggle matSuffix [for]="fechaDesde"></mat-datepicker-toggle>
+                <mat-datepicker #fechaDesde></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Fecha Hasta</mat-label>
+                <input matInput [matDatepicker]="fechaHasta" formControlName="fechaHasta">
+                <mat-datepicker-toggle matSuffix [for]="fechaHasta"></mat-datepicker-toggle>
+                <mat-datepicker #fechaHasta></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Bodega</mat-label>
+                <mat-select formControlName="bodega">
+                    @for (bod of bodegas; track bod) {
+                    <mat-option [value]="bod">
+                        {{bod}}
+                    </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </mat-card-content>
+    <div fxLayoutAlign="center none">
+        <button [disabled]="procesando()" mat-button (click)="getEntregas()">Consultar Entregas</button>
+        @if (procesando()) {
+        <div>
+            <mat-progress-spinner [mode]="'indeterminate'" [diameter]="30"></mat-progress-spinner>
+        </div>
+        }
+    </div>
+    <mat-card-actions fxLayout="row" fxLayoutAlign="center center">
+
+    </mat-card-actions>
+    @if (entregas) {
+    <div>
+        Exportar a:<br>
+        <button mat-button (click)="export('excel')">Excel</button>
+        <button mat-button (click)="export('csv')">Csv</button>
+    </div>
+    }
+    <div>
+        <mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="Selected">
+                <mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox (change)="selectAll($event.checked)">Exportar todo?</mat-checkbox>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <mat-checkbox [(ngModel)]="element.Selected"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="NumFactura">
+                <mat-header-cell *matHeaderCellDef>Codigo Seguimiento/ NUMERO DE FACTURA</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.NumFactura}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Fecha">
+                <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.Fecha}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Cedula">
+                <mat-header-cell *matHeaderCellDef>Cedula</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.Cedula}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Cliente">
+                <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.Cliente}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+
+</mat-card>

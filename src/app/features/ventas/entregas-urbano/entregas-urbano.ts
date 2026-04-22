@@ -1,0 +1,178 @@
+import { Component, signal, ViewChild } from '@angular/core';
+import { Header } from "../../../shared/header/header";
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, NgModel } from '@angular/forms';
+import { MatFormField, MatInputModule } from '@angular/material/input';
+import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatOption } from "@angular/material/core";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { MatHeaderCell, MatRow, MatHeaderRow, MatTable, MatCellDef, MatHeaderCellDef, MatHeaderRowDef, MatRowDef } from "@angular/material/table";
+import { MatCell } from "@angular/material/table";
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatCheckbox } from "@angular/material/checkbox";
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { EntregaService } from './services/entrega.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { ElementTabla } from './models/entregas-urbano.models';
+import { MatTableModule } from '@angular/material/table';
+import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
+
+@Component({
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatInputModule,
+    FormsModule,
+    MatCardContent,
+    MatCard,
+    MatButtonModule,
+    MatCardActions,
+    Header,
+    MatSelectModule,
+    MatOption,
+    MatProgressSpinner,
+    MatHeaderCell,
+    MatCell,
+    MatProgressSpinner,
+    MatCell,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckbox,
+    MatRow,
+    MatHeaderRow,
+    MatPaginator,
+    MatTable,
+    MatCellDef,
+    MatHeaderCellDef,
+    MatHeaderRowDef,
+    MatRowDef,
+    MatTableModule
+  ],
+  templateUrl: './entregas-urbano.html',
+  styleUrl: './entregas-urbano.scss',
+})
+export class EntregasUrbano {
+
+  form: FormGroup;
+  procesando = signal(false);
+
+  protected readonly bodegas: string[] = ['PT1', 'PT2', 'PICK2'];
+  entregas: any[] = [];
+
+  columnsConfig = [
+    { key: 'NumFactura', label: 'Codigo Seguimiento/ NUMERO DE FACTURA' },
+    { key: 'Fecha', label: 'Fecha' },
+    { key: 'Cedula', label: 'Cedula' },
+    { key: 'Cliente', label: 'Cliente' },
+  ];
+
+  displayedColumns = ['Selected', ...this.columnsConfig.map(c => c.key)];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource: MatTableDataSource<ElementTabla>;
+
+
+  constructor(private fb: FormBuilder, private entregaService: EntregaService) {
+
+    this.dataSource = new MatTableDataSource<ElementTabla>([]);
+
+    this.form = this.fb.group({
+      fechaDesde: [new Date(), Validators.required],
+      fechaHasta: [new Date(), Validators.required],
+      bodega: ['', Validators.required],
+    });
+  }
+
+  getEntregas() {
+    if (!this.form.valid)
+      return;
+    this.procesando.set(true);
+    this.entregaService.getEntregasUrbano(this.form.value).subscribe({
+      next: (entregas) => {
+        this.procesando.set(false);
+        this.entregas = entregas;
+        this.dataSource.data = entregas;
+        this.dataSource.paginator = this.paginator;
+      },
+      error: (error) => {
+        this.procesando.set(false);
+        console.error('Error al obtener entregas:', error);
+        Swal.fire({
+          text: 'Error al obtener entregas',
+          icon: 'error',
+        });
+      }
+    });
+  }
+
+  setDataSource(source: ElementTabla[]) {
+    this.dataSource = new MatTableDataSource<ElementTabla>(source);
+    this.dataSource.paginator = this.paginator;
+  }
+  selectAll(checked: boolean) {
+    this.entregas.forEach(entrega => entrega.Selected = checked);
+  }
+
+  export(type: 'excel' | 'csv') {
+    //filtra solo seleccionados
+    const selected = this.entregas.filter(e => e.Selected);
+
+    if (selected.length === 0) {
+      Swal.fire({
+        text: 'Debe seleccionar al menos 1 registro a exportar!!',
+        icon: 'warning',
+      });
+      return;
+    }
+
+    // Transformar data según columnas visibles
+    const data = selected.map(row => {
+      const newRow: any = {};
+
+      this.columnsConfig.forEach(col => {
+        newRow[col.label] = row[col.key];
+      });
+
+      return newRow;
+    });
+
+    if (type === 'excel') this.exportToExcel(data);
+    if (type === 'csv') this.exportToCSV(data);
+  }
+
+  exportToExcel(data: any[]) {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Entregas');
+
+    const buffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array'
+    });
+
+    const blob = new Blob([buffer], {
+      type: 'application/octet-stream'
+    });
+
+    saveAs(blob, 'EntregasUrbano.xlsx');
+  }
+
+  exportToCSV(data: any[]) {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const csv = XLSX.utils.sheet_to_csv(worksheet);
+
+    const blob = new Blob(["\uFEFF" + csv], {
+      type: 'text/csv;charset=utf-8;'
+    });
+
+    saveAs(blob, 'EntregasUrbano.csv');
+  }
+
+}

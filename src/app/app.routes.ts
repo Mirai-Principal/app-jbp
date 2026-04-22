@@ -6,6 +6,7 @@ import { noAuthGuard } from './core/guards/no-auth.guard';
 import { Dashboard } from './features/dashboard/dashboard';
 import { Error } from './features/error/error';
 import { UpdateNumFacturaExportacion } from './features/ventas/update-num-factura-exportacion/update-num-factura-exportacion';
+import { EntregasUrbano } from './features/ventas/entregas-urbano/entregas-urbano';
 
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
@@ -13,6 +14,7 @@ export const routes: Routes = [
     { path: 'directorio', component: DirectorioTelefonico, title: 'Directorio', canActivate: [AuthGuard] },
     { path: 'dashboard', component: Dashboard, title: 'Dashboard', canActivate: [AuthGuard] },
     { path: 'actualizar-numero-factura-exportacion', component: UpdateNumFacturaExportacion, title: 'Actualizar número de factura de exportación', canActivate: [AuthGuard] },
+    { path: 'entregas-urbano', component: EntregasUrbano, title: 'Entregas Urbano', canActivate: [AuthGuard] },
 
     // Ruta para manejar páginas no encontradas
     { path: '**', component: Error }
