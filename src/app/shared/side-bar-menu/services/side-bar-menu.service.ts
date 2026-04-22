@@ -16,11 +16,14 @@ export class SidebarMenuService {
             url: '/dashboard'
         },
         {
-            name: 'Products',
-            icon: 'inventory',
+            name: 'Ventas',
+            icon: 'point_of_sale',
             children: [
-                { name: 'List', icon: 'list', url: '/login' },
-                { name: 'Create', icon: 'add', url: '/products/create' }
+                { name: 'Actualizar Num Factura Exp', icon: 'numbers', url: '/ventas/actualizar-num-factura-exp' },
+                { name: 'Entregas Urbano', icon: 'local_shipping', url: '/ventas/entregas-urbano' },
+                { name: 'Hoja de Ruta', icon: 'route', url: '/ventas/hoja-ruta' },
+                { name: 'Participantes Puntos', icon: 'people', url: '/ventas/participantes-puntos' },
+                { name: 'Facturas historicas por cliente', icon: 'fact_check', url: '/ventas/facturas-historicas-por-cliente' }
             ]
         },
         {

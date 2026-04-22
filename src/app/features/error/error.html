@@ -1,0 +1,36 @@
+<div class="error-container">
+    <div class="error-card">
+        <div class="error-illustration">
+            <mat-icon class="error-icon">error_outline</mat-icon>
+            <div class="error-code">404</div>
+        </div>
+
+        <div class="error-content">
+            <h1 class="error-title">Página no encontrada</h1>
+            <p class="error-description">
+                La página o recurso que estás buscando no existe o ha sido movida.
+            </p>
+            <p class="error-subtitle">
+                Por favor, verifica la URL o regresa a la página principal.
+            </p>
+
+            <div class="error-actions">
+                <button mat-raised-button color="primary" routerLink="/" class="home-btn">
+                    <mat-icon>home</mat-icon>
+                    Volver al inicio
+                </button>
+
+                <button mat-button color="accent" (click)="goBack()" class="back-btn">
+                    <mat-icon>arrow_back</mat-icon>
+                    Atrás
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="error-footer">
+        <p class="footer-text">
+            Si crees que esto es un error, contacta al administrador del sistema.
+        </p>
+    </div>
+</div>
