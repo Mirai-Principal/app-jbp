@@ -19,7 +19,7 @@ export class SidebarMenuService {
             name: 'Ventas',
             icon: 'point_of_sale',
             children: [
-                { name: 'Actualizar Num Factura Exp', icon: 'numbers', url: '/ventas/actualizar-num-factura-exp' },
+                { name: 'Actualizar Num Factura Exp', icon: 'numbers', url: '/actualizar-numero-factura-exportacion' },
                 { name: 'Entregas Urbano', icon: 'local_shipping', url: '/ventas/entregas-urbano' },
                 { name: 'Hoja de Ruta', icon: 'route', url: '/ventas/hoja-ruta' },
                 { name: 'Participantes Puntos', icon: 'people', url: '/ventas/participantes-puntos' },

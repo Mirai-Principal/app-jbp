@@ -168,8 +168,12 @@ a.active,
 
 .submenu-item.active {
     background: $primary-alpha-20;
-    color: $primary;
+    color: $gray-500 !important;
     font-weight: 500;
+
+    mat-icon {
+        color: $gray-500 !important;
+    }
 }
 
 mat-nav-list {
