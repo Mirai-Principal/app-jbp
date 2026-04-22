@@ -2,6 +2,19 @@
 
 <mat-card>
     <mat-card-content>
+
+        <app-button-loader [isLoading]="false" [text]="'Agregar Dashboard'" [icon]="'add'" color="primary"
+            (click)="abrirModal()">
+        </app-button-loader>
+
         <app-dashboard-lista />
     </mat-card-content>
 </mat-card>
+
+<!-- Modal para agregar/editar dashboard -->
+<app-modal [isOpen]="isOpen()" [title]="editData() ? 'Editar Dashboard' : 'Nuevo Dashboard'"
+    [subtitle]="editData() ? 'Modifica los datos del dashboard seleccionado' : 'Completa los datos para crear un nuevo dashboard'"
+    [closeOnBackdropClick]="true" (close)="modalService.closeModal()" (backdropClick)="modalService.closeModal()">
+
+    <app-dashboard-nuevo />
+</app-modal>

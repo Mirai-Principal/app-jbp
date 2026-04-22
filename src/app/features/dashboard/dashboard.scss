@@ -1,5 +1,20 @@
+@use '../../shared/styles/colors' as *;
+
+
+mat-card {
+    border-radius: 0px;
+    background-color: $background-content;
+}
+
 mat-card-content {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+
+    app-dashboard-lista {
+        background-color: $white;
+    }
 }

@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { Alert } from '../../../../shared/alert/alert';
 import { DashboardService } from '../../services/dashboard.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { ModalService } from '../../../../shared/modal/modal.service';
 import { LoaderPage } from "../../../../shared/loader-page/loader-page";
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -24,25 +25,26 @@ export class DashboardLista {
   activeSortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  constructor(private dashboardService: DashboardService, private dialog: MatDialog) {
+  constructor(private dashboardService: DashboardService, private dialog: MatDialog, private modalService: ModalService) {
     this.cargarDashboards();
   }
 
   cargarDashboards() {
     this.isLoading.set(true);
-    this.dashboardService.getDasboards().subscribe(me => {
-      if (me.error)
-        console.log(me.error);
-      else {
-        this.dashBoards = me.data;
-        console.log(this.dashBoards);
+    this.dashboardService.getDasboards().subscribe({
+      next: me => {
+        if (me.error)
+          console.log(me.error);
+        else {
+          this.dashBoards = me.data;
+          console.log(this.dashBoards);
+        }
+        this.isLoading.set(false);
+      }, error: error => {
+        console.log(error);
+        this.isLoading.set(false);
       }
-      this.isLoading.set(false);
-    }, error => {
-      console.log(error);
-      this.isLoading.set(false);
-    }
-    );
+    });
   }
 
   sortByColumn(column: string): void {
@@ -91,29 +93,33 @@ export class DashboardLista {
     if (!confirm("Esta seguro de eliminar este dashboard?"))
       return;
     const index = this.dashBoards.findIndex(p => p.id == dash.id);
-    this.dashboardService.deleteDasboard(dash.id).subscribe(me => {
-      if (me == 'ok') {
-        this.dashBoards.splice(index, 1);
-      } else
-        this.dialog.open(Alert, {
-          data: {
+    this.dashboardService.deleteDasboard(dash.id).subscribe({
+      next: me => {
+        if (me == 'ok') {
+          this.dashBoards.splice(index, 1);
+        } else
+          Swal.fire({
             title: 'Error',
-            message: me,
-            type: 'error'
-          }
-        });
-    }, error => this.dialog.open(Alert, {
-      data: {
-        title: 'Error',
-        message: error,
-        type: 'error'
+            text: me,
+            icon: 'error'
+          });
+      }, error: error => {
+        console.log(error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Error al eliminar el dashboard',
+          icon: 'error'
+        })
       }
-    }));
+    });
     this.clearDash();
   }
+
   editar(dash: any) {
     this.editing = true;
     this.dash = dash;
+    // Abrir modal con los datos del dashboard a editar
+    this.modalService.openModal(dash);
   }
 
   clearDash() {
@@ -125,3 +131,4 @@ export class DashboardLista {
   }
 
 }
+

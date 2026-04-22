@@ -1,0 +1,184 @@
+@use '../../../../shared/styles/colors' as *;
+
+.dashboard-form-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-card {
+    border-radius: $border-radius;
+    box-shadow: 0 4px 20px $primary-alpha-20;
+    overflow: hidden;
+    transition: $transition-normal;
+
+    &:hover {
+        box-shadow: 0 8px 30px $primary-alpha-30;
+    }
+}
+
+.card-header {
+    background: $gradient-primary;
+    color: $white;
+    padding: 20px;
+    text-align: center;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.card-content {
+    padding: 0;
+}
+
+.dashboard-form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .full-width {
+        width: 100%;
+    }
+}
+
+.modules-section {
+    margin-top: 16px;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius;
+    padding: 16px;
+}
+
+.modules-label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    color: $primary;
+    margin-bottom: 8px;
+    padding: 0 12px;
+}
+
+.module-checkbox {
+    flex: 1 1 calc(33.333% - 8px);
+    min-width: 150px;
+    margin: 0;
+
+    ::ng-deep .mat-checkbox-layout {
+        margin-bottom: 8px;
+    }
+
+    ::ng-deep .mat-checkbox-inner-container {
+        font-size: 0.9rem;
+    }
+}
+
+.no-modules {
+    color: $gray-600;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+}
+
+::ng-deep .mat-form-field-appearance-outline {
+    .mat-form-field-outline {
+        border-radius: $border-radius;
+    }
+
+    .mat-form-field-flex {
+        margin-top: 0.25em;
+    }
+
+    .mat-form-field-label {
+        color: $primary;
+        font-weight: 500;
+    }
+
+    &.mat-focused {
+        .mat-form-field-outline {
+            border-color: $primary;
+            box-shadow: 0 0 0 2px $primary-alpha-30;
+        }
+    }
+
+    &.mat-form-field-invalid {
+        .mat-form-field-outline {
+            border-color: #f44336;
+        }
+    }
+}
+
+::ng-deep .mat-input-element {
+    font-size: 1rem;
+    padding: 12px 0;
+}
+
+.actions-container {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+.action-button {
+    min-width: 140px;
+    height: 48px;
+    border-radius: $border-radius;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: $transition-fast;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px $primary-alpha-20;
+    }
+
+    &:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    .button-spinner {
+        margin-right: 4px;
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .dashboard-form-container {
+        padding: 16px;
+    }
+
+    .modules-container {
+        max-height: 150px;
+    }
+
+    .action-button {
+        min-width: 120px;
+        height: 44px;
+        font-size: 0.9rem;
+    }
+
+    .actions-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 480px) {
+    .module-checkbox {
+        flex: 1 1 100%;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+    }
+}

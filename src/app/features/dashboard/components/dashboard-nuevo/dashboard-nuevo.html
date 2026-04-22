@@ -1,51 +1,60 @@
-<div fxLayout="column" fxLayoutAlign="center none">
-    <table>
-        <tr>
-            <td>
-                Modulos en los que será visible el Dashboard:
-                @for (modulo of dash.modulos; track modulo) {
-                <div>
-                    <mat-checkbox [(ngModel)]="modulo.Checked">
-                        {{modulo.Name}}
-                    </mat-checkbox>
-                </div>
-                }
-            </td>
-        </tr>
-        <tr>
-            <td width="100%">
-                <mat-form-field style="width: 100%;">
-                    <input matInput placeholder="Nombre" [(ngModel)]="dash.nombre">
-                </mat-form-field>
-            </td>
-        </tr>
-        <tr>
-            <td width="100%">
-                <mat-form-field style="width: 100%;">
-                    <input matInput placeholder="Url" [(ngModel)]="dash.url">
-                </mat-form-field>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <table>
-                    <tr>
-                        <td>
-                            <button [disabled]="procesando" class="registro" mat-button (click)="registrar()">{{editing
-                                ? 'Aceptar': 'Registrar DashBoard'}}</button>
-                            @if (procesando) {
-                            <div>
-                                <mat-progress-spinner [mode]="'indeterminate'" [diameter]="30"></mat-progress-spinner>
-                            </div>
-                            }
-                            @if (editing) {
-                        <td style="padding-left: 10px;">
-                            <button class="registro" mat-button (click)="clearDash()">Cancelar</button>
-                        </td>
+<div class="dashboard-form-container">
+    <mat-card class="form-card">
+        <mat-card-content class="card-content">
+            <form [formGroup]="formulario" class="dashboard-form">
+
+                <!-- Sección de Módulos -->
+                <div class="modules-section">
+                    <mat-label class="modules-label">Módulos Disponibles</mat-label>
+                    <div class="modules-grid">
+                        @for (modulo of dash.modulos; track $index) {
+                        <mat-checkbox [(ngModel)]="modulo.Checked" [ngModelOptions]="{standalone: true}"
+                            class="module-checkbox">
+                            <span class="checkbox-label">{{modulo.Name}}</span>
+                        </mat-checkbox>
                         }
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+
+                        @if (dash.modulos?.length === 0) {
+                        <p class="no-modules">No hay módulos disponibles</p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Campo Nombre -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Nombre del Dashboard</mat-label>
+                    <input matInput placeholder="Ej: Dashboard Principal" formControlName="nombre">
+                    <mat-icon matPrefix>dashboard</mat-icon>
+                    @if (formulario.get('nombre')?.hasError('required') && formulario.get('nombre')?.touched) {
+                    <mat-error>El nombre es requerido</mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- Campo URL -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>URL del Dashboard</mat-label>
+                    <input matInput placeholder="Ej: www.example.com/dashboard" formControlName="url">
+                    <mat-icon matPrefix>link</mat-icon>
+                    @if (formulario.get('url')?.hasError('required') && formulario.get('url')?.touched) {
+                    <mat-error>La URL es requerida</mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- Botones de Acción -->
+                <div class="actions-container">
+                    <app-button-loader [isLoading]="procesando()" [text]="editing ? 'Actualizar' : 'Registrar'"
+                        [icon]="editing ? 'edit' : 'add'" color="primary"
+                        [waitingText]="editing ? 'Actualizando...' : 'Registrando...'" (click)="registrar()">
+                    </app-button-loader>
+
+
+                    <button mat-raised-button color="warn" type="button" [disabled]="procesando()" (click)="clearDash()"
+                        class="action-button">
+                        <mat-icon>clear</mat-icon>
+                        Limpiar
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
 </div>

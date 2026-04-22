@@ -1,7 +1,7 @@
 @use '../../shared/styles/colors' as *;
 
 mat-card {
-    background-color: rgba($color: $white, $alpha: 0.9);
+    background-color: $background-content;
     border-radius: 0;
     box-shadow: 0 4px 12px $primary-alpha-10;
     overflow: hidden;

@@ -1,15 +1,30 @@
 import { Component, computed, signal } from '@angular/core';
 import { DashboardLista } from './components/dashboard-lista/dashboard-lista';
+import { DashboardNuevo } from './components/dashboard-nuevo/dashboard-nuevo';
 import { Header } from "../../shared/header/header";
-import { MatCard, MatCardContent } from "@angular/material/card";
+import { Modal } from "../../shared/modal/modal";
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { ModalService } from '../../shared/modal/modal.service';
+import { ButtonLoader } from "../../shared/button-loader/button-loader";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [DashboardLista, Header, MatCard, MatCardContent],
+  imports: [DashboardLista, DashboardNuevo, Header, Modal, MatCard, MatCardContent, MatIconModule, ButtonLoader],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss',
+  styleUrls: ['./dashboard.scss'],
 })
 export class Dashboard {
+  readonly isOpen: any;
+  readonly editData: any;
 
+  constructor(public modalService: ModalService) {
+    this.isOpen = this.modalService.isOpen;
+    this.editData = this.modalService.editData;
+  }
+
+  abrirModal() {
+    this.modalService.openModal();
+  }
 
 }

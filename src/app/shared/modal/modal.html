@@ -1,0 +1,39 @@
+@if (isOpen) {
+<div class="modal-overlay" (click)="onBackdropClick()">
+    <div class="modal-content" [style.max-width]="maxWidth" [style.max-height]="maxHeight"
+        (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+        @if (title || subtitle) {
+        <div class="modal-header">
+            <div class="header-content">
+                @if (title) {
+                <h2 class="modal-title">{{ title }}</h2>
+                }
+                @if (subtitle) {
+                <p class="modal-subtitle">{{ subtitle }}</p>
+                }
+            </div>
+
+            @if (showCloseButton) {
+            <button class="close-button" (click)="onClose()" [disabled]="loading">
+                ✕
+            </button>
+            }
+        </div>
+        }
+
+        <!-- Content -->
+        <div class="modal-body">
+            <ng-content></ng-content>
+        </div>
+
+        <!-- Loading Overlay -->
+        @if (loading) {
+        <div class="loading-overlay">
+            <div class="spinner"></div>
+        </div>
+        }
+    </div>
+</div>
+}
