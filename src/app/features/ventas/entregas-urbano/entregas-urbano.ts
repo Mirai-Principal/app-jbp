@@ -2,13 +2,11 @@ import { Component, signal, ViewChild } from '@angular/core';
 import { Header } from "../../../shared/header/header";
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, NgModel } from '@angular/forms';
 import { MatFormField, MatInputModule } from '@angular/material/input';
-import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
+import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOption } from "@angular/material/core";
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatHeaderCell, MatRow, MatHeaderRow, MatTable, MatCellDef, MatHeaderCellDef, MatHeaderRowDef, MatRowDef } from "@angular/material/table";
-import { MatCell } from "@angular/material/table";
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckbox } from "@angular/material/checkbox";
@@ -21,6 +19,7 @@ import { MatTableModule } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { ButtonLoader } from "../../../shared/button-loader/button-loader";
 
 
 @Component({
@@ -32,15 +31,10 @@ import { saveAs } from 'file-saver';
     MatCardContent,
     MatCard,
     MatButtonModule,
-    MatCardActions,
     Header,
     MatSelectModule,
     MatOption,
-    MatProgressSpinner,
     MatHeaderCell,
-    MatCell,
-    MatProgressSpinner,
-    MatCell,
     MatDatepickerModule,
     MatNativeDateModule,
     MatCheckbox,
@@ -52,7 +46,9 @@ import { saveAs } from 'file-saver';
     MatHeaderCellDef,
     MatHeaderRowDef,
     MatRowDef,
-    MatTableModule
+    MatTableModule,
+    MatIconModule,
+    ButtonLoader
   ],
   templateUrl: './entregas-urbano.html',
   styleUrl: './entregas-urbano.scss',
@@ -111,10 +107,6 @@ export class EntregasUrbano {
     });
   }
 
-  setDataSource(source: ElementTabla[]) {
-    this.dataSource = new MatTableDataSource<ElementTabla>(source);
-    this.dataSource.paginator = this.paginator;
-  }
   selectAll(checked: boolean) {
     this.entregas.forEach(entrega => entrega.Selected = checked);
   }

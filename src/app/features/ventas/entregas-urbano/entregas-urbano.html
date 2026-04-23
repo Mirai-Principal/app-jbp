@@ -2,20 +2,28 @@
 
 <mat-card>
     <mat-card-content>
-        <div [formGroup]="form" fxLayout="column">
-            <mat-form-field appearance="fill">
+        <form [formGroup]="form">
+            <mat-form-field>
                 <mat-label>Fecha Desde</mat-label>
                 <input matInput [matDatepicker]="fechaDesde" formControlName="fechaDesde">
                 <mat-datepicker-toggle matSuffix [for]="fechaDesde"></mat-datepicker-toggle>
                 <mat-datepicker #fechaDesde></mat-datepicker>
+                @if (form.get('fechaDesde')?.hasError('required') && form.get('fechaDesde')?.touched) {
+                <mat-error>La fecha desde es requerida</mat-error>
+                }
             </mat-form-field>
-            <mat-form-field appearance="fill">
+
+            <mat-form-field>
                 <mat-label>Fecha Hasta</mat-label>
                 <input matInput [matDatepicker]="fechaHasta" formControlName="fechaHasta">
                 <mat-datepicker-toggle matSuffix [for]="fechaHasta"></mat-datepicker-toggle>
                 <mat-datepicker #fechaHasta></mat-datepicker>
+                @if (form.get('fechaHasta')?.hasError('required') && form.get('fechaHasta')?.touched) {
+                <mat-error>La fecha hasta es requerida</mat-error>
+                }
             </mat-form-field>
-            <mat-form-field appearance="fill">
+
+            <mat-form-field>
                 <mat-label>Bodega</mat-label>
                 <mat-select formControlName="bodega">
                     @for (bod of bodegas; track bod) {
@@ -24,58 +32,80 @@
                     </mat-option>
                     }
                 </mat-select>
+                @if (form.get('bodega')?.hasError('required') && form.get('bodega')?.touched) {
+                <mat-error>La bodega es requerida</mat-error>
+                }
             </mat-form-field>
+
+            <div class="actions">
+                <app-button-loader [disabled]="form.invalid || procesando()" [isLoading]="procesando()"
+                    (click)="getEntregas()" text="Consultar Entregas" icon="search" color="primary"
+                    waitingText="Espere un momento...">
+                </app-button-loader>
+            </div>
+        </form>
+    </mat-card-content>
+
+    @if (entregas && entregas.length > 0) {
+    <mat-card-content>
+        <div class="export-section">
+            <span>Exportar como:</span>
+            <button mat-raised-button color="primary" (click)="export('excel')">
+                <mat-icon>table_chart</mat-icon>
+                Excel
+            </button>
+            <button mat-raised-button color="accent" (click)="export('csv')">
+                <mat-icon>description</mat-icon>
+                CSV
+            </button>
+        </div>
+
+        <div class="table-container">
+            <mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="Selected">
+                    <mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="selectAll($event.checked)" style="color: white;">Exportar
+                            todo?</mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <mat-checkbox [(ngModel)]="element.Selected"></mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="NumFactura">
+                    <mat-header-cell *matHeaderCellDef>Codigo Seguimiento/ NUMERO DE FACTURA</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.NumFactura}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Fecha">
+                    <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.Fecha}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Cedula">
+                    <mat-header-cell *matHeaderCellDef>Cedula</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.Cedula}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Cliente">
+                    <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.Cliente}}</mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+        </div>
+
+        <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+    } @else if (entregas) {
+    <mat-card-content>
+        <div class="empty-data">
+            <mat-icon style="font-size: 48px; height: 48px; width: 48px; margin-bottom: 16px;">inbox</mat-icon>
+            <h3>No se encontraron entregas</h3>
+            <p>No hay resultados para los filtros seleccionados</p>
         </div>
     </mat-card-content>
-    <div fxLayoutAlign="center none">
-        <button [disabled]="procesando()" mat-button (click)="getEntregas()">Consultar Entregas</button>
-        @if (procesando()) {
-        <div>
-            <mat-progress-spinner [mode]="'indeterminate'" [diameter]="30"></mat-progress-spinner>
-        </div>
-        }
-    </div>
-    <mat-card-actions fxLayout="row" fxLayoutAlign="center center">
-
-    </mat-card-actions>
-    @if (entregas) {
-    <div>
-        Exportar a:<br>
-        <button mat-button (click)="export('excel')">Excel</button>
-        <button mat-button (click)="export('csv')">Csv</button>
-    </div>
     }
-    <div>
-        <mat-table [dataSource]="dataSource">
-            <ng-container matColumnDef="Selected">
-                <mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="selectAll($event.checked)">Exportar todo?</mat-checkbox>
-                </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    <mat-checkbox [(ngModel)]="element.Selected"></mat-checkbox>
-                </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="NumFactura">
-                <mat-header-cell *matHeaderCellDef>Codigo Seguimiento/ NUMERO DE FACTURA</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.NumFactura}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="Fecha">
-                <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.Fecha}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="Cedula">
-                <mat-header-cell *matHeaderCellDef>Cedula</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.Cedula}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="Cliente">
-                <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.Cliente}}</mat-cell>
-            </ng-container>
-
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
-        <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
-    </div>
-
 </mat-card>
