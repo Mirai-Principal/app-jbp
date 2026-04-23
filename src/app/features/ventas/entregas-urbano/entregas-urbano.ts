@@ -20,6 +20,7 @@ import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { ButtonLoader } from "../../../shared/button-loader/button-loader";
+import { LoaderPage } from "../../../shared/loader-page/loader-page";
 
 
 @Component({
@@ -48,7 +49,8 @@ import { ButtonLoader } from "../../../shared/button-loader/button-loader";
     MatRowDef,
     MatTableModule,
     MatIconModule,
-    ButtonLoader
+    ButtonLoader,
+    LoaderPage
   ],
   templateUrl: './entregas-urbano.html',
   styleUrl: './entregas-urbano.scss',
@@ -57,9 +59,10 @@ export class EntregasUrbano {
 
   form: FormGroup;
   procesando = signal(false);
+  entregas: any[] = [];
+  selectAllChecked = signal(false);
 
   protected readonly bodegas: string[] = ['PT1', 'PT2', 'PICK2'];
-  entregas: any[] = [];
 
   columnsConfig = [
     { key: 'NumFactura', label: 'Codigo Seguimiento/ NUMERO DE FACTURA' },
@@ -94,7 +97,14 @@ export class EntregasUrbano {
         this.procesando.set(false);
         this.entregas = entregas;
         this.dataSource.data = entregas;
-        this.dataSource.paginator = this.paginator;
+
+        // Use setTimeout to ensure paginator is properly initialized
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+        }, 0);
+
+        // Uncheck todos los items seleccionados
+        this.uncheckAll();
       },
       error: (error) => {
         this.procesando.set(false);
@@ -108,6 +118,7 @@ export class EntregasUrbano {
   }
 
   selectAll(checked: boolean) {
+    this.selectAllChecked.set(checked);
     this.entregas.forEach(entrega => entrega.Selected = checked);
   }
 
@@ -136,6 +147,20 @@ export class EntregasUrbano {
 
     if (type === 'excel') this.exportToExcel(data);
     if (type === 'csv') this.exportToCSV(data);
+
+    // Uncheck todos los items seleccionados
+    this.uncheckAll();
+  }
+
+  uncheckAll() {
+    if (this.entregas) {
+      this.entregas.forEach(item => {
+        item.Selected = false;
+      });
+
+      // Uncheck the 'Select All' checkbox
+      this.selectAllChecked.set(false);
+    }
   }
 
   exportToExcel(data: any[]) {

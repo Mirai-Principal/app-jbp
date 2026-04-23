@@ -1,3 +1,7 @@
+@if (procesando()) {
+<app-loader-page message="Consultando entregas..." icon="local_shipping" />
+}
+
 <app-header title="Entregas Urbano" icon="local_shipping"></app-header>
 
 <mat-card>
@@ -64,7 +68,7 @@
             <mat-table [dataSource]="dataSource">
                 <ng-container matColumnDef="Selected">
                     <mat-header-cell *matHeaderCellDef>
-                        <mat-checkbox (change)="selectAll($event.checked)" style="color: white;">Exportar
+                        <mat-checkbox [checked]="selectAllChecked()" (change)="selectAll($event.checked)">Exportar
                             todo?</mat-checkbox>
                     </mat-header-cell>
                     <mat-cell *matCellDef="let element">
