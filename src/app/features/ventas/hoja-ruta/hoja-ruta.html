@@ -1,1 +1,62 @@
-<p>hoja-ruta works!</p>
+@if (procesando()) {
+<app-loader-page message="Consultando hoja de ruta..." icon="receipt_long" />
+}
+
+<app-header title="Hoja de Ruta" icon="receipt_long"></app-header>
+
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="form">
+            <mat-form-field>
+                <mat-label>Fecha Desde</mat-label>
+                <input matInput [matDatepicker]="fechaDesde" formControlName="fechaDesde">
+                <mat-datepicker-toggle matSuffix [for]="fechaDesde"></mat-datepicker-toggle>
+                <mat-datepicker #fechaDesde></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Fecha Hasta</mat-label>
+                <input matInput [matDatepicker]="fechaHasta" formControlName="fechaHasta">
+                <mat-datepicker-toggle matSuffix [for]="fechaHasta"></mat-datepicker-toggle>
+                <mat-datepicker #fechaHasta></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Lugar donde se emite la hoja de ruta</mat-label>
+                <mat-select formControlName="lugar">
+                    @for (l of lugares; track l) {
+                    <mat-option [value]="l">
+                        {{l}}
+                    </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            <!-- descomentar cuando ya no haya preimpresos -->
+            <!--mat-form-field >
+              <mat-label>Nro. Hoja de Ruta</mat-label>
+              <input matInput formControlName="nroHojaRuta">
+          </mat-form-field-->
+            <div class="actions">
+                <app-button-loader [disabled]="form.invalid || procesando()" [isLoading]="procesando()"
+                    (click)="getEntregas()" text="Consultar Entregas" icon="search" color="primary"
+                    waitingText="Espere un momento...">
+                </app-button-loader>
+            </div>
+        </form>
+
+        @if (this.entregas) {
+        <div>
+            <button mat-button (click)="generarHojaRuta()">Previsualizar Hoja de Ruta</button>
+        </div>
+        }
+        <app-table [data]="dataSource.data" [columns]="tableColumns" [displayedColumns]="displayedColumns"
+            [showSelectAll]="true" [selectAll]="selectAll.bind(this)">
+        </app-table>
+    </mat-card-content>
+</mat-card>
+
+@if (data && data.length > 0) {
+<app-modal [isOpen]="modalService.isOpen()" [title]="'Hoja de ruta'" [closeOnBackdropClick]="true"
+    (close)="modalService.closeModal()" (backdropClick)="modalService.closeModal()">
+
+    <app-reporte-hoja-ruta [entregas]="data" [lugar]="form.value.lugar" />
+</app-modal>
+}

@@ -1,0 +1,50 @@
+@use '../../../shared/styles/colors' as *;
+
+
+mat-card {
+    background-color: $background-content;
+    border-radius: 0;
+    box-shadow: 0 4px 12px $primary-alpha-10;
+    overflow: hidden;
+    padding: 0;
+
+    // Ensure card doesn't overflow on mobile
+    @media (max-width: 768px) {
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        width: 100%;
+        max-width: 100vw; // Ensure it doesn't exceed viewport width
+        box-sizing: border-box; // Include padding and border in the element's total width and height
+        overflow: hidden; // Prevent content from spilling out
+    }
+
+    @media (max-width: 480px) {
+        padding: 0; // Add some padding on very small screens
+        min-width: 100vw;
+    }
+
+    @media (max-width: 360px) {
+        padding: 0; // Even less padding on extra small screens
+        min-width: 100vw;
+    }
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.export-section {
+    padding: 1rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 1rem;
+
+    span {
+        font-weight: 600;
+    }
+}
