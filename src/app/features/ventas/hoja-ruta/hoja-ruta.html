@@ -44,7 +44,7 @@
 
         @if (this.entregas) {
         <div>
-            <button mat-button (click)="generarHojaRuta()">Previsualizar Hoja de Ruta</button>
+            <button matButton="elevated" (click)="generarHojaRuta()">Previsualizar Hoja de Ruta</button>
         </div>
         }
         <app-table [data]="dataSource.data" [columns]="tableColumns" [displayedColumns]="displayedColumns"

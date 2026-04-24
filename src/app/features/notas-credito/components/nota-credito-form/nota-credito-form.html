@@ -1,0 +1,110 @@
+<form [formGroup]="formulario" (ngSubmit)="agregarItem()" class="form-container">
+    <!-- Buscador de Cliente -->
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cliente</mat-label>
+        <input type="text" matInput formControlName="clienteBusqueda" [matAutocomplete]="autoCliente"
+            placeholder="Buscar por nombre">
+        <mat-icon matPrefix>search</mat-icon>
+        @if (formulario.get('clienteBusqueda')?.hasError('required') && formulario.get('clienteBusqueda')?.touched) {
+        <mat-error>El cliente es requerido</mat-error>
+        }
+        <mat-autocomplete #autoCliente="matAutocomplete" [displayWith]="displayCliente"
+            (optionSelected)="onClienteSeleccionado($event.option.value)">
+            @for (cliente of clientesFiltrados(); track cliente.Ruc) {
+            <mat-option [value]="cliente">
+                <div class="cliente-option">
+                    <span class="cliente-nombre">{{ cliente.name }}</span>
+                </div>
+            </mat-option>
+            }
+        </mat-autocomplete>
+    </mat-form-field>
+
+    @if (clienteSeleccionado()) {
+    <div class="cliente-seleccionado">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ clienteSeleccionado()!.Nombre }} - {{ clienteSeleccionado()!.Ruc }}</span>
+    </div>
+    }
+
+    <!-- Número de Factura -->
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nro. Factura</mat-label>
+        <input matInput formControlName="nroFactura" placeholder="Ej: 001-001-000123456">
+        <mat-icon matPrefix>receipt</mat-icon>
+        @if (formulario.get('nroFactura')?.hasError('pattern') && formulario.get('nroFactura')?.touched) {
+        <mat-error>Formato inválido (Ej: 001-001-000123456)</mat-error>
+        }
+    </mat-form-field>
+
+    <!-- Monto Factura -->
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Monto Factura</mat-label>
+        <input matInput type="number" formControlName="montoFactura" placeholder="0" step="1" min="1"
+            max="999999999" (input)="prevenirDecimales($event)">
+        <span matPrefix style="margin: 0 4px 0 4px;">$</span>
+        @if (formulario.get('montoFactura')?.hasError('required') && formulario.get('montoFactura')?.touched) {
+        <mat-error>El monto es requerido</mat-error>
+        }
+        @if (formulario.get('montoFactura')?.hasError('min') && formulario.get('montoFactura')?.touched) {
+        <mat-error>El monto debe ser mayor a 0</mat-error>
+        }
+        @if (formulario.get('montoFactura')?.hasError('max') && formulario.get('montoFactura')?.touched) {
+        <mat-error>El monto no puede ser mayor a 999999999</mat-error>
+        }
+    </mat-form-field>
+
+    <!-- Fecha Factura -->
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Fecha Factura</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="fechaFactura" placeholder="mm/dd/yyyy" [max]="today()"
+            min="2000-01-02">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        @if (formulario.get('fechaFactura')?.hasError('required') && formulario.get('fechaFactura')?.touched) {
+        <mat-error>La fecha es requerida</mat-error>
+        }
+    </mat-form-field>
+
+    <!-- Descripción -->
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descripción</mat-label>
+        <textarea matInput formControlName="descripcion" rows="3"
+            placeholder="Describe los detalles de la nota de crédito..."></textarea>
+        @if (formulario.get('descripcion')?.hasError('required') && formulario.get('descripcion')?.touched) {
+        <mat-error>La descripción es requerida</mat-error>
+        }
+        @if (formulario.get('descripcion')?.hasError('minlength') && formulario.get('descripcion')?.touched) {
+        <mat-error>La descripción debe tener al menos 5 caracteres</mat-error>
+        }
+        @if (formulario.get('descripcion')?.hasError('maxlength') && formulario.get('descripcion')?.touched) {
+        <mat-error>La descripción no puede exceder 200 caracteres</mat-error>
+        }
+    </mat-form-field>
+
+    <!-- Puntos Equivalentes (Solo lectura) -->
+    <mat-form-field appearance="outline" class="full-width puntos-field">
+        <mat-label>Puntos Equivalentes</mat-label>
+        <input matInput [value]="puntosEquivalentes()" readonly tabindex="-1">
+        <mat-icon matPrefix color="primary">stars</mat-icon>
+    </mat-form-field>
+
+    <!-- Botónes -->
+    <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit"
+            [disabled]="formulario.invalid || !clienteSeleccionado()" class="btn-agregar">
+            <mat-icon>save</mat-icon>
+            Guardar Nota de Crédito
+        </button>
+
+        @if (formulario.dirty) {
+        <button mat-button type="button" (click)="limpiarFormulario()">
+            Limpiar
+        </button>
+        }
+        <!-- boton para cancelar -->
+        <button mat-button type="button" (click)="cancelar()">
+            Cancelar
+        </button>
+    </div>
+</form>

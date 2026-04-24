@@ -5,6 +5,7 @@ import { MatTable, MatHeaderCell, MatCell, MatHeaderRow, MatRow } from "@angular
 import { ReporteHoja } from '../models/hoja-ruta.model';
 import { CommonModule } from '@angular/common';
 import { NgxPrintModule } from 'ngx-print';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-reporte-hoja-ruta',
@@ -19,8 +20,8 @@ import { NgxPrintModule } from 'ngx-print';
     MatCardTitle,
     MatCardSubtitle,
     CommonModule,
-    NgxPrintModule
-
+    NgxPrintModule,
+    MatButtonModule
   ],
   templateUrl: './reporte-hoja-ruta.html',
   styleUrls: ['./reporte-hoja-ruta.scss'],

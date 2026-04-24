@@ -1,0 +1,109 @@
+ .form-container {
+     display: flex;
+     flex-direction: column;
+     gap: 16px;
+     padding: 20px;
+     background: #fafafa;
+     margin-bottom: 24px;
+     max-height: 80vh;
+     overflow-y: auto;
+ }
+
+ .full-width {
+     width: 100%;
+ }
+
+ .cliente-option {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     width: 100%;
+ }
+
+ .cliente-nombre {
+     font-weight: 500;
+     flex: 1;
+ }
+
+ .cliente-ruc {
+     color: #666;
+     font-size: 0.9em;
+     margin-left: 8px;
+ }
+
+ .cliente-seleccionado {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     padding: 12px;
+     background: #e8f5e9;
+     border-radius: 4px;
+     color: #2e7d32;
+
+     mat-icon {
+         color: #4caf50;
+     }
+ }
+
+ .puntos-field {
+     ::ng-deep .mat-mdc-form-field-infix input {
+         font-weight: 600;
+         font-size: 1.1em;
+         color: #1976d2;
+     }
+ }
+
+ .btn-agregar {
+     align-self: flex-start;
+
+     mat-icon {
+         margin-right: 8px;
+     }
+ }
+
+ /* Estilos para el scroll */
+ .form-container::-webkit-scrollbar {
+     width: 6px;
+ }
+
+ .form-container::-webkit-scrollbar-track {
+     background: #f1f1f1;
+     border-radius: 3px;
+ }
+
+ .form-container::-webkit-scrollbar-thumb {
+     background: #c1c1c1;
+     border-radius: 3px;
+ }
+
+ .form-container::-webkit-scrollbar-thumb:hover {
+     background: #a8a8a8;
+ }
+
+ /* Asegurar que el diálogo tenga espacio suficiente */
+ ::ng-deep .mat-mdc-dialog-container {
+     overflow: visible !important;
+     border-radius: 8px !important;
+ }
+
+ ::ng-deep .mat-mdc-dialog-surface {
+     overflow: visible !important;
+     border-radius: 8px !important;
+ }
+
+ /* SweetAlert z-index para mostrar encima del modal */
+ .swal2-container-above-modal {
+     z-index: 9999 !important;
+ }
+
+ .swal2-popup {
+     z-index: 9999 !important;
+ }
+
+ .swal2-container {
+     z-index: 9999 !important;
+ }
+
+ .swal2-backdrop-show {
+     z-index: 9998 !important;
+ }
