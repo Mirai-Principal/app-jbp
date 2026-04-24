@@ -7,8 +7,8 @@ import { conf } from '../../assets/conf';
     providedIn: 'root',
 })
 export class GetUrlEndpointService {
-    static urlConsultaLoteArticulo: string = 'http://app.jbp.com.ec/consultaLote?lote=';
-    static urlConsultaUbicacion: string = 'http://app.jbp.com.ec/consultaUbicacion?ubicacion=';
+    urlConsultaLoteArticulo: string = 'http://app.jbp.com.ec/consultaLote?lote=';
+    urlConsultaUbicacion: string = 'http://app.jbp.com.ec/consultaUbicacion?ubicacion=';
     //static urlConsultaLoteArticulo:string = 'http://apptest.jbp.com.ec/consultaLote?lote=';
     //static urlConsultaUbicacion:string = 'http://apptest.jbp.com.ec/consultaUbicacion?ubicacion=';
 

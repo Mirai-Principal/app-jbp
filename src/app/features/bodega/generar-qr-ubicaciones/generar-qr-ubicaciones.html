@@ -1,0 +1,97 @@
+<app-header title="Generar QR de Ubicaciones" icon="qr_code" />
+
+<div class="container">
+    <mat-card>
+
+        <mat-card-content>
+            <span style="padding-right: 10px;"><b>Generar ubicaciones de manera:</b></span>
+            <mat-radio-group [(ngModel)]="tipoUbicacion" (change)="encerarQRs()">
+                <mat-radio-button value="masiva">Masiva </mat-radio-button>
+                <mat-radio-button value="manual" style="padding-left: 10px;">Manual</mat-radio-button>
+            </mat-radio-group>
+            <div fxLayout="column">
+                <mat-form-field appearance="fill">
+                    <mat-label>Tamaño QR</mat-label>
+                    <input [(ngModel)]="qrWidth" matInput type="number">
+                </mat-form-field>
+            </div>
+            @if (tipoUbicacion() === 'manual') {
+            <div fxLayout="column">
+                <mat-form-field appearance="fill">
+                    <mat-label>Ubicación</mat-label>
+                    <input [(ngModel)]="ubicacionManual" matInput placeholder="Ej. P1-A-S6-UB">
+                </mat-form-field>
+            </div>
+            }
+            @if (tipoUbicacion() === 'masiva') {
+            <div [formGroup]="form" fxLayout="column">
+                <mat-form-field appearance="fill">
+                    <mat-label>Percha</mat-label>
+                    <mat-select formControlName="percha">
+                        @for (p of perchas(); track p) {
+                        <mat-option [value]="p">
+                            {{p.codigo}}
+                        </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Nivel</mat-label>
+                    <mat-select formControlName="nivel">
+                        @for (n of niveles(); track n) {
+                        <mat-option [value]="n">
+                            {{n.codigo}}
+                        </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Pallet desde</mat-label>
+                    <mat-select formControlName="palletDesde">
+                        @for (p of pallets(); track p) {
+                        <mat-option [value]="p">
+                            {{p.codigo}}
+                        </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Pallet hasta</mat-label>
+                    <mat-select formControlName="palletHasta">
+                        @for (p of pallets(); track p) {
+                        <mat-option [value]="p">
+                            {{p.codigo}}
+                        </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            }
+            <div fxLayoutAlign="center" style="padding-bottom: 20px;">
+                <button matButton="elevated" (click)="generarUbicaciones()">Generar Ubicaciones</button>
+                <span style="padding-left: 20px;"> </span>
+                @if (this.ubicaciones().length > 0) {
+                <button matButton="elevated" printSectionId="codigosQR" ngxPrint>Imprimir</button>
+                }
+                <!-- <button mat-button printSectionId="codigosQR2" ngxPrint>Imprimir</button> -->
+
+            </div>
+            <div id="codigosQR">
+                @if(this.ubicaciones().length>0) {
+                <div fxLayout="row wrap" fxLayoutGap="25px" style="width:595; margin-right:-25px">
+
+                    @for(u of this.ubicaciones(); track u) {
+                    <div
+                        style="padding-top:15px; padding-left:15px;padding-right:15px; border: solid 1px #000000; text-align:center">
+                        <qrcode [qrdata]="u.urlConsulta" [elementType]="'svg'" [margin]="0" [width]="qrWidth()"
+                            [errorCorrectionLevel]="'M'"></qrcode>
+                        <p style="text-align: center; padding-top: 5px;">{{u.ubicacion}}</p>
+                        <!-- <p>{{u.urlConsulta}}</p> -->
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
