@@ -23,13 +23,15 @@ export class SidebarMenuService {
                 { name: 'Entregas Urbano', icon: 'local_shipping', url: '/entregas-urbano' },
                 { name: 'Hoja de Ruta', icon: 'route', url: '/hoja-de-ruta' },
                 { name: 'Participantes Puntos', icon: 'people', url: '/participantes-puntos' },
-                { name: 'Facturas historicas por cliente', icon: 'fact_check', url: '/facturas-historicas-por-cliente' }
+                { name: 'Histórico de Facturas', icon: 'receipt', url: '/historico-facturas' }
             ]
         },
         {
-            name: 'Orders',
-            icon: 'receipt',
-            url: '/orders'
+            name: 'Bodega',
+            icon: 'inventory',
+            children: [
+                { name: 'Generar QR de Ubicaciones', icon: 'qr_code', url: '/generar-qr-ubicaciones' },
+            ]
         },
         {
             name: 'Customers',

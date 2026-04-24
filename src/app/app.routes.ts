@@ -8,7 +8,8 @@ import { Error } from './features/error/error';
 import { UpdateNumFacturaExportacion } from './features/ventas/update-num-factura-exportacion/update-num-factura-exportacion';
 import { EntregasUrbano } from './features/ventas/entregas-urbano/entregas-urbano';
 import { HojaRuta } from './features/ventas/hoja-ruta/hoja-ruta';
-import { NotasCreditoComponent } from './features/notas-credito/notas-credito';
+import { NotasCreditoComponent } from './features/ventas/notas-credito/notas-credito';
+import { HistoricoFacturas } from './features/ventas/historico-facturas/historico-facturas';
 
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
@@ -19,7 +20,7 @@ export const routes: Routes = [
     { path: 'entregas-urbano', component: EntregasUrbano, title: 'Entregas Urbano', canActivate: [AuthGuard] },
     { path: 'hoja-de-ruta', component: HojaRuta, title: 'Hoja de Ruta', canActivate: [AuthGuard] },
     { path: 'participantes-puntos', component: NotasCreditoComponent, title: 'Participantes Puntos', canActivate: [AuthGuard] },
-
+    { path: 'historico-facturas', component: HistoricoFacturas, title: 'Histórico de Facturas', canActivate: [AuthGuard] },
 
     // Ruta para manejar páginas no encontradas
     { path: '**', component: Error }

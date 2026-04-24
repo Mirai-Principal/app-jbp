@@ -90,20 +90,3 @@
      overflow: visible !important;
      border-radius: 8px !important;
  }
-
- /* SweetAlert z-index para mostrar encima del modal */
- .swal2-container-above-modal {
-     z-index: 9999 !important;
- }
-
- .swal2-popup {
-     z-index: 9999 !important;
- }
-
- .swal2-container {
-     z-index: 9999 !important;
- }
-
- .swal2-backdrop-show {
-     z-index: 9998 !important;
- }

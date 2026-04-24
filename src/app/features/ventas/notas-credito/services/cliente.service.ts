@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Cliente } from '../models/nota-credito.model';
-import { GetUrlEndpointService } from '../../../core/services/get-url-endpoint.service';
+import { GetUrlEndpointService } from '../../../../core/services/get-url-endpoint.service';
 
 @Injectable({
   providedIn: 'root'

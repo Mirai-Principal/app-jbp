@@ -16,7 +16,7 @@ import { Cliente, NotaCreditoItem } from '../../models/nota-credito.model';
 import { ClienteService } from '../../services/cliente.service';
 import { NotaCreditoService } from '../../services/nota-credito.service';
 import Swal from 'sweetalert2';
-import { Alert } from '../../../../shared/alert/alert';
+import { Alert } from '../../../../../shared/alert/alert';
 
 @Component({
   selector: 'app-nota-credito-form',

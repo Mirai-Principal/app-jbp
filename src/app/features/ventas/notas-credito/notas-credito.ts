@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NotaCreditoFormComponent } from './components/nota-credito-form/nota-credito-form';
 import { NotaCreditoTablaComponent } from './components/nota-credito-tabla/nota-credito-tabla';
 import { NotaCreditoItem } from './models/nota-credito.model';
-import { Header } from "../../shared/header/header";
+import { Header } from "../../../shared/header/header";
 
 @Component({
   selector: 'app-notas-credito',
