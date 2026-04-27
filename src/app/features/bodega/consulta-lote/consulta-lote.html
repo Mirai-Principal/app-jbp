@@ -1,0 +1,152 @@
+@if(!isLoading() ) {
+@if(detalleLote().CodArticulo) {
+<div class="container">
+    <!-- Header Card -->
+    <div class="header-card">
+        <div class="status-badge" [class]="estadoLote()">{{estadoLote()}}</div>
+        <div class="product-info">
+            <h6 class="product-code">{{esProductoTerminado()?detalleLote().CodPoePT:detalleLote().CodPoe}}</h6>
+            <h3 class="product-name">{{detalleLote().Articulo}}</h3>
+        </div>
+    </div>
+
+    <!-- Main Info Grid -->
+    <div class="info-grid">
+        <!-- Basic Info Card -->
+        <div class="info-card">
+            <h4 class="card-title">Información Básica</h4>
+            <div class="info-row">
+                <span class="label">Código Artículo:</span>
+                <span class="value">{{detalleLote().CodArticulo}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Lote:</span>
+                <span class="value highlight">{{lote()}}</span>
+            </div>
+            @if (!esProductoTerminado()) {
+            <div class="info-row">
+                <span class="label">Lote Proveedor:</span>
+                <span class="value">{{detalleLote().LoteProveedor}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Proveedor:</span>
+                <span class="value">{{detalleLote().Proveedor}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Fabricante:</span>
+                <span class="value">{{detalleLote().Fabricante}}</span>
+            </div>
+            }
+            @if (esProductoTerminado()) {
+            <div class="info-row">
+                <span class="label">Titular del Producto:</span>
+                <span class="value">{{detalleLote().Cliente}}</span>
+            </div>
+            }
+        </div>
+
+        <!-- Storage Info Card -->
+        <div class="info-card">
+            <h4 class="card-title">Almacenamiento</h4>
+            <div class="info-row">
+                <span class="label">Condiciones:</span>
+                <span
+                    class="value">{{esProductoTerminado()?detalleLote().CondicionAlmacenamientoPT:detalleLote().CondicionAlmacenamiento}}</span>
+            </div>
+            @if (esProductoTerminado()) {
+            <div class="info-row">
+                <span class="label">Empacado Por:</span>
+                <span class="value">{{detalleLote().ResponsableEmpaque}}</span>
+            </div>
+            }
+            @if (!esProductoTerminado()) {
+            <div class="info-row">
+                <span class="label">Fecha Ingreso:</span>
+                <span class="value">{{detalleLote().FechaIngreso}}</span>
+            </div>
+            }
+        </div>
+
+        <!-- Dates Info Card -->
+        <div class="info-card">
+            <h4 class="card-title">Fechas</h4>
+            <div class="info-row">
+                <span class="label">Fabricación:</span>
+                <span class="value">{{detalleLote().FechaFabricacion}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Vencimiento:</span>
+                <span class="value date-important">{{detalleLote().FechaVencimiento}}</span>
+            </div>
+            @if (!esProductoTerminado()) {
+            <div class="info-row">
+                <span class="label">Retest:</span>
+                <span class="value">{{detalleLote().FechaRetest}}</span>
+            </div>
+            }
+        </div>
+
+        <!-- Quantity Info Card -->
+        <div class="info-card">
+            <h4 class="card-title">Cantidades</h4>
+            @if (esProductoTerminado()) {
+            <div class="info-row">
+                <span class="label">Cantidad Por Caja:</span>
+                <span class="value">{{detalleLote().CantidadPT}} {{detalleLote().UnidadMedida}}</span>
+            </div>
+            }
+            <div class="info-row">
+                <span class="label">Bultos Totales:</span>
+                <span class="value highlight">{{detalleLote().Bultos}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Observaciones:</span>
+                <span class="value">{{detalleLote().Observaciones || 'N/A'}}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Locations Section -->
+    @if (detalleLote().UbicacionesCantidad && detalleLote().UbicacionesCantidad.length > 0) {
+    <div class="locations-card">
+        <h4 class="card-title">Ubicaciones y Cantidades</h4>
+        <table class="locations-table">
+            <thead>
+                <tr>
+                    <th>CodBodega</th>
+                    <th>Ubicación</th>
+                    <th>Cantidad ({{detalleLote().UnidadMedida}})</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (uc of detalleLote().UbicacionesCantidad; track uc) {
+                <tr>
+                    <td>{{uc.CodBodega}}</td>
+                    <td>{{uc.Ubicacion || 'General'}}</td>
+                    <td>
+                        @if (!uc.Ubicacion) {
+                        <span>{{uc.CantBodega}}</span>
+                        }
+                        @if (uc.Ubicacion) {
+                        <span>{{uc.CantUbicacion}}</span>
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+</div>
+}@else {
+<div class="empty-state">
+    <mat-icon>warning</mat-icon>
+    <p>No se encontraron los datos</p>
+</div>
+}
+}@else {
+<div class="empty-state">
+    <mat-spinner></mat-spinner>
+    <p class="loading-text">Espere un momento...</p>
+</div>
+}

@@ -11,6 +11,7 @@ import { HojaRuta } from './features/ventas/hoja-ruta/hoja-ruta';
 import { NotasCreditoComponent } from './features/ventas/notas-credito/notas-credito';
 import { HistoricoFacturas } from './features/ventas/historico-facturas/historico-facturas';
 import { GenerarQrUbicaciones } from './features/bodega/generar-qr-ubicaciones/generar-qr-ubicaciones';
+import { ConsultarUbicacion } from './features/bodega/consultar-ubicacion/consultar-ubicacion';
 
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
@@ -23,6 +24,7 @@ export const routes: Routes = [
     { path: 'participantes-puntos', component: NotasCreditoComponent, title: 'Participantes Puntos', canActivate: [AuthGuard] },
     { path: 'historico-facturas', component: HistoricoFacturas, title: 'Histórico de Facturas', canActivate: [AuthGuard] },
     { path: 'generar-qr-ubicaciones', component: GenerarQrUbicaciones, title: 'Generar QR de Ubicaciones', canActivate: [AuthGuard] },
+    { path: 'consultar-ubicacion', component: ConsultarUbicacion, title: 'Consultar Ubicación' },
 
     // Ruta para manejar páginas no encontradas
     { path: '**', component: Error }

@@ -31,16 +31,6 @@ export class GenerarQrUbicacionesService {
     });
     return ms;
   }
-  getContenidoUbicacion(ubicacion: string) {
-    const url = this.getUrlEndpointService.getUrlFromEndPointName('bodega') + '/consultaubicacion/' + ubicacion;
-    console.log(url);
-    return this.http.get<any>(url);
-  }
-  getContenidoLote(lote: string, codArticulo?: string) {
-    let url = this.getUrlEndpointService.getUrlFromEndPointName('bodega') + '/getUbicacionesYDetArticuloPorLote/' + lote;
-    if (codArticulo)
-      url += '/' + codArticulo;
-    return this.http.get<any>(url);
-  }
+
 }
 

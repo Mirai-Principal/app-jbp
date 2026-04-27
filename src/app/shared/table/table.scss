@@ -61,3 +61,22 @@
         }
     }
 }
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+
+    mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        margin-bottom: 16px;
+        opacity: 0.5;
+    }
+
+    p {
+        margin: 8px 0;
+    }
+
+}

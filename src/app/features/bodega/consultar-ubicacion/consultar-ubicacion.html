@@ -1,0 +1,38 @@
+<app-header [title]="'Contenido de Ubicacion: ' + ubicacion()" icon="pin_drop" />
+
+@if (isLoading()) {
+<app-loader-page message="Cargando contenido de la ubicación..." icon="pin_drop" />
+}
+
+
+<div class="container">
+    <mat-card>
+        <mat-card-content>
+            <mat-card-header>
+                <mat-card-title>Seleccione la bodega</mat-card-title>
+            </mat-card-header>
+            <mat-card-actions>
+                <mat-radio-group [value]="bodegaSeleccionada()" class="example-radio-group"
+                    (change)="bodegaSeleccionada.set($event.value)">
+                    @for (bodega of bodegas(); track bodega) {
+                    <mat-radio-button [value]="bodega">{{bodega}}</mat-radio-button>
+                    }
+                </mat-radio-group>
+            </mat-card-actions>
+
+            <app-table [data]="dataFiltrada()" [columns]="tableColumns" [displayedColumns]="displayedColumns"
+                [showPaginator]="true" [cellTemplate]="cellTemplate"></app-table>
+
+            <ng-template #cellTemplate let-column="column" let-element="element">
+                @if (column.columnDef === 'Lote') {
+                <span>{{ element.Lote }} <mat-icon class="clickable-icon"
+                        (click)="verDetalleLote(element.Lote, element.CodArticulo)">visibility</mat-icon></span>
+                }
+                @else {
+                {{ element[column.columnDef] }}
+                }
+            </ng-template>
+
+        </mat-card-content>
+    </mat-card>
+</div>

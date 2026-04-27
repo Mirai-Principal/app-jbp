@@ -13,7 +13,7 @@ registerLocaleData(localeEs, 'es');
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes, withComponentInputBinding()),  //permite recibir parámetros con input()
+    provideRouter(routes, withComponentInputBinding()),  //el segundo permite recibir parámetros con input()
     provideHttpClient(), //proveedor de http para peticiones
     { provide: LOCALE_ID, useValue: 'es' }, //registramos el proveedor de localizacion
     {
