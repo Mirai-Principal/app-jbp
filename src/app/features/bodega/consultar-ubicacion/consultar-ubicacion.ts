@@ -2,9 +2,9 @@ import { Component, inject, input, signal, computed, effect, ViewChild } from '@
 import { Header } from "../../../shared/header/header";
 import { MatCard, MatCardContent, MatCardActions, MatCardHeader, MatCardTitle } from "@angular/material/card";
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { TableColumn, Table } from '../../../shared/table/table';
+import { Table } from '../../../shared/table/table';
 import { MatTableDataSource } from '@angular/material/table';
-import { ConsultarUbicacionService, ConsultaUbicacionResponse, UbicacionItem } from './services/consultar-ubicacion.service';
+import { ConsultarUbicacionService, UbicacionItem } from './services/consultar-ubicacion.service';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import { switchMap, of, startWith, finalize, catchError, tap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +12,6 @@ import { Alert } from '../../../shared/alert/alert';
 import { LoaderPage } from "../../../shared/loader-page/loader-page";
 import { MatPaginator } from '@angular/material/paginator';
 import { MatRadioGroup, MatRadioButton } from "@angular/material/radio";
-import { Router } from '@angular/router';
 import { MatIcon } from "@angular/material/icon";
 import { ConsultaLote } from "../consulta-lote/consulta-lote";
 
@@ -30,7 +29,6 @@ export class ConsultarUbicacion {
   // DI
   private consultarUbicacionService = inject(ConsultarUbicacionService);
   private dialog = inject(MatDialog);
-  private router = inject(Router);
 
   // estados
   ubicacion = input<string>();

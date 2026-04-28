@@ -34,9 +34,11 @@ export class SidebarMenuService {
             ]
         },
         {
-            name: 'Customers',
+            name: 'Farmacovigilancia',
             icon: 'group',
-            url: '/customers'
+            children: [
+                { name: 'Reporte de Reacciones', icon: 'qr_code', url: '/reacciones-reporte' },
+            ]
         },
         {
             name: 'Settings',

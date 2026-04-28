@@ -1,0 +1,212 @@
+@if (isLoading()) {
+<app-loader-page message="Cargando reacciones..." icon="healing" />
+}
+
+<app-header title="Base de Datos de Reportes" icon="description"></app-header>
+
+<div class="container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>FOR-ARH-011 Base de Datos de Reportes RAM, FT, EM</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="actions-bar">
+                <button mat-raised-button color="primary" (click)="getReacciones()">
+                    <mat-icon>refresh</mat-icon>
+                    Refrescar
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th class="expand-column"></th>
+                            <th>Cod. Registro</th>
+                            <th>Fecha Registro</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Rango Edad</th>
+                            <th>Altura (Cm)</th>
+                            <th>Peso (Kg)</th>
+                            <th>Quien Padecio Enfermedad</th>
+                            <th>Otra Enfermedad</th>
+                            <th>Notificador</th>
+                            <th>Mail</th>
+                            <th>Teléfono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(item of reacciones(); track item.id) {
+                        <tr>
+                            <td class="expand-column">
+                                <button mat-icon-button (click)="toggleExpansion(item.id)" class="expand-btn">
+                                    <mat-icon>
+                                        {{ isExpanded(item.id) ? 'expand_less' : 'expand_more' }}
+                                    </mat-icon>
+                                </button>
+                            </td>
+                            <td class="highlight">{{item.idStr}}</td>
+                            <td>{{item.fechaRegistro}}</td>
+                            <td>{{item.nombres}}</td>
+                            <td>{{item.apellidos}}</td>
+                            <td>{{item.rangoEdad}}</td>
+                            <td>{{item.alturaCm}}</td>
+                            <td>{{item.pesoKg}}</td>
+                            <td>{{item.quienPadecioEnfermedad}}</td>
+                            <td>
+                                @if(item.padeceOtraEnfermedad) {
+                                <span class="badge badge-success">Sí</span>
+                                }
+                                @if(!item.padeceOtraEnfermedad) {
+                                <span class="badge badge-secondary">No</span>
+                                }
+                            </td>
+                            <td>{{item.notificador}}</td>
+                            <td>{{item.notificadorMail}}</td>
+                            <td>{{item.notificadorTelefono}}</td>
+                        </tr>
+                        @if(isExpanded(item.id)) {
+                        <tr class="expanded-row">
+                            <td colspan="14">
+                                <mat-expansion-panel class="detail-panel" [expanded]="true">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <mat-icon>medical_information</mat-icon>
+                                            Detalles Completos del Reporte
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+
+                                    <!-- Medicamentos Section -->
+                                    @if(item.medicamentos && item.medicamentos.length > 0) {
+                                    <div class="detail-section">
+                                        <h4 class="section-title">
+                                            <mat-icon>medication</mat-icon>
+                                            Medicamentos
+                                        </h4>
+                                        <table class="detail-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Medicamento</th>
+                                                    <th>Lote</th>
+                                                    <th>Fecha Vencimiento</th>
+                                                    <th>Uso</th>
+                                                    <th>Posología</th>
+                                                    <th>Frecuencia</th>
+                                                    <th>Vía</th>
+                                                    <th>¿Qué pasó?</th>
+                                                    <th>Fecha Uso</th>
+                                                    <th>Cuándo dejó</th>
+                                                    <th>Reacción previa</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for(med of item.medicamentos; track med.id) {
+                                                <tr>
+                                                    <td class="med-name">{{med.medicamento}}</td>
+                                                    <td>{{med.lote}}</td>
+                                                    <td>{{med.fechaVencimiento}}</td>
+                                                    <td>{{med.paraQueUtilizo}}</td>
+                                                    <td>{{med.posologia}}</td>
+                                                    <td>{{med.cantidadFrecuencia}}</td>
+                                                    <td>{{med.viaAdministracion}}</td>
+                                                    <td>{{med.quePasoConMedicamento}}</td>
+                                                    <td>{{med.fechaUtilizacion}}</td>
+                                                    <td>{{med.cuandoDejoUsar}}</td>
+                                                    <td>
+                                                        @if(med.haVueltoReaccion) {
+                                                        <span class="badge badge-warning">Sí</span>
+                                                        }
+                                                        @if(!med.haVueltoReaccion) {
+                                                        <span class="badge badge-info">No</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    }
+
+                                    <!-- Reacciones Section -->
+                                    @if(item.reaccionesStr && item.reaccionesStr.length > 0) {
+                                    <div class="detail-section">
+                                        <h4 class="section-title">
+                                            <mat-icon>sick</mat-icon>
+                                            Reacciones Adversas
+                                        </h4>
+                                        <div class="reactions-list">
+                                            @for (r of item.reaccionesStr; track $index) {
+                                            <div class="reaction-item">
+                                                <mat-icon>error_outline</mat-icon>
+                                                <span>{{r}}</span>
+                                            </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    }
+
+                                    <!-- Información de Reacción Section -->
+                                    @if(item.informacionesReaccion && item.informacionesReaccion.length > 0) {
+                                    <div class="detail-section">
+                                        <h4 class="section-title">
+                                            <mat-icon>healing</mat-icon>
+                                            Información de la Reacción
+                                        </h4>
+                                        <table class="detail-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Síntomas</th>
+                                                    <th>Estado Persona</th>
+                                                    <th>Fecha Inicio</th>
+                                                    <th>Fecha Fin</th>
+                                                    <th>Tratamiento</th>
+                                                    <th>Descripción Tratamiento</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for(info of item.informacionesReaccion; track info.id) {
+                                                <tr>
+                                                    <td class="symptoms">{{info.sintomas}}</td>
+                                                    <td>{{info.estadoPersonaAfectada}}</td>
+                                                    <td>{{info.fechaInicio}}</td>
+                                                    <td>{{info.fechaFin}}</td>
+                                                    <td>
+                                                        @if(info.siguiioTratamiento) {
+                                                        <span class="badge badge-success">Sí</span>
+                                                        }
+                                                        @if(!info.siguiioTratamiento) {
+                                                        <span class="badge badge-secondary">No</span>
+                                                        }
+                                                    </td>
+                                                    <td>{{info.tratamiento}}</td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    }
+
+                                    <!-- Otra Enfermedad Section -->
+                                    @if(item.padeceOtraEnfermedad && item.otraEnfermedad) {
+                                    <div class="detail-section">
+                                        <h4 class="section-title">
+                                            <mat-icon>medical_services</mat-icon>
+                                            Otra Enfermedad Reportada
+                                        </h4>
+                                        <div class="other-disease">
+                                            <p>{{item.otraEnfermedad}}</p>
+                                        </div>
+                                    </div>
+                                    }
+                                </mat-expansion-panel>
+                            </td>
+                        </tr>
+                        }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

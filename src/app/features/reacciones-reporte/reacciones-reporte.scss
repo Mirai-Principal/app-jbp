@@ -1,0 +1,441 @@
+ @use '../../shared/styles/colors' as *;
+
+ .container {
+     margin: auto;
+ }
+
+ mat-card {
+     background-color: $background-content;
+     border-radius: 0;
+     box-shadow: 0 4px 12px $primary-alpha-10;
+     overflow: hidden;
+     padding: 0;
+
+     @media (min-width: 1200px) {
+         margin: 0 auto;
+         max-width: 85vw;
+     }
+
+     @media (max-width: 1200px) {
+         margin: 0 auto;
+         max-width: 90vw;
+     }
+
+     // Ensure card doesn't overflow on mobile
+     @media (max-width: 768px) {
+         margin: 0 auto;
+         border-radius: 0;
+         box-shadow: none;
+         max-width: 90vw; // Ensure it doesn't exceed viewport width
+         box-sizing: border-box; // Include padding and border in the element's total width and height
+         overflow: hidden; // Prevent content from spilling out
+     }
+
+     @media (max-width: 480px) {
+         padding: 0 auto; // Add some padding on very small screens
+         min-width: 95vw;
+     }
+
+     @media (max-width: 360px) {
+         padding: 0; // Even less padding on extra small screens
+         min-width: 100vw;
+     }
+ }
+
+ // Actions Bar
+ .actions-bar {
+     padding: 20px;
+     border-bottom: 1px solid #e0e0e0;
+     display: flex;
+     justify-content: flex-end;
+     gap: 12px;
+
+     button {
+         display: flex;
+         align-items: center;
+         gap: 8px;
+     }
+ }
+
+ // Table Container
+ .table-container {
+     overflow-x: auto;
+     background: white;
+ }
+
+ // Main Table
+ .main-table {
+     width: 100%;
+     border-collapse: collapse;
+     font-size: 14px;
+
+     thead {
+         background: #f8f9fa;
+         border-bottom: 2px solid #e9ecef;
+
+         th {
+             padding: 12px 8px;
+             text-align: left;
+             font-weight: 600;
+             color: #2c3e50;
+             white-space: nowrap;
+             border-right: 1px solid #e9ecef;
+
+             &:last-child {
+                 border-right: none;
+             }
+
+             &.expand-column {
+                 width: 50px;
+                 text-align: center;
+             }
+         }
+     }
+
+     tbody {
+         tr {
+             border-bottom: 1px solid #f8f9fa;
+             transition: background-color 0.2s ease;
+
+             &:hover {
+                 background-color: #f8f9fa;
+             }
+
+             &.expanded-row {
+                 background-color: #f8f9fa;
+             }
+
+             td {
+                 padding: 8px 6px;
+                 vertical-align: middle;
+                 border-right: 1px solid #f8f9fa;
+                 text-wrap: wrap;
+
+                 &:last-child {
+                     border-right: none;
+                 }
+
+                 &.expand-column {
+                     text-align: center;
+                     padding: 6px;
+                 }
+
+                 &.highlight {
+                     font-weight: 600;
+                     color: #007bff;
+                 }
+
+                 //columna nombre
+                 &:nth-child(4) {
+                     max-width: 120px;
+                 }
+
+                 //columna apellido
+                 &:nth-child(5) {
+                     max-width: 120px;
+                 }
+
+                 //columna Notificador
+                 &:nth-child(11) {
+                     max-width: 120px;
+                 }
+
+                 //columna mail
+                 &:nth-child(12) {
+                     max-width: 140px;
+                 }
+
+                 //columna telefono
+                 &:nth-child(13) {
+                     max-width: 110px;
+                 }
+
+             }
+         }
+     }
+ }
+
+ // Expand Button
+ .expand-btn {
+     width: 40px;
+     height: 40px;
+
+     mat-icon {
+         font-size: 20px;
+         width: 20px;
+         height: 20px;
+     }
+ }
+
+ // Detail Panel
+ .detail-panel {
+     margin: 0;
+     box-shadow: none;
+     border: none;
+     background: #fafbfc;
+
+     mat-expansion-panel-header {
+         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+         color: white;
+         border-radius: 8px 8px 0 0;
+         margin: 0;
+
+         mat-panel-title {
+             display: flex;
+             align-items: center;
+             gap: 12px;
+             font-weight: 600;
+             font-size: 16px;
+         }
+     }
+
+     mat-expansion-panel-content {
+         .mat-expansion-panel-content-body {
+             padding: 0;
+         }
+     }
+ }
+
+ // Detail Sections
+ .detail-section {
+     padding: 24px;
+     border-bottom: 1px solid #e9ecef;
+
+     &:last-child {
+         border-bottom: none;
+     }
+
+     .section-title {
+         display: flex;
+         align-items: center;
+         gap: 12px;
+         margin: 0 0 20px 0;
+         color: #2c3e50;
+         font-size: 18px;
+         font-weight: 600;
+         border-bottom: 2px solid #e9ecef;
+         padding-bottom: 8px;
+
+         mat-icon {
+             color: #007bff;
+         }
+     }
+ }
+
+ // Detail Tables
+ .detail-table {
+     width: 100%;
+     border-collapse: collapse;
+     margin-bottom: 20px;
+     font-size: 13px;
+
+     thead {
+         background: #f8f9fa;
+         border: 1px solid #e9ecef;
+
+         th {
+             padding: 12px 8px;
+             text-align: left;
+             font-weight: 600;
+             color: #2c3e50;
+             border-right: 1px solid #e9ecef;
+             white-space: nowrap;
+
+             &:last-child {
+                 border-right: none;
+             }
+         }
+     }
+
+     tbody {
+         tr {
+             border-bottom: 1px solid #f8f9fa;
+
+             &:hover {
+                 background-color: #f8f9fa;
+             }
+
+             &:last-child {
+                 border-bottom: none;
+             }
+
+             td {
+                 padding: 10px 8px;
+                 border-right: 1px solid #f8f9fa;
+
+                 &:last-child {
+                     border-right: none;
+                 }
+
+                 &.med-name {
+                     font-weight: 500;
+                     color: #007bff;
+                 }
+
+                 &.symptoms {
+                     font-weight: 500;
+                     color: #dc3545;
+                 }
+             }
+         }
+     }
+ }
+
+ // Badges
+ .badge {
+     display: inline-block;
+     padding: 4px 8px;
+     font-size: 12px;
+     font-weight: 600;
+     border-radius: 12px;
+     text-transform: uppercase;
+
+     &.badge-success {
+         background-color: #d4edda;
+         color: #155724;
+     }
+
+     &.badge-secondary {
+         background-color: #f8f9fa;
+         color: #6c757d;
+     }
+
+     &.badge-warning {
+         background-color: #fff3cd;
+         color: #856404;
+     }
+
+     &.badge-info {
+         background-color: #d1ecf1;
+         color: #0c5460;
+     }
+ }
+
+ // Reactions List
+ .reactions-list {
+     display: grid;
+     gap: 12px;
+
+     .reaction-item {
+         display: flex;
+         align-items: center;
+         gap: 12px;
+         padding: 12px;
+         background: #f8f9fa;
+         border-radius: 8px;
+         border-left: 4px solid #dc3545;
+
+         mat-icon {
+             color: #dc3545;
+             font-size: 20px;
+             width: 20px;
+             height: 20px;
+         }
+
+         span {
+             color: #2c3e50;
+             font-weight: 500;
+         }
+     }
+ }
+
+ // Other Disease
+ .other-disease {
+     padding: 16px;
+     background: #fff3cd;
+     border-radius: 8px;
+     border-left: 4px solid #ffc107;
+
+     p {
+         margin: 0;
+         color: #856404;
+         font-weight: 500;
+     }
+ }
+
+ // Responsive Design
+ @media (max-width: 768px) {
+     .container {
+         padding: 16px;
+     }
+
+     .actions-bar {
+         padding: 16px;
+         flex-direction: column;
+         align-items: stretch;
+
+         button {
+             justify-content: center;
+         }
+     }
+
+     .main-table {
+         font-size: 12px;
+
+         thead th {
+             padding: 12px 8px;
+             font-size: 12px;
+         }
+
+         tbody td {
+             padding: 8px;
+             font-size: 12px;
+         }
+     }
+
+     .detail-section {
+         padding: 16px;
+
+         .section-title {
+             font-size: 16px;
+         }
+     }
+
+     .detail-table {
+         font-size: 12px;
+
+         thead th {
+             padding: 8px 6px;
+             font-size: 11px;
+         }
+
+         tbody td {
+             padding: 6px;
+             font-size: 11px;
+         }
+     }
+ }
+
+ @media (max-width: 480px) {
+     .main-table {
+         thead th {
+             padding: 8px 4px;
+             font-size: 11px;
+         }
+
+         tbody td {
+             padding: 6px 4px;
+             font-size: 11px;
+         }
+     }
+
+     .detail-section {
+         padding: 12px;
+
+         .section-title {
+             font-size: 14px;
+             flex-direction: column;
+             align-items: flex-start;
+             gap: 8px;
+         }
+     }
+
+     .reactions-list {
+         .reaction-item {
+             padding: 8px;
+             flex-direction: column;
+             align-items: flex-start;
+             gap: 8px;
+         }
+     }
+ }
