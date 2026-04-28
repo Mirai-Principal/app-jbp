@@ -41,9 +41,9 @@ export class SidebarMenuService {
             ]
         },
         {
-            name: 'Settings',
-            icon: 'settings',
-            url: '/settings'
+            name: 'Registrar Usuario',
+            icon: 'person_add',
+            url: '/registrar-usuario'
         }
     ]);
 

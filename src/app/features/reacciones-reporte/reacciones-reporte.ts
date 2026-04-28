@@ -13,7 +13,10 @@ import { Alert } from '../../shared/alert/alert';
 
 @Component({
   selector: 'app-reacciones-reporte',
-  imports: [Header, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatIcon, ReactiveFormsModule, MatButtonModule, MatExpansionModule, LoaderPage],
+  imports: [Header, MatCard, MatCardHeader, MatCardTitle,
+    MatCardContent, MatIcon, ReactiveFormsModule, MatButtonModule,
+    MatExpansionModule,
+    LoaderPage],
   templateUrl: './reacciones-reporte.html',
   styleUrl: './reacciones-reporte.scss',
 })

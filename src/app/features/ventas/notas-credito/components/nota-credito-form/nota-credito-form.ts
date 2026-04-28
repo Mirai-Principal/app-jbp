@@ -108,7 +108,6 @@ export class NotaCreditoFormComponent {
           // Manejar errores en la búsqueda de clientes
           (error) => {
             console.error('Error al buscar clientes:', error);
-            // Mostrar alert al usuario si hay error en la petición
             this.dialog.open(Alert, {
               data: {
                 title: 'Error al buscar clientes',

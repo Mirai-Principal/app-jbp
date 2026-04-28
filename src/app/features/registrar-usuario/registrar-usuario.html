@@ -1,0 +1,65 @@
+<app-header title="Registrar Usuario" icon="user" />
+
+<div class="container">
+    <mat-card class="search-card">
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon>search</mat-icon>
+                Buscar Usuario
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="form" class="search-form">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Nombre de Usuario</mat-label>
+                    <input matInput placeholder="Ingrese el nombre de usuario" formControlName="userName" required>
+                    <mat-icon matPrefix>person</mat-icon>
+                    @if (form.get('userName')?.hasError('required') && form.get('userName')?.touched) {
+                    <mat-error>El nombre de usuario es requerido</mat-error>
+                    }
+                </mat-form-field>
+                <div class="actions">
+                    <app-button-loader [disabled]="form.invalid || procesando()" [isLoading]="procesando()"
+                        (click)="getUser()" text="Consultar Usuario" icon="search" color="primary"
+                        waitingText="Espere un momento...">
+                    </app-button-loader>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+
+    @if (user().userDisplayName) {
+    <mat-card class="user-info-card">
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon>person</mat-icon>
+                Información del Usuario
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="user-info">
+                <div class="info-item">
+                    <mat-icon class="info-icon">badge</mat-icon>
+                    <div class="info-content">
+                        <span class="info-label">Nombre Completo</span>
+                        <span class="info-value">{{user().userDisplayName}}</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <mat-icon class="info-icon">email</mat-icon>
+                    <div class="info-content">
+                        <span class="info-label">Correo Electrónico</span>
+                        <span class="info-value">{{user().userMail}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="actions">
+                <button mat-raised-button color="success" (click)="createUser()" class="register-btn">
+                    <mat-icon>how_to_reg</mat-icon>
+                    Registrar Usuario
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    }
+</div>
