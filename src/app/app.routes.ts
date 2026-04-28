@@ -14,6 +14,7 @@ import { GenerarQrUbicaciones } from './features/bodega/generar-qr-ubicaciones/g
 import { ConsultarUbicacion } from './features/bodega/consultar-ubicacion/consultar-ubicacion';
 import { ReaccionesReporte } from './features/reacciones-reporte/reacciones-reporte';
 import { RegistrarUsuario } from './features/registrar-usuario/registrar-usuario';
+import { EnvioRetenciones } from './features/envio-retenciones/envio-retenciones';
 
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
@@ -29,6 +30,7 @@ export const routes: Routes = [
     { path: 'consultar-ubicacion', component: ConsultarUbicacion, title: 'Consultar Ubicación' },
     { path: 'reacciones-reporte', component: ReaccionesReporte, title: 'Reporte de Reacciones', canActivate: [AuthGuard] },
     { path: 'registrar-usuario', component: RegistrarUsuario, title: 'Registrar Usuario', canActivate: [AuthGuard] },
+    { path: 'envio-retenciones', component: EnvioRetenciones, title: 'Envio de Retenciones', canActivate: [AuthGuard] },
 
     // Ruta para manejar páginas no encontradas
     { path: '**', component: Error }

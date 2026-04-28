@@ -45,6 +45,12 @@ export class SidebarMenuService {
             icon: 'person_add',
             url: '/registrar-usuario'
         }
+        ,
+        {
+            name: 'Envio de Retenciones',
+            icon: 'upload',
+            url: '/envio-retenciones'
+        }
     ]);
 
     getMenu() {
