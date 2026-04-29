@@ -19,7 +19,8 @@
             <div fxLayout="column">
                 <mat-form-field appearance="fill">
                     <mat-label>Ubicación</mat-label>
-                    <input [(ngModel)]="ubicacionManual" matInput placeholder="Ej. P1-A-S6-UB">
+                    <input [(ngModel)]="ubicacionManual" matInput placeholder="Ej. P1-A-S6-UB"
+                        (keypress)="generarQRManual($event)">
                 </mat-form-field>
             </div>
             }

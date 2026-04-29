@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { Header } from "../../../shared/header/header";
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, NgModel } from '@angular/forms';
 import { MatFormField, MatInputModule } from '@angular/material/input';
@@ -16,12 +16,11 @@ import { EntregaService } from './services/entrega.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { ElementTabla } from './models/entregas-urbano.models';
 import { MatTableModule } from '@angular/material/table';
-import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { ButtonLoader } from "../../../shared/button-loader/button-loader";
 import { LoaderPage } from "../../../shared/loader-page/loader-page";
-
+import { SweetAlertService } from '../../../shared/alert/sweet-alert.service';
 
 @Component({
   imports: [
@@ -56,6 +55,7 @@ import { LoaderPage } from "../../../shared/loader-page/loader-page";
   styleUrl: './entregas-urbano.scss',
 })
 export class EntregasUrbano {
+  private sweetAlert = inject(SweetAlertService);
 
   form: FormGroup;
   procesando = signal(false);
@@ -109,10 +109,7 @@ export class EntregasUrbano {
       error: (error) => {
         this.procesando.set(false);
         console.error('Error al obtener entregas:', error);
-        Swal.fire({
-          text: 'Error al obtener entregas',
-          icon: 'error',
-        });
+        this.sweetAlert.error('Error', 'Error al obtener entregas');
       }
     });
   }
@@ -127,10 +124,7 @@ export class EntregasUrbano {
     const selected = this.entregas.filter(e => e.Selected);
 
     if (selected.length === 0) {
-      Swal.fire({
-        text: 'Debe seleccionar al menos 1 registro a exportar!!',
-        icon: 'warning',
-      });
+      this.sweetAlert.warning('Advertencia', 'Debe seleccionar al menos 1 registro a exportar!!');
       return;
     }
 

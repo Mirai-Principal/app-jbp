@@ -13,41 +13,9 @@
             <mat-card-subtitle>Lugar: {{lugar()}}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <div class="table-container">
-                <mat-table [dataSource]="dataSource">
-
-                    <!-- Columnas -->
-                    <ng-container matColumnDef="Cliente">
-                        <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{element.Cliente}}</mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="NumFactura">
-                        <mat-header-cell *matHeaderCellDef>Número de Factura</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{element.NumFactura}}</mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="Transporte">
-                        <mat-header-cell *matHeaderCellDef>Transporte</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{element.Transporte}}</mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="Ciudad">
-                        <mat-header-cell *matHeaderCellDef>Ciudad</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{element.Ciudad}}</mat-cell>
-                    </ng-container>
-
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
-                </mat-table>
-            </div>
-
-            @if (dataSource.data.length === 0) {
-            <div class="empty-data">
-                <h3>No se encontraron entregas</h3>
-            </div>
-            }
+            <app-table [data]="dataSource.data" [columns]="tableColumns" [displayedColumns]="displayedColumns"
+                [showPaginator]="true">
+            </app-table>
 
         </mat-card-content>
     </mat-card>

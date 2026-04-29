@@ -1,14 +1,46 @@
-<mat-dialog-content class="alert-container">
-    <div class="alert-header">
-        <mat-icon [class]="alertClass">{{ icon }}</mat-icon>
-        <h2 matDialogTitle>{{ title }}</h2>
-    </div>
+<div class="sweet-alert-container" [ngClass]="type">
+    <div class="sweet-alert-backdrop" (click)="close()"></div>
 
-    <div class="alert-message">
-        <p>{{ message }}</p>
-    </div>
-</mat-dialog-content>
+    <div class="sweet-alert-modal">
+        <!-- Icon Section -->
+        <div class="icon-section">
+            @if (!isLoading) {
+            <mat-icon [ngClass]="alertClass" class="alert-icon">
+                {{ icon }}
+            </mat-icon>
+            } @else {
+            <mat-progress-spinner mode="indeterminate" diameter="64" strokeWidth="3" class="loading-spinner">
+            </mat-progress-spinner>
+            }
+        </div>
 
-<mat-dialog-actions>
-    <button mat-button (click)="close()">Aceptar</button>
-</mat-dialog-actions>
+        <!-- Content Section -->
+        <div class="content-section">
+            <h2 class="alert-title">{{ title }}</h2>
+            @if (message) {
+            <p class="alert-message">{{ message }}</p>
+            }
+        </div>
+
+        <!-- Actions Section -->
+        <div class="actions-section">
+            @if (showCancelButton) {
+            <button mat-button class="cancel-btn" (click)="cancel()" [disabled]="isLoading">
+                {{ cancelButtonText }}
+            </button>
+            }
+
+            @if (showConfirmButton) {
+            <button mat-raised-button class="confirm-btn" [ngClass]="type" (click)="confirm()" [disabled]="isLoading">
+                @if (isLoading) {
+                <mat-progress-spinner mode="indeterminate" diameter="20" strokeWidth="2" class="btn-spinner">
+                </mat-progress-spinner>
+                <span>{{ confirmButtonText }}</span>
+                } @else {
+                <span>{{ confirmButtonText }}</span>
+                }
+            </button>
+            }
+        </div>
+    </div>
+</div>

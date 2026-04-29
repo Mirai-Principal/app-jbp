@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, effect, signal, runInInjectionContext } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, signal, runInInjectionContext, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DashboardService } from '../../services/dashboard.service';
 import { UserService } from '../../../../core/services/user.service';
@@ -11,7 +11,7 @@ import { MatCardContent, MatCard } from "@angular/material/card";
 import { MatIcon } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
 import { ButtonLoader } from "../../../../shared/button-loader/button-loader";
-import Swal from 'sweetalert2';
+import { SweetAlertService } from "../../../../shared/alert/sweet-alert.service";
 
 @Component({
   selector: 'app-dashboard-nuevo',
@@ -39,6 +39,8 @@ export class DashboardNuevo {
   dashBoards: any[] = [];
   modulosEmpty: any[] = [];
   editing: boolean = false;
+
+  private sweetAlert = inject(SweetAlertService);
 
   constructor(public mkService: DashboardService,
     private usrService: UserService,
@@ -104,11 +106,7 @@ export class DashboardNuevo {
       error: error => {
         console.log(error);
 
-        Swal.fire({
-          title: 'Error',
-          text: 'Error al cargar los módulos',
-          icon: 'error'
-        });
+        this.sweetAlert.error('Error', 'Error al cargar los módulos');
       }
     });
   }
@@ -143,21 +141,13 @@ export class DashboardNuevo {
     this.setModulosTxt();
 
     if (!this.formulario.valid) {
-      Swal.fire({
-        title: 'Formulario inválido',
-        text: 'Por favor, complete todos los campos requeridos',
-        icon: 'warning'
-      });
+      this.sweetAlert.warning('Formulario inválido', 'Por favor, complete todos los campos requeridos');
       this.formulario.markAllAsTouched();   // Marcar todos los campos como tocados
       return;
     }
 
     if (this.dash.modulosStr === '') {
-      Swal.fire({
-        title: 'Formulario inválido',
-        text: 'Por favor, seleccione al menos un módulo',
-        icon: 'warning'
-      });
+      this.sweetAlert.warning('Formulario inválido', 'Por favor, seleccione al menos un módulo');
       return;
     }
 
@@ -169,11 +159,7 @@ export class DashboardNuevo {
       next: me => {
         console.log(me);
         if (me.error)
-          Swal.fire({
-            title: 'Error',
-            text: me.error,
-            icon: 'error'
-          });
+          this.sweetAlert.error('Error', me.error);
         else {
           if (insertar)//solo para insertar
             this.dashBoards.push(me);
@@ -183,12 +169,7 @@ export class DashboardNuevo {
           // Cerrar modal cuando se registra exitosamente
           this.modalService.closeModal();
 
-          Swal.fire({
-            icon: "success",
-            text: "Dashboard registrado exitosamente",
-            showConfirmButton: false,
-            timer: 1500
-          });
+          this.sweetAlert.success('Éxito', 'Dashboard registrado exitosamente');
 
         }
         this.clearDash();
@@ -196,11 +177,7 @@ export class DashboardNuevo {
       },
       error: error => {
         this.clearDash();
-        Swal.fire({
-          title: 'Error',
-          text: error,
-          icon: 'error'
-        });
+        this.sweetAlert.error('Error', error);
         this.procesando.set(false);
       }
     });

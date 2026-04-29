@@ -1,6 +1,6 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { Header } from "../../../shared/header/header";
-import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, NgModel } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,15 +8,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatOption } from "@angular/material/core";
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { ElementTabla } from './models/hoja-ruta.model';
 import { MatTableModule } from '@angular/material/table';
-import Swal from 'sweetalert2';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
 import { ButtonLoader } from "../../../shared/button-loader/button-loader";
+import { SweetAlertService } from "../../../shared/alert/sweet-alert.service";
 import { LoaderPage } from "../../../shared/loader-page/loader-page";
 import { HojaRutaService } from './services/hoja-ruta.service';
 import { StringUtils } from '../../../shared/stringUtils';
@@ -24,8 +21,6 @@ import { Modal } from "../../../shared/modal/modal";
 import { ReporteHojaRuta } from "./reporte-hoja-ruta/reporte-hoja-ruta";
 import { ModalService } from '../../../shared/modal/modal.service';
 import { Table, TableColumn } from '../../../shared/table/table';
-
-
 
 @Component({
   selector: 'app-hoja-ruta',
@@ -55,6 +50,7 @@ import { Table, TableColumn } from '../../../shared/table/table';
 })
 export class HojaRuta {
 
+  private sweetAlert = inject(SweetAlertService);
   protected readonly procesando = signal(false);
   selectAllChecked = signal(false);
 
@@ -87,8 +83,6 @@ export class HojaRuta {
     { columnDef: 'NumeroGuia', header: 'NumeroGuia' }
   ];
 
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
   dataSource: MatTableDataSource<ElementTabla> = new MatTableDataSource<ElementTabla>([]);
 
   constructor(private hojaRutaService: HojaRutaService, private fb: FormBuilder, public modalService: ModalService) {
@@ -125,10 +119,6 @@ export class HojaRuta {
           this.entregas = entregas;
           this.setUnicKeyEnEntregas()
           this.dataSource.data = entregas;
-          // Use setTimeout to ensure paginator is properly initialized
-          setTimeout(() => {
-            this.dataSource.paginator = this.paginator;
-          }, 0);
 
           // Uncheck todos los items seleccionados
           this.uncheckAll();
@@ -139,10 +129,7 @@ export class HojaRuta {
         this.procesando.set(false);
 
         console.error('Error al obtener entregas:', error);
-        Swal.fire({
-          text: 'Error al obtener entregas',
-          icon: 'error',
-        });
+        this.sweetAlert.error('Error', 'Error al obtener entregas');
       }
     });
   }
@@ -157,10 +144,7 @@ export class HojaRuta {
     //obtener entregas seleccionadas
     var selected = this.entregas.filter(e => e.Selected);
     if (selected.length === 0) {
-      Swal.fire({
-        text: 'Debe seleccionar al menos 1 registro!!',
-        icon: 'warning',
-      });
+      this.sweetAlert.warning('Advertencia', 'Debe seleccionar al menos 1 registro');
       return;
     }
     //datos a procesar para la hoja de ruta

@@ -36,9 +36,6 @@ export class Table implements AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     this.updateDataSource();
-    if (this.paginator) {
-      this.dataSource.paginator = this.paginator;
-    }
   }
 
   ngOnChanges() {
@@ -52,6 +49,12 @@ export class Table implements AfterViewInit, OnChanges {
   private updateDataSource() {
     if (this.dataSource) {
       this.dataSource.data = this.data || [];
+      // Use setTimeout to ensure paginator is available after DOM update
+      setTimeout(() => {
+        if (this.paginator) {
+          this.dataSource.paginator = this.paginator;
+        }
+      });
     }
   }
 }

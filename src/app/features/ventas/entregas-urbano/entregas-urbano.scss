@@ -8,6 +8,24 @@ mat-card {
     background-color: $background-content;
 }
 
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+
+    mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        margin-bottom: 16px;
+        opacity: 0.5;
+    }
+
+    p {
+        margin: 8px 0;
+    }
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -45,8 +63,8 @@ form {
         mat-header-cell {
             font-weight: 600;
             padding: 12px 16px;
-            background: $gradient-soft;
-            color: $white ;
+            background: $gradient-light;
+            color: $black ;
 
         }
 
@@ -57,7 +75,7 @@ form {
         }
 
         mat-row:hover {
-            background-color: $primary-100;
+            background-color: $gray-100;
         }
 
         mat-column-Selected {

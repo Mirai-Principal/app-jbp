@@ -8,11 +8,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { InfoButtonComponent } from '../../../../../shared/info-button/info-button';
-import { Alert } from '../../../../../shared/alert/alert';
 import { ButtonLoader } from '../../../../../shared/button-loader/button-loader';
-import { NotaCreditoItem, NotaCreditoRequest, NotaCreditoItemResponse } from '../../models/nota-credito.model';
+import { NotaCreditoItem, NotaCreditoItemResponse } from '../../models/nota-credito.model';
 import { NotaCreditoService } from '../../services/nota-credito.service';
 import { ClienteService } from '../../services/cliente.service';
+import { SweetAlertService } from '../../../../../shared/alert/sweet-alert.service';
 
 @Component({
   selector: 'app-nota-credito-tabla',
@@ -34,6 +34,9 @@ import { ClienteService } from '../../services/cliente.service';
 })
 
 export class NotaCreditoTablaComponent implements OnChanges {
+
+  private sweetAlert = inject(SweetAlertService);
+
 
   private notaCreditoService = inject(NotaCreditoService);
   private clienteService = inject(ClienteService);
@@ -164,15 +167,10 @@ export class NotaCreditoTablaComponent implements OnChanges {
 
         if (errores > 0) {
           mensaje += '\n\nRevisa los íconos de error en la tabla para ver los detalles.';
+          this.sweetAlert.warning('Advertencia', mensaje);
+        } else {
+          this.sweetAlert.success('Todo bien', mensaje);
         }
-
-        this.dialog.open(Alert, {
-          data: {
-            title: 'Resultado del Envío',
-            message: mensaje,
-            type: errores > 0 ? 'warning' : 'success'
-          }
-        });
       },
       error: (error) => {
         // Detener loader
@@ -182,14 +180,7 @@ export class NotaCreditoTablaComponent implements OnChanges {
         this.cdr.detectChanges();
 
         // Mostrar alert personalizado con el error
-        this.dialog.open(Alert, {
-          data: {
-            title: 'Error al enviar',
-            message: "Ocurrio un error al enviar las notas de crédito",
-            type: 'error'
-          }
-        });
-
+        this.sweetAlert.error('Error', "Ocurrió un error al enviar las notas de crédito");
         console.error('Error al enviar:', error);
       }
     });
@@ -205,13 +196,7 @@ export class NotaCreditoTablaComponent implements OnChanges {
 
   mostrarMensajeError(item: NotaCreditoItem) {
     if (item.mensajeError) {
-      this.dialog.open(Alert, {
-        data: {
-          title: 'Error en Factura ' + item.nroFactura,
-          message: item.mensajeError,
-          type: 'error'
-        }
-      });
+      this.sweetAlert.error('Error en Factura ' + item.nroFactura, item.mensajeError);
     }
   }
 }

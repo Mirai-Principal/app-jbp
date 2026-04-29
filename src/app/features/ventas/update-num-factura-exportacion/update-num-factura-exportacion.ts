@@ -1,6 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import Swal from 'sweetalert2';
 import { MatCardActions, MatCard, MatCardContent, MatCardHeader, MatCardTitle } from "@angular/material/card";
 import { MatFormField, MatInputModule } from "@angular/material/input";
 import { MatIcon } from "@angular/material/icon";
@@ -9,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { FacturaService } from './services/factura.service';
 import { ButtonLoader } from "../../../shared/button-loader/button-loader";
+import { SweetAlertService } from "../../../shared/alert/sweet-alert.service";
 
 @Component({
   selector: 'app-update-num-factura-exportacion',
@@ -37,6 +37,8 @@ export class UpdateNumFacturaExportacion {
 
 
 
+  private sweetAlert = inject(SweetAlertService);
+
   constructor(private fb: FormBuilder, private facturaService: FacturaService) {
     this.form = this.fb.group({
       DocNum: ['', [Validators.required]],
@@ -46,11 +48,7 @@ export class UpdateNumFacturaExportacion {
 
   updateNumFacturaExportacion() {
     if (this.form.invalid) {
-      Swal.fire({
-        icon: "warning",
-        title: "Campos inválidos",
-        text: "Por favor, complete todos los campos obligatorios.",
-      });
+      this.sweetAlert.warning('Campos inválidos', 'Por favor, complete todos los campos obligatorios.');
       this.form.markAllAsTouched();
       return;
     }
@@ -66,31 +64,17 @@ export class UpdateNumFacturaExportacion {
         this.procesando.set(false);
 
         if (resp == 'ok') {
-          Swal.fire({
-            icon: "success",
-            title: "Éxito",
-            text: "Se actualizó el número de factura correctamente",
-            timer: 2000,
-            showConfirmButton: false,
-          }).then(() => {
+          this.sweetAlert.success('Éxito', 'Se actualizó el número de factura correctamente').subscribe(() => {
             // Reset form after successful update
             this.form.reset();
           });
         } else {
-          Swal.fire({
-            icon: "warning",
-            title: "Advertencia",
-            text: resp,
-          });
+          this.sweetAlert.warning('Advertencia', resp);
         }
       },
       error: (error) => {
         this.procesando.set(false);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.message || 'Ocurrió un error al procesar la solicitud',
-        });
+        this.sweetAlert.error('Error', error.message || 'Ocurrió un error al procesar la solicitud');
       }
     });
 

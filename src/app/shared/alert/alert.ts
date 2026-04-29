@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-alert',
@@ -10,7 +11,8 @@ import { MatIconModule } from '@angular/material/icon';
     CommonModule,
     MatButtonModule,
     MatDialogModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './alert.html',
   styleUrl: './alert.css',
@@ -31,6 +33,26 @@ export class Alert {
     return this.data?.type || 'info';
   }
 
+  get isLoading(): boolean {
+    return this.data?.isLoading || false;
+  }
+
+  get showCancelButton(): boolean {
+    return this.data?.showCancelButton || false;
+  }
+
+  get showConfirmButton(): boolean {
+    return this.data?.showConfirmButton !== false;
+  }
+
+  get confirmButtonText(): string {
+    return this.data?.confirmButtonText || 'OK';
+  }
+
+  get cancelButtonText(): string {
+    return this.data?.cancelButtonText || 'Cancelar';
+  }
+
   get alertClass(): string {
     return `alert-${this.type}`;
   }
@@ -45,6 +67,20 @@ export class Alert {
   }
 
   close() {
-    this.dialogRef.close();
+    if (!this.isLoading) {
+      this.dialogRef.close();
+    }
+  }
+
+  confirm() {
+    if (!this.isLoading) {
+      this.dialogRef.close(true);
+    }
+  }
+
+  cancel() {
+    if (!this.isLoading) {
+      this.dialogRef.close(false);
+    }
   }
 }

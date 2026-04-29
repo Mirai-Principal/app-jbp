@@ -9,14 +9,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
-import { debounceTime, distinctUntilChanged, switchMap, startWith, catchError } from 'rxjs/operators';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { debounceTime, distinctUntilChanged, switchMap, startWith, catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Cliente, NotaCreditoItem } from '../../models/nota-credito.model';
 import { ClienteService } from '../../services/cliente.service';
 import { NotaCreditoService } from '../../services/nota-credito.service';
-import Swal from 'sweetalert2';
-import { Alert } from '../../../../../shared/alert/alert';
+import { SweetAlertService } from '../../../../../shared/alert/sweet-alert.service';
 
 @Component({
   selector: 'app-nota-credito-form',
@@ -31,7 +31,8 @@ import { Alert } from '../../../../../shared/alert/alert';
     MatIconModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './nota-credito-form.html',
   styleUrl: './nota-credito-form.css'
@@ -44,6 +45,7 @@ export class NotaCreditoFormComponent {
   private notaCreditoService = inject(NotaCreditoService);
   private dialogData = inject<NotaCreditoItem | null>(MAT_DIALOG_DATA, { optional: true });
   private dialogRef = inject(MatDialogRef<NotaCreditoFormComponent>, { optional: true });
+  private sweetAlert = inject(SweetAlertService);
 
   // Output
   itemAgregado = output<NotaCreditoItem>();
@@ -56,6 +58,7 @@ export class NotaCreditoFormComponent {
   clientesFiltrados!: Signal<Cliente[]>;
   datosOriginales = signal<NotaCreditoItem | null>(null);
   esEdicion = signal<boolean>(false);
+  isLoading = signal<boolean>(false);
 
   puntosEquivalentes!: Signal<number>;
 
@@ -103,20 +106,17 @@ export class NotaCreditoFormComponent {
         if (termino.length < 3) {
           return of([]);
         }
+        this.isLoading.set(true);
 
         return this.clienteService.buscarClientes(termino).pipe(
-          // Manejar errores en la búsqueda de clientes
-          (error) => {
+          finalize(() => {
+            this.isLoading.set(false);
+          }),
+          catchError((error) => {
             console.error('Error al buscar clientes:', error);
-            this.dialog.open(Alert, {
-              data: {
-                title: 'Error al buscar clientes',
-                message: "Ocurrio un error al buscar los clientes",
-                type: 'error'
-              }
-            });
+            this.sweetAlert.error('Error', "Ocurrió un error al buscar los clientes");
             return of([]); // Devolver array vacío en caso de error
-          }
+          })
         );
       })
     );

@@ -15,6 +15,7 @@ import { NgxPrintModule } from 'ngx-print';
 import { FlexLayoutModule } from 'ng-flex-layout';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { Header } from "../../../shared/header/header";
+import { SweetAlertService } from '../../../shared/alert/sweet-alert.service';
 
 
 @Component({
@@ -47,6 +48,8 @@ export class GenerarQrUbicaciones {
   private generarQrUbicacionesService = inject(GenerarQrUbicacionesService);
   private dialog = inject(MatDialog);
   private getUrlEndpointService = inject(GetUrlEndpointService);
+  private sweetAlert = inject(SweetAlertService);
+
 
   // ✅ Estado reactivo
   qrWidth = signal(255);
@@ -90,41 +93,26 @@ export class GenerarQrUbicaciones {
   }
 
   generarUbicaciones() {
-    //  Validación form
-    if (this.form.invalid) {
-      this.dialog.open(Alert, {
-        data: {
-          title: 'Aviso',
-          message: 'Debe escoger los parametros para la generacion de las ubicaciones!!',
-          type: 'warning'
-        }
-      });
-      return;
-    }
     this.ubicaciones.set([]);
 
     //  Modo manual
     if (this.tipoUbicacion() === 'manual') {
-      const manual = this.ubicacionManual();
-
-      if (!manual) {
-        this.dialog.open(Alert, {
-          data: {
-            title: 'Aviso',
-            message: "Debe ingresar una ubicación!!",
-            type: 'warning'
-          }
-        });
+      if (!this.ubicacionManual()) {
+        this.sweetAlert.warning('Aviso', 'Debe ingresar una ubicación!!');
         return;
       }
-
       this.ubicaciones.set([
         {
-          ubicacion: manual,
-          urlConsulta: this.getUrlEndpointService.urlConsultaUbicacion + manual
+          ubicacion: this.ubicacionManual(),
+          urlConsulta: this.getUrlEndpointService.urlConsultaUbicacion + this.ubicacionManual()
         }
       ]);
+      return;
+    }
 
+    //  Validación form
+    if (this.form.invalid) {
+      this.sweetAlert.warning('Aviso', 'Debe escoger los parametros para la generacion de las ubicaciones!!');
       return;
     }
 
@@ -132,13 +120,7 @@ export class GenerarQrUbicaciones {
 
     // control de nulos
     if (!palletDesde || !palletHasta || !nivel || !percha) {
-      this.dialog.open(Alert, {
-        data: {
-          title: 'Error',
-          message: 'Todos los campos son requeridos',
-          type: 'error'
-        }
-      });
+      this.sweetAlert.error('Error', 'Todos los campos son requeridos');
       return;
     }
 
@@ -155,6 +137,12 @@ export class GenerarQrUbicaciones {
 
     this.ubicaciones.set(nuevasUbicaciones);
     console.log(this.ubicaciones());
+  }
+
+  generarQRManual(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.generarUbicaciones();
+    }
   }
 
 }

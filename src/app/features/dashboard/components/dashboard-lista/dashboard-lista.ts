@@ -1,19 +1,24 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { DashboardService } from '../../services/dashboard.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ModalService } from '../../../../shared/modal/modal.service';
 import { LoaderPage } from "../../../../shared/loader-page/loader-page";
-import Swal from 'sweetalert2';
-
+import { SweetAlertService } from "../../../../shared/alert/sweet-alert.service";
+import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-dashboard-lista',
-  imports: [MatIconModule, LoaderPage],
+  imports: [MatIconModule, LoaderPage, CommonModule, MatTableModule, MatButtonModule],
   templateUrl: './dashboard-lista.html',
   styleUrl: './dashboard-lista.scss',
 })
 export class DashboardLista {
+  private modalService = inject(ModalService);
+  private dashboardService = inject(DashboardService);
+  private sweetAlert = inject(SweetAlertService);
   isLoading = signal(false);
   procesando: boolean = false;
   dash: any = {}
@@ -25,7 +30,7 @@ export class DashboardLista {
   activeSortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  constructor(private dashboardService: DashboardService, private dialog: MatDialog, private modalService: ModalService) {
+  constructor() {
     this.cargarDashboards();
   }
 
@@ -98,18 +103,10 @@ export class DashboardLista {
         if (me == 'ok') {
           this.dashBoards.splice(index, 1);
         } else
-          Swal.fire({
-            title: 'Error',
-            text: me,
-            icon: 'error'
-          });
+          this.sweetAlert.error('Error', me);
       }, error: error => {
         console.log(error);
-        Swal.fire({
-          title: 'Error',
-          text: 'Error al eliminar el dashboard',
-          icon: 'error'
-        })
+        this.sweetAlert.error('Error', 'Error al eliminar el dashboard');
       }
     });
     this.clearDash();

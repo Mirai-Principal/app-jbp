@@ -4,7 +4,11 @@
         <mat-label>Cliente</mat-label>
         <input type="text" matInput formControlName="clienteBusqueda" [matAutocomplete]="autoCliente"
             placeholder="Buscar por nombre">
+        @if (isLoading()) {
+        <mat-progress-spinner matPrefix mode="indeterminate" diameter="24" strokeWidth="3"></mat-progress-spinner>
+        }@else {
         <mat-icon matPrefix>search</mat-icon>
+        }
         @if (formulario.get('clienteBusqueda')?.hasError('required') && formulario.get('clienteBusqueda')?.touched) {
         <mat-error>El cliente es requerido</mat-error>
         }
@@ -40,8 +44,8 @@
     <!-- Monto Factura -->
     <mat-form-field appearance="outline" class="full-width">
         <mat-label>Monto Factura</mat-label>
-        <input matInput type="number" formControlName="montoFactura" placeholder="0" step="1" min="1"
-            max="999999999" (input)="prevenirDecimales($event)">
+        <input matInput type="number" formControlName="montoFactura" placeholder="0" step="1" min="1" max="999999999"
+            (input)="prevenirDecimales($event)">
         <span matPrefix style="margin: 0 4px 0 4px;">$</span>
         @if (formulario.get('montoFactura')?.hasError('required') && formulario.get('montoFactura')?.touched) {
         <mat-error>El monto es requerido</mat-error>
