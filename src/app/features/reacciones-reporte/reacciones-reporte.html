@@ -1,8 +1,8 @@
 @if (isLoading()) {
-<app-loader-page message="Cargando reacciones..." icon="healing" />
+<app-loader-page message="Cargando reacciones..." icon="radar" />
 }
 
-<app-header title="Base de Datos de Reportes" icon="description"></app-header>
+<app-header title="Base de Datos de Reportes" icon="radar"></app-header>
 
 <div class="container">
     <mat-card>
@@ -10,13 +10,6 @@
             <mat-card-title>FOR-ARH-011 Base de Datos de Reportes RAM, FT, EM</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <div class="actions-bar">
-                <button mat-raised-button color="primary" (click)="getReacciones()">
-                    <mat-icon>refresh</mat-icon>
-                    Refrescar
-                </button>
-            </div>
-
             <div class="table-container">
                 <table class="main-table">
                     <thead>

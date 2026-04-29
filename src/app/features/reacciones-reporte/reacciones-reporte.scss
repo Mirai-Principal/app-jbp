@@ -2,6 +2,7 @@
 
  .container {
      margin: auto;
+     width: 100%;
  }
 
  mat-card {
@@ -13,7 +14,7 @@
 
      @media (min-width: 1200px) {
          margin: 0 auto;
-         max-width: 85vw;
+         max-width: 90vw;
      }
 
      @media (max-width: 1200px) {
@@ -39,21 +40,6 @@
      @media (max-width: 360px) {
          padding: 0; // Even less padding on extra small screens
          min-width: 100vw;
-     }
- }
-
- // Actions Bar
- .actions-bar {
-     padding: 20px;
-     border-bottom: 1px solid #e0e0e0;
-     display: flex;
-     justify-content: flex-end;
-     gap: 12px;
-
-     button {
-         display: flex;
-         align-items: center;
-         gap: 8px;
      }
  }
 
@@ -93,16 +79,17 @@
      }
 
      tbody {
+
          tr {
              border-bottom: 1px solid #f8f9fa;
              transition: background-color 0.2s ease;
 
              &:hover {
-                 background-color: #f8f9fa;
+                 background-color: $gray-100;
              }
 
              &.expanded-row {
-                 background-color: #f8f9fa;
+                 background-color: $gray-100;
              }
 
              td {
@@ -142,7 +129,7 @@
 
                  //columna mail
                  &:nth-child(12) {
-                     max-width: 140px;
+                     max-width: 200px;
                  }
 
                  //columna telefono

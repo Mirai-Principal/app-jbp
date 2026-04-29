@@ -45,9 +45,9 @@ export class SidebarMenuService {
         },
         {
             name: 'Farmacovigilancia',
-            icon: 'group',
+            icon: 'local_pharmacy',
             children: [
-                { name: 'Reporte de Reacciones', icon: 'qr_code', url: '/reacciones-reporte' },
+                { name: 'Reporte de Reacciones', icon: 'radar', url: '/reacciones-reporte' },
             ],
             visible: true
         },
