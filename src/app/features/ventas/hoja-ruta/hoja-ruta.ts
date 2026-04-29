@@ -13,13 +13,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ElementTabla } from './models/hoja-ruta.model';
 import { MatTableModule } from '@angular/material/table';
 import { ButtonLoader } from "../../../shared/button-loader/button-loader";
-import { SweetAlertService } from "../../../shared/alert/sweet-alert.service";
+import { SweetAlertService } from "../../../shared/alert/services/sweet-alert.service";
 import { LoaderPage } from "../../../shared/loader-page/loader-page";
 import { HojaRutaService } from './services/hoja-ruta.service';
 import { StringUtils } from '../../../shared/stringUtils';
 import { Modal } from "../../../shared/modal/modal";
 import { ReporteHojaRuta } from "./reporte-hoja-ruta/reporte-hoja-ruta";
-import { ModalService } from '../../../shared/modal/modal.service';
+import { ModalService } from '../../../shared/modal/services/modal.service';
 import { Table, TableColumn } from '../../../shared/table/table';
 
 @Component({

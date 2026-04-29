@@ -27,8 +27,8 @@
 
         <ng-container *ngFor="let item of menu()">
 
+            @if (item.visible){
             <div class="menu-item" (click)="item.children ? toggle(item) : null">
-
                 <!-- ITEM NORMAL -->
                 @if(!item.children) {
                 <a [routerLink]="item.url" [class.active]="isActive(item.url)">
@@ -69,6 +69,7 @@
                 </a>
                 }
             </div>
+            }
             }
         </ng-container>
 

@@ -3,4 +3,5 @@ export interface MenuItem {
     icon: string;
     url?: string;
     children?: MenuItem[];
+    visible?: boolean;
 }

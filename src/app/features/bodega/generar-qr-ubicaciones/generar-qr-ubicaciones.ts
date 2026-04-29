@@ -1,10 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/material/card";
+import { MatCard, MatCardContent } from "@angular/material/card";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GenerarQrUbicacionesService } from './services/generar-qr-ubicaciones.service';
-import { computed, signal, effect } from '@angular/core';
+import { computed, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Alert } from '../../../shared/alert/alert';
 import { MatDialog } from '@angular/material/dialog';
 import { GetUrlEndpointService } from '../../../core/services/get-url-endpoint.service';
 import { MatFormField, MatInputModule, MatLabel } from "@angular/material/input";
@@ -15,7 +14,7 @@ import { NgxPrintModule } from 'ngx-print';
 import { FlexLayoutModule } from 'ng-flex-layout';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { Header } from "../../../shared/header/header";
-import { SweetAlertService } from '../../../shared/alert/sweet-alert.service';
+import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.service';
 
 
 @Component({

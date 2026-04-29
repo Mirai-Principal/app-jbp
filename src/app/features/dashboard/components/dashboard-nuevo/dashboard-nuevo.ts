@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { DashboardService } from '../../services/dashboard.service';
 import { UserService } from '../../../../core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalService } from '../../../../shared/modal/modal.service';
+import { ModalService } from '../../../../shared/modal/services/modal.service';
 import { MatCheckbox } from "@angular/material/checkbox";
 import { MatFormField, MatLabel, MatInputModule } from "@angular/material/input";
 import { FormsModule } from '@angular/forms';
@@ -11,7 +11,7 @@ import { MatCardContent, MatCard } from "@angular/material/card";
 import { MatIcon } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
 import { ButtonLoader } from "../../../../shared/button-loader/button-loader";
-import { SweetAlertService } from "../../../../shared/alert/sweet-alert.service";
+import { SweetAlertService } from "../../../../shared/alert/services/sweet-alert.service";
 
 @Component({
   selector: 'app-dashboard-nuevo',

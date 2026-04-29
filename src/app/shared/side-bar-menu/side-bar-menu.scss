@@ -10,6 +10,8 @@
     transition: $transition-fast;
     overflow-y: auto;
     position: fixed;
+    top: 0;
+    left: 0;
     z-index: 1000;
     box-shadow: 2px 0 8px $primary-alpha-10;
 
@@ -182,7 +184,10 @@ mat-nav-list {
 
 .sidebar-footer {
     border-top: 1px solid $gray-200;
-    margin-top: auto;
+    position: sticky;
+    bottom: 0;
+    background: $background-content;
+    z-index: 10;
 
     .logout-btn {
         width: 100%;

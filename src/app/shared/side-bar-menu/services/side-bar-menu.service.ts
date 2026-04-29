@@ -4,16 +4,24 @@ import { MenuItem } from '../models/side-bar-menu.model';
 @Injectable({ providedIn: 'root' })
 export class SidebarMenuService {
 
+    //? toca traer esto para controlar el acceso a ciertos menus
+    //! vulnerable ya q se puede cambiar en el local storage, el backend deberia validar los permisos
+    private readonly currentUser = localStorage.getItem('currentUser');
+    private readonly ModulosAcceso = JSON.parse(this.currentUser || '{}').ModulosAcceso;
+
+
     private readonly _menu = signal<MenuItem[]>([
         {
             name: 'Directorio',
             icon: 'contacts',
-            url: '/directorio'
+            url: '/directorio',
+            visible: true
         },
         {
             name: 'Dashboard',
             icon: 'dashboard',
-            url: '/dashboard'
+            url: '/dashboard',
+            visible: this.ModulosAcceso.Dashboards
         },
         {
             name: 'Ventas',
@@ -24,37 +32,43 @@ export class SidebarMenuService {
                 { name: 'Hoja de Ruta', icon: 'route', url: '/hoja-de-ruta' },
                 { name: 'Participantes Puntos', icon: 'people', url: '/participantes-puntos' },
                 { name: 'Histórico de Facturas', icon: 'receipt', url: '/historico-facturas' }
-            ]
+            ],
+            visible: this.ModulosAcceso.Ventas
         },
         {
             name: 'Bodega',
             icon: 'inventory',
             children: [
                 { name: 'Generar QR de Ubicaciones', icon: 'qr_code', url: '/generar-qr-ubicaciones' },
-            ]
+            ],
+            visible: this.ModulosAcceso.Bodega
         },
         {
             name: 'Farmacovigilancia',
             icon: 'group',
             children: [
                 { name: 'Reporte de Reacciones', icon: 'qr_code', url: '/reacciones-reporte' },
-            ]
+            ],
+            visible: true
         },
         {
             name: 'Registrar Usuario',
             icon: 'person_add',
-            url: '/registrar-usuario'
+            url: '/registrar-usuario',
+            visible: true
         }
         ,
         {
             name: 'Envio de Retenciones',
             icon: 'upload',
-            url: '/envio-retenciones'
+            url: '/envio-retenciones',
+            visible: true
         },
         {
             name: 'Actualizar Monto Cuentas',
             icon: 'account_balance',
-            url: '/actualizar-monto-cuentas'
+            url: '/actualizar-monto-cuentas',
+            visible: true
         }
     ]);
 

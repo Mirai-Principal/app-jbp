@@ -12,7 +12,7 @@ import { ButtonLoader } from '../../../../../shared/button-loader/button-loader'
 import { NotaCreditoItem, NotaCreditoItemResponse } from '../../models/nota-credito.model';
 import { NotaCreditoService } from '../../services/nota-credito.service';
 import { ClienteService } from '../../services/cliente.service';
-import { SweetAlertService } from '../../../../../shared/alert/sweet-alert.service';
+import { SweetAlertService } from '../../../../../shared/alert/services/sweet-alert.service';
 
 @Component({
   selector: 'app-nota-credito-tabla',

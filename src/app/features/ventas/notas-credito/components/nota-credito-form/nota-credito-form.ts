@@ -16,7 +16,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Cliente, NotaCreditoItem } from '../../models/nota-credito.model';
 import { ClienteService } from '../../services/cliente.service';
 import { NotaCreditoService } from '../../services/nota-credito.service';
-import { SweetAlertService } from '../../../../../shared/alert/sweet-alert.service';
+import { SweetAlertService } from '../../../../../shared/alert/services/sweet-alert.service';
 
 @Component({
   selector: 'app-nota-credito-form',

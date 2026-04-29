@@ -28,6 +28,7 @@ export class App {
     this.router.events.subscribe(() => {
       this.checkAuthState();
     })
+
   }
 
   private checkAuthState(): void {
@@ -40,7 +41,6 @@ export class App {
     this.userService.currentUser.subscribe({
       next: (usr) => {
         currentUser = usr;
-        console.log(currentUser);
       }
     });
 

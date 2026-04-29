@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Alert } from './alert';
+import { Alert } from '../alert';
 import { Observable } from 'rxjs';
 
 export interface SweetAlertOptions {
@@ -18,7 +18,7 @@ export interface SweetAlertOptions {
   providedIn: 'root'
 })
 export class SweetAlertService {
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) { }
 
   // Alertas simples
   success(title: string, message?: string): Observable<boolean> {

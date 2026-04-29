@@ -5,7 +5,7 @@ import { Header } from "../../shared/header/header";
 import { Modal } from "../../shared/modal/modal";
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { ModalService } from '../../shared/modal/modal.service';
+import { ModalService } from '../../shared/modal/services/modal.service';
 import { ButtonLoader } from "../../shared/button-loader/button-loader";
 
 @Component({

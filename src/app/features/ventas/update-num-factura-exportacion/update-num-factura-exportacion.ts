@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { FacturaService } from './services/factura.service';
 import { ButtonLoader } from "../../../shared/button-loader/button-loader";
-import { SweetAlertService } from "../../../shared/alert/sweet-alert.service";
+import { SweetAlertService } from "../../../shared/alert/services/sweet-alert.service";
 
 @Component({
   selector: 'app-update-num-factura-exportacion',
