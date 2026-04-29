@@ -15,6 +15,7 @@ import { ConsultarUbicacion } from './features/bodega/consultar-ubicacion/consul
 import { ReaccionesReporte } from './features/reacciones-reporte/reacciones-reporte';
 import { RegistrarUsuario } from './features/registrar-usuario/registrar-usuario';
 import { EnvioRetenciones } from './features/envio-retenciones/envio-retenciones';
+import { ActualizarMontoCuentas } from './features/actualizar-monto-cuentas/actualizar-monto-cuentas';
 
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
@@ -31,6 +32,7 @@ export const routes: Routes = [
     { path: 'reacciones-reporte', component: ReaccionesReporte, title: 'Reporte de Reacciones', canActivate: [AuthGuard] },
     { path: 'registrar-usuario', component: RegistrarUsuario, title: 'Registrar Usuario', canActivate: [AuthGuard] },
     { path: 'envio-retenciones', component: EnvioRetenciones, title: 'Envio de Retenciones', canActivate: [AuthGuard] },
+    { path: 'actualizar-monto-cuentas', component: ActualizarMontoCuentas, title: 'Actualizar Monto Cuentas', canActivate: [AuthGuard] },
 
     // Ruta para manejar páginas no encontradas
     { path: '**', component: Error }

@@ -23,10 +23,11 @@
         box-shadow: 0 4px 12px $primary-alpha-10;
 
         .header-row {
-            color: $white;
+            color: $black;
+            font-size: 1.1rem;
 
             .dashboard-cell {
-                background: $gradient-secondary;
+                background: $gradient-light;
             }
         }
 
@@ -58,10 +59,13 @@
         font-weight: 500;
         padding: 10px;
         margin-right: 40px;
+        transition: all 0.2s ease;
+        display: inline-block;
+        transform-origin: center;
+        will-change: transform;
 
         &:hover {
-            color: $primary-dark;
-            font-size: 1.01em;
+            transform: scale(1.1);
         }
     }
 
@@ -69,6 +73,10 @@
         display: flex;
         gap: 8px;
         justify-content: center;
+
+        button {
+            cursor: pointer;
+        }
     }
 
     .empty-state {

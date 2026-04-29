@@ -50,6 +50,11 @@ export class SidebarMenuService {
             name: 'Envio de Retenciones',
             icon: 'upload',
             url: '/envio-retenciones'
+        },
+        {
+            name: 'Actualizar Monto Cuentas',
+            icon: 'account_balance',
+            url: '/actualizar-monto-cuentas'
         }
     ]);
 
