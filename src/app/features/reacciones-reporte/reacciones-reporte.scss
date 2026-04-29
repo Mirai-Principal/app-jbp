@@ -14,7 +14,7 @@
 
      @media (min-width: 1200px) {
          margin: 0 auto;
-         max-width: 90vw;
+         max-width: 80vw;
      }
 
      @media (max-width: 1200px) {
@@ -56,7 +56,7 @@
      font-size: 14px;
 
      thead {
-         background: #f8f9fa;
+         background: $gradient-light;
          border-bottom: 2px solid #e9ecef;
 
          th {
