@@ -55,20 +55,20 @@ export class SidebarMenuService {
             name: 'Registrar Usuario',
             icon: 'person_add',
             url: '/registrar-usuario',
-            visible: true
+            visible: false
         }
         ,
         {
             name: 'Envio de Retenciones',
             icon: 'upload',
             url: '/envio-retenciones',
-            visible: true
+            visible: false
         },
         {
             name: 'Actualizar Monto Cuentas',
             icon: 'account_balance',
             url: '/actualizar-monto-cuentas',
-            visible: true
+            visible: false
         }
     ]);
 
