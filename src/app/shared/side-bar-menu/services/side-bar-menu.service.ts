@@ -49,7 +49,7 @@ export class SidebarMenuService {
             children: [
                 { name: 'Reporte de Reacciones', icon: 'radar', url: '/reacciones-reporte' },
             ],
-            visible: true
+            visible: this.ModulosAcceso.Farmacovigilancia
         },
         {
             name: 'Registrar Usuario',

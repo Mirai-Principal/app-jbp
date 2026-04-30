@@ -8,8 +8,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { ReaccionesReporteService } from './services/reacciones-reporte.service';
 import { ReaccionesReporteResponse } from './models/reacciones-reporte.model';
 import { LoaderPage } from "../../shared/loader-page/loader-page";
-import { MatDialog } from '@angular/material/dialog';
-import { Alert } from '../../shared/alert/alert';
+import { SweetAlertService } from '../../shared/alert/services/sweet-alert.service';
 
 @Component({
   selector: 'app-reacciones-reporte',
@@ -24,7 +23,8 @@ export class ReaccionesReporte {
 
   // DI
   private reaccionesReporteService = inject(ReaccionesReporteService);
-  private dialog = inject(MatDialog);
+  private sweetAlert = inject(SweetAlertService);
+
 
   // estados
   protected readonly reacciones = signal<ReaccionesReporteResponse[]>([]);
@@ -46,13 +46,8 @@ export class ReaccionesReporte {
       , error: (error) => {
         console.error(error);
         this.isLoading.set(false);
-        this.dialog.open(Alert, {
-          data: {
-            title: 'Error al cargar reacciones',
-            message: "Error al cargar reacciones",
-            type: 'error'
-          }
-        });
+        this.sweetAlert.error('Error', 'Error al cargar reacciones');
+
       }
     });
   }

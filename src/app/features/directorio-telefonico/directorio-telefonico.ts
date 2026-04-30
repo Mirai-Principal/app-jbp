@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { DirectorioTelefonicoService } from './services/directorio-telefonico.service';
 import { DirectorioMsg } from '../../core/models/directorioMsg';
 import { Observable } from 'rxjs';
@@ -14,6 +14,7 @@ import { Header } from '../../shared/header/header';
 import { LoaderPage } from '../../shared/loader-page/loader-page';
 import { MatDialog } from '@angular/material/dialog';
 import { Alert } from '../../shared/alert/alert';
+import { SweetAlertService } from '../../shared/alert/services/sweet-alert.service';
 
 @Component({
   selector: 'app-directorio-telefonico',
@@ -33,6 +34,10 @@ import { Alert } from '../../shared/alert/alert';
   styleUrl: './directorio-telefonico.scss',
 })
 export class DirectorioTelefonico {
+
+  // DI
+  private sweetAlert = inject(SweetAlertService);
+
   // controles de ingreso en la UI para búsqueda
   txtSearch = new FormControl();
   displayedColumns: string[] = ['CONTACTO', 'Ext', 'DEPARTAMENTO', 'PLANTA'];
@@ -61,14 +66,7 @@ export class DirectorioTelefonico {
       },
       error: (error) => {
         this.isLoading.set(false);
-
-        this.dialog.open(Alert, {
-          data: {
-            title: 'Error',
-            message: "Error al cargar el directorio",
-            type: 'error'
-          }
-        });
+        this.sweetAlert.error('Error', "Error al cargar el directorio")
         console.error('Error al obtener los datos: ', error);
       },
       complete: () => {

@@ -9,13 +9,12 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from "@angular/common";
 import { MatTableModule, MatHeaderRowDef, MatRowDef, MatCellDef, MatHeaderCellDef } from "@angular/material/table";
-import { Alert } from '../../shared/alert/alert';
-import { MatDialog } from '@angular/material/dialog';
 import { RetencionesServices } from './services/retenciones.service';
 import { map, scan, startWith } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { StatusMsg } from '../../core/models/common.msg';
 import { dateUtils } from '../../shared/dateUtils';
+import { SweetAlertService } from '../../shared/alert/services/sweet-alert.service';
 
 @Component({
   selector: 'app-envio-retenciones',
@@ -41,11 +40,9 @@ import { dateUtils } from '../../shared/dateUtils';
   styleUrl: './envio-retenciones.scss',
 })
 export class EnvioRetenciones {
-
-
   // DI
   private retencionesServices = inject(RetencionesServices);
-  private dialog = inject(MatDialog);
+  private sweetAlert = inject(SweetAlertService);
 
   // 🔹 estado
   procesando = signal(false);
@@ -112,13 +109,7 @@ export class EnvioRetenciones {
   // 🔥 acción enviar
   enviarRetenciones() {
     if (this.mesesControl.invalid) {
-      this.dialog.open(Alert, {
-        data: {
-          title: 'Error',
-          message: 'Debe seleccionar al menos un mes',
-          type: 'error'
-        }
-      });
+      this.sweetAlert.error('Error', 'Debe seleccionar al menos un mes');
       this.mesesControl.markAsTouched();
       return;
     }

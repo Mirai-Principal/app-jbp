@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -9,9 +9,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserService } from '../../core/services/user.service';
 import { ButtonLoader } from '../../shared/button-loader/button-loader';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { Alert } from '../../shared/alert/alert';
 import { enviroment } from '../../assets/enviroment';
+import { SweetAlertService } from '../../shared/alert/services/sweet-alert.service';
 
 @Component({
   selector: 'app-login',
@@ -26,13 +25,15 @@ import { enviroment } from '../../assets/enviroment';
     MatProgressSpinnerModule,
     FormsModule,
     ButtonLoader,
-
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
 
 export class Login {
+  // DI
+  private sweetAlert = inject(SweetAlertService);
+
   // Estado de carga
   isLoading = signal(false);
   enviroment = enviroment;
@@ -44,8 +45,7 @@ export class Login {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private router: Router,
-    private dialog: MatDialog) {
+    private router: Router) {
 
     // validar el formulario
     this.form = this.fb.group({
@@ -70,24 +70,12 @@ export class Login {
             this.router.navigate(['directorio']);
           } else {
             // Mostrar alert personalizado con el error
-            this.dialog.open(Alert, {
-              data: {
-                title: 'Acceso denegado',
-                message: "No está autorizado para ingresar",
-                type: 'warning'
-              }
-            });
+            this.sweetAlert.warning('Acceso denegado', 'No está autorizado para ingresar');
           }
         },
         error: (error) => {
           console.error('Error en el login:', error);
-          this.dialog.open(Alert, {
-            data: {
-              title: 'Error al iniciar sesión',
-              message: "Error al iniciar sesión",
-              type: 'error'
-            }
-          });
+          this.sweetAlert.error('Error', 'Error al iniciar sesión');
           this.isLoading.set(false);
         }
       });

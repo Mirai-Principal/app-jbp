@@ -8,14 +8,12 @@ import { ConsultarUbicacionService, UbicacionItem } from './services/consultar-u
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import { switchMap, of, startWith, finalize, catchError, tap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { Alert } from '../../../shared/alert/alert';
 import { LoaderPage } from "../../../shared/loader-page/loader-page";
 import { MatPaginator } from '@angular/material/paginator';
 import { MatRadioGroup, MatRadioButton } from "@angular/material/radio";
 import { MatIcon } from "@angular/material/icon";
 import { ConsultaLote } from "../consulta-lote/consulta-lote";
-
-
+import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.service';
 
 @Component({
   selector: 'app-consultar-ubicacion',
@@ -29,29 +27,12 @@ export class ConsultarUbicacion {
   // DI
   private consultarUbicacionService = inject(ConsultarUbicacionService);
   private dialog = inject(MatDialog);
+  private sweetAlert = inject(SweetAlertService);
 
   // estados
   ubicacion = input<string>();
   protected readonly isLoading = signal(false);
   protected readonly error = signal<string | null>(null);
-
-  constructor() {
-    effect(() => {
-      const err = this.error();
-
-      if (!err) return;
-
-      this.dialog.open(Alert, {
-        data: {
-          message: err,
-          type: 'error'
-        }
-      });
-
-      // 🔥 evitar duplicados
-      this.error.set(null);
-    });
-  }
 
   // columnas
   displayedColumns = ['Lote', 'Bodega', 'CodArticulo', 'Articulo', 'Cantidad'];
@@ -85,7 +66,7 @@ export class ConsultarUbicacion {
           },
           error: (error: any) => {
             console.error(error);
-            this.error.set('Ocurrió un error al consultar la ubicación');
+            this.sweetAlert.error('Error', 'Ocurrió un error al consultar la ubicación');
           }
         }),
         catchError(() => of({ Items: [] })),
