@@ -16,6 +16,7 @@ import { ReaccionesReporte } from './features/reacciones-reporte/reacciones-repo
 import { RegistrarUsuario } from './features/registrar-usuario/registrar-usuario';
 import { EnvioRetenciones } from './features/envio-retenciones/envio-retenciones';
 import { ActualizarMontoCuentas } from './features/actualizar-monto-cuentas/actualizar-monto-cuentas';
+import { ConsultaLote } from './features/bodega/consulta-lote/consulta-lote';
 
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
@@ -29,6 +30,7 @@ export const routes: Routes = [
     { path: 'historico-facturas', component: HistoricoFacturas, title: 'Histórico de Facturas', canActivate: [AuthGuard] },
     { path: 'generar-qr-ubicaciones', component: GenerarQrUbicaciones, title: 'Generar QR de Ubicaciones', canActivate: [AuthGuard] },
     { path: 'consultar-ubicacion', component: ConsultarUbicacion, title: 'Consultar Ubicación' },
+    { path: 'consulta-lote/:lote/:codArticulo', component: ConsultaLote, title: 'Consulta Lote' },
     { path: 'reacciones-reporte', component: ReaccionesReporte, title: 'Reporte de Reacciones', canActivate: [AuthGuard] },
     { path: 'registrar-usuario', component: RegistrarUsuario, title: 'Registrar Usuario', canActivate: [AuthGuard] },
     { path: 'envio-retenciones', component: EnvioRetenciones, title: 'Envio de Retenciones', canActivate: [AuthGuard] },

@@ -1,34 +1,27 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ConsultaLoteService } from './services/consulta-lote.service';
 import { of } from 'rxjs';
 import { catchError, finalize, startWith, switchMap, tap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatIcon } from "@angular/material/icon";
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { LoaderPage } from "../../../shared/loader-page/loader-page";
+import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.service';
 
 @Component({
   selector: 'app-consulta-lote',
-  imports: [CommonModule, MatIcon, MatProgressSpinner],
+  imports: [CommonModule, MatIcon, LoaderPage],
   templateUrl: './consulta-lote.html',
   styleUrl: './consulta-lote.scss',
 })
 export class ConsultaLote {
-
+  // DI
   private consultaLoteService = inject(ConsultaLoteService);
-  private dialog = inject(MatDialog);
+  private sweetAlert = inject(SweetAlertService);
 
   // Datos del diálogo como signals
-  lote = signal<string>('');
-  codArticulo = signal<string | undefined>(undefined);
-
-  constructor() {
-    const data = inject(MAT_DIALOG_DATA);
-    this.lote.set(data.lote);
-    this.codArticulo.set(data.codArticulo);
-
-  }
+  lote = input<string>('');
+  codArticulo = input<string | undefined>(undefined);
 
   // 🔹 loading
   protected readonly isLoading = signal(false);
@@ -44,9 +37,9 @@ export class ConsultaLote {
         tap({
           next: (response) => {
             console.log("respuesta", response);
-
           },
           error: (error: any) => {
+            this.sweetAlert.error('Error', 'Error al obtener los datos');
             console.error("Error al obtener los datos: " + error);
           }
         }),

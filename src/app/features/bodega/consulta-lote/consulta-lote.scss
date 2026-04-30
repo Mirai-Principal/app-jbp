@@ -7,7 +7,10 @@
      justify-content: center;
      text-align: center;
      padding: 60px 20px;
+     width: 200px;
+     margin: auto;
      color: #999;
+     background: $white;
 
      mat-icon {
          font-size: 64px;
@@ -28,8 +31,12 @@
      max-width: 100%;
      background: #f8f9fa;
      border-radius: 0;
-     max-height: 90vh;
+     max-height: 100vh;
      overflow-y: auto;
+
+     @media screen and (min-width: 768px) {
+         margin: 0 40px;
+     }
  }
 
  // Header Card

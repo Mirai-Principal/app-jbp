@@ -1,11 +1,14 @@
-@if(!isLoading() ) {
+@if (isLoading()) {
+<app-loader-page message="Cargando información del lote..." icon="inventory_2" />
+}
+
 @if(detalleLote().CodArticulo) {
 <div class="container">
     <!-- Header Card -->
     <div class="header-card">
         <div class="status-badge" [class]="estadoLote()">{{estadoLote()}}</div>
         <div class="product-info">
-            <h6 class="product-code">{{esProductoTerminado()?detalleLote().CodPoePT:detalleLote().CodPoe}}</h6>
+            <h6 class="product-code">{{esProductoTerminado()?detalleLote().CodPoePT : detalleLote().CodPoe}}</h6>
             <h3 class="product-name">{{detalleLote().Articulo}}</h3>
         </div>
     </div>
@@ -142,11 +145,5 @@
 <div class="empty-state">
     <mat-icon>warning</mat-icon>
     <p>No se encontraron los datos</p>
-</div>
-}
-}@else {
-<div class="empty-state">
-    <mat-spinner></mat-spinner>
-    <p class="loading-text">Espere un momento...</p>
 </div>
 }

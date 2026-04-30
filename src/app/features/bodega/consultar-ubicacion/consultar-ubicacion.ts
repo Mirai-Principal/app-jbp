@@ -7,13 +7,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ConsultarUbicacionService, UbicacionItem } from './services/consultar-ubicacion.service';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import { switchMap, of, startWith, finalize, catchError, tap } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
 import { LoaderPage } from "../../../shared/loader-page/loader-page";
 import { MatPaginator } from '@angular/material/paginator';
 import { MatRadioGroup, MatRadioButton } from "@angular/material/radio";
 import { MatIcon } from "@angular/material/icon";
-import { ConsultaLote } from "../consulta-lote/consulta-lote";
 import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-consultar-ubicacion',
@@ -26,8 +25,8 @@ export class ConsultarUbicacion {
 
   // DI
   private consultarUbicacionService = inject(ConsultarUbicacionService);
-  private dialog = inject(MatDialog);
   private sweetAlert = inject(SweetAlertService);
+  private router = inject(Router);
 
   // estados
   ubicacion = input<string>();
@@ -100,9 +99,8 @@ export class ConsultarUbicacion {
   });
 
   verDetalleLote(lote: string, codArticulo: string) {
-    this.dialog.open(ConsultaLote, {
-      data: { lote, codArticulo },
-    });
+    //redirigir a la pantalla de consulta de lote
+    this.router.navigate(['/consulta-lote', lote, codArticulo]);
   }
 }
 
