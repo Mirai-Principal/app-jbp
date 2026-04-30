@@ -1,52 +1,22 @@
  @use '../../shared/styles/colors' as *;
 
  .container {
-     margin: auto;
-     width: 100%;
+     margin: 0 10px;
+
  }
 
  mat-card {
      background-color: $background-content;
      border-radius: 0;
-     box-shadow: 0 4px 12px $primary-alpha-10;
      overflow: hidden;
-     padding: 0;
-
-     @media (min-width: 1200px) {
-         margin: 0 auto;
-         max-width: 80vw;
-     }
-
-     @media (max-width: 1200px) {
-         margin: 0 auto;
-         max-width: 90vw;
-     }
-
-     // Ensure card doesn't overflow on mobile
-     @media (max-width: 768px) {
-         margin: 0 auto;
-         border-radius: 0;
-         box-shadow: none;
-         max-width: 90vw; // Ensure it doesn't exceed viewport width
-         box-sizing: border-box; // Include padding and border in the element's total width and height
-         overflow: hidden; // Prevent content from spilling out
-     }
-
-     @media (max-width: 480px) {
-         padding: 0 auto; // Add some padding on very small screens
-         min-width: 95vw;
-     }
-
-     @media (max-width: 360px) {
-         padding: 0; // Even less padding on extra small screens
-         min-width: 100vw;
-     }
  }
 
  // Table Container
  .table-container {
      overflow-x: auto;
-     background: white;
+     background: $white;
+     box-shadow: 0 4px 12px $primary-alpha-10;
+
  }
 
  // Main Table
@@ -343,7 +313,7 @@
  // Responsive Design
  @media (max-width: 768px) {
      .container {
-         padding: 16px;
+         margin: 0;
      }
 
      .actions-bar {
