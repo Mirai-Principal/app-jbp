@@ -18,6 +18,8 @@
     transition: margin-left 0.3s ease;
     overflow-x: hidden;
     max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* When sidebar is collapsed */

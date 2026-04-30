@@ -1,15 +1,17 @@
 <app-header title="Dashboard" icon="dashboard" />
 
-<mat-card>
-    <mat-card-content>
+<div class="container">
+    <mat-card>
+        <mat-card-content>
 
-        <app-button-loader [isLoading]="false" [text]="'Agregar Dashboard'" [icon]="'add'" color="primary"
-            (click)="abrirModal()">
-        </app-button-loader>
+            <app-button-loader [isLoading]="false" [text]="'Agregar Dashboard'" [icon]="'add'" color="primary"
+                (click)="abrirModal()">
+            </app-button-loader>
 
-        <app-dashboard-lista />
-    </mat-card-content>
-</mat-card>
+            <app-dashboard-lista />
+        </mat-card-content>
+    </mat-card>
+</div>
 
 <!-- Modal para agregar/editar dashboard -->
 <app-modal [isOpen]="isOpen()" [title]="editData() ? 'Editar Dashboard' : 'Nuevo Dashboard'"
