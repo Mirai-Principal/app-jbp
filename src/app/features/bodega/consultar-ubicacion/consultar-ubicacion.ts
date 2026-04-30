@@ -34,11 +34,11 @@ export class ConsultarUbicacion {
   protected readonly error = signal<string | null>(null);
 
   // columnas
-  displayedColumns = ['Lote', 'Bodega', 'CodArticulo', 'Articulo', 'Cantidad'];
+  displayedColumns = ['Lote', 'CodBodega', 'CodArticulo', 'Articulo', 'Cantidad'];
 
   tableColumns = [
     { columnDef: 'Lote', header: 'Lote' },
-    { columnDef: 'Bodega', header: 'Bodega' },
+    { columnDef: 'CodBodega', header: 'Bodega' },
     { columnDef: 'CodArticulo', header: 'CodArticulo' },
     { columnDef: 'Articulo', header: 'Articulo' },
     { columnDef: 'Cantidad', header: 'Cantidad' },
@@ -100,7 +100,7 @@ export class ConsultarUbicacion {
 
   verDetalleLote(lote: string, codArticulo: string) {
     //redirigir a la pantalla de consulta de lote
-    this.router.navigate(['/consulta-lote', lote, codArticulo]);
+    this.router.navigate(['/consulta-lote/lote', lote, 'codArticulo', codArticulo]);
   }
 }
 
