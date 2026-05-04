@@ -30,6 +30,13 @@ mat-card {
     }
 }
 
+.btn_previsializar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+}
+
 form {
     display: flex;
     flex-direction: column;
