@@ -119,7 +119,15 @@ export class SidebarMenu {
   // detectar resize
   @HostListener('window:resize')
   onResize() {
-    this.sidebarState.setIsMobile(window.innerWidth < 768);
+    const wasMobile = this.isMobile();
+    const isNowMobile = window.innerWidth < 768;
+
+    this.sidebarState.setIsMobile(isNowMobile);
+
+    // Si entra en modo móvil, resetear el estado colapsado
+    if (!wasMobile && isNowMobile) {
+      this.sidebarState.setCollapsed(false);
+    }
   }
 
   // sidebar.component.ts
