@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UrlServices } from '../../../core/services/url.service';
 import { HttpClient } from '@angular/common/http';
 import { ItemMsg, ListMe } from '../../../core/models/common.msg';
+import { UrlServices } from '../../../assets/enviroment';
 
 @Injectable({
   providedIn: 'root',

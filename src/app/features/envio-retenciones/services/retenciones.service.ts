@@ -10,7 +10,7 @@ import {
 import { Observable, Subject, from } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { UrlServices } from '../../../core/services/url.service';
+import { UrlServices, UrlServices2 } from '../../../assets/enviroment';
 import { StatusMsg } from '../../../core/models/common.msg';
 
 @Injectable({
@@ -37,7 +37,7 @@ export class RetencionesServices {
   // 🔥 Inicialización moderna del Hub
   private initHub() {
     this.hub = new HubConnectionBuilder()
-      .withUrl(UrlServices.retencionesServiceHubUrl)
+      .withUrl(UrlServices2.retencionesServiceHubUrl)
       .withAutomaticReconnect() // 🔥 reconexión automática
       .build();
 
@@ -60,7 +60,7 @@ export class RetencionesServices {
 
   // 🔹 request inicial
   private requestMsg() {
-    this.http.get(`${UrlServices.retencionesServiceUrl}/requestMessage`)
+    this.http.get(`${UrlServices2.retencionesServiceUrl}/requestMessage`)
       .subscribe({
         error: err => console.error('Error requestMessage', err)
       });
