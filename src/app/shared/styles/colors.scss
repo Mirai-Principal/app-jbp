@@ -3,46 +3,46 @@
 // =============================
 
 // =============================
-// 🎨 PALETA PRINCIPAL
+// 🎨 PALETA PRINCIPAL (Angular Material Indigo)
 // =============================
 
-$primary: #c10e0e;
-$primary-light: #e53935;
-$primary-dark: #8b0000;
+$primary: #3f51b5;
+$primary-light: #5c6bc0;
+$primary-dark: #303f9f;
 
 // =============================
 // 🎨 PALETA PARA BOTONES
 // =============================
-$accent: #007bff;
+$accent: #00bcd4;
 
 
 // =============================
-// 🎨 VARIACIONES DEL ROJO
+// 🎨 VARIACIONES DEL PRIMARY
 // =============================
 
-$primary-100: #ffe5e5;
-$primary-200: #ffb3b3;
-$primary-300: #ff8080;
-$primary-400: #ff4d4d;
-$primary-500: #c10e0e; // base
-$primary-600: #a50c0c;
-$primary-700: #8b0000;
-$primary-800: #660000;
-$primary-900: #400000;
+$primary-100: #e8eaf6;
+$primary-200: #c5cae9;
+$primary-300: #9fa8da;
+$primary-400: #7986cb;
+$primary-500: #3f51b5; // base
+$primary-600: #3949ab;
+$primary-700: #303f9f;
+$primary-800: #283593;
+$primary-900: #1a237e;
 
 // =============================
 // 🎨 TRANSPARENCIAS
 // =============================
 
-$primary-alpha-5: rgba(193, 14, 14, 0.05);
-$primary-alpha-10: rgba(193, 14, 14, 0.1);
-$primary-alpha-20: rgba(193, 14, 14, 0.2);
-$primary-alpha-30: rgba(193, 14, 14, 0.3);
-$primary-alpha-40: rgba(193, 14, 14, 0.4);
-$primary-alpha-50: rgba(193, 14, 14, 0.5);
-$primary-alpha-60: rgba(193, 14, 14, 0.6);
-$primary-alpha-70: rgba(193, 14, 14, 0.7);
-$primary-alpha-80: rgba(193, 14, 14, 0.8);
+$primary-alpha-5: rgba(63, 81, 181, 0.05);
+$primary-alpha-10: rgba(63, 81, 181, 0.1);
+$primary-alpha-20: rgba(63, 81, 181, 0.2);
+$primary-alpha-30: rgba(63, 81, 181, 0.3);
+$primary-alpha-40: rgba(63, 81, 181, 0.4);
+$primary-alpha-50: rgba(63, 81, 181, 0.5);
+$primary-alpha-60: rgba(63, 81, 181, 0.6);
+$primary-alpha-70: rgba(63, 81, 181, 0.7);
+$primary-alpha-80: rgba(63, 81, 181, 0.8);
 
 // =============================
 // 🎨 COLORES NEUTROS
@@ -65,7 +65,7 @@ $gray-900: #121212;
 // 🎨 GRADIENTES
 // =============================
 
-$gradient-primary: linear-gradient(135deg, #c10e0e, #8b0000);
+$gradient-primary: linear-gradient(135deg, #3f51b5, #303f9f);
 
 $gradient-secondary: linear-gradient(135deg,
                 $primary-alpha-80,
