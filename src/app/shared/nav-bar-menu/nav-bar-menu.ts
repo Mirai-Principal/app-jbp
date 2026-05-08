@@ -1,26 +1,27 @@
 // sidebar.component.ts
-import { Component, signal, computed, HostListener, inject } from '@angular/core';
+import { Component, signal, computed, HostListener, inject, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SidebarMenuService } from './services/side-bar-menu.service';
+import { SidebarMenuService } from './services/nav-bar-menu.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
-import { MenuItem } from './models/side-bar-menu.model';
+import { MenuItem } from './models/nav-bar-menu.model';
 import { UserService } from '../../core/services/user.service';
 import { filter } from 'rxjs';
 import { enviroment } from '../../assets/enviroment';
-import { SidebarStateService } from './services/sidebar-state.service';
+import { NavBarStateService } from './services/nav-bar-state.service';
 
 @Component({
-  selector: 'app-side-bar-menu',
+  selector: 'app-nav-bar-menu',
   standalone: true,
   imports: [CommonModule, MatIconModule, MatListModule, RouterModule],
-  templateUrl: './side-bar-menu.html',
-  styleUrls: ['./side-bar-menu.scss']
+  templateUrl: './nav-bar-menu.html',
+  styleUrls: ['./nav-bar-menu.scss']
 })
-export class SidebarMenu {
+export class NavBarMenu {
   private router = inject(Router);
-  private sidebarState = inject(SidebarStateService);
+  private navbarState = inject(NavBarStateService);
+  private elementRef = inject(ElementRef<HTMLElement>);
 
   // nombre de la empresa
   protected readonly companyName = enviroment.empresaNombre;
@@ -30,9 +31,9 @@ export class SidebarMenu {
   expandedItems = signal<Set<string>>(new Set());
 
   // Use shared service signals
-  protected readonly collapsed = this.sidebarState.collapsed;
-  protected readonly mobileOpen = this.sidebarState.mobileOpen;
-  protected readonly isMobile = this.sidebarState.isMobile;
+  protected readonly collapsed = this.navbarState.collapsed;
+  protected readonly mobileOpen = this.navbarState.mobileOpen;
+  protected readonly isMobile = this.navbarState.isMobile;
 
   // ruta actual 
   currentRoute = signal(this.router.url);
@@ -44,14 +45,14 @@ export class SidebarMenu {
     this.menu.set(this.menuService.getMenu());
 
     // Initialize mobile state
-    this.sidebarState.setIsMobile(window.innerWidth < 768);
+    this.navbarState.setIsMobile(window.innerWidth < 992);
 
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
 
         this.currentRoute.set(this.router.url);
-        this.expandActiveParents();
+        this.expandedItems.set(new Set());
 
         // 🔥 cerrar en mobile SIEMPRE al navegar
         if (this.isMobile()) {
@@ -59,6 +60,13 @@ export class SidebarMenu {
         }
 
       });
+  }
+
+  onNavLinkClick() {
+    this.expandedItems.set(new Set());
+    if (this.isMobile()) {
+      this.navbarState.setMobileOpen(false);
+    }
   }
 
   // 🔥 detectar si un item está activo
@@ -94,11 +102,12 @@ export class SidebarMenu {
   toggle(item: MenuItem) {
     const current = new Set(this.expandedItems());
 
-    current.has(item.name)
-      ? current.delete(item.name)
-      : current.add(item.name);
+    if (current.has(item.name)) {
+      this.expandedItems.set(new Set());
+      return;
+    }
 
-    this.expandedItems.set(current);
+    this.expandedItems.set(new Set([item.name]));
   }
 
   isExpanded(name: string) {
@@ -109,24 +118,43 @@ export class SidebarMenu {
     if (this.isMobile())
       this.toggleMobile()
     else
-      this.sidebarState.toggleCollapsed();
+      this.navbarState.toggleCollapsed();
   }
 
   toggleMobile() {
-    this.sidebarState.toggleMobileOpen();
+    this.navbarState.toggleMobileOpen();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as Node | null;
+    if (!target) return;
+
+    const clickedInside = this.elementRef.nativeElement.contains(target);
+    if (!clickedInside) {
+      this.expandedItems.set(new Set());
+      if (this.isMobile() && this.mobileOpen()) {
+        this.navbarState.setMobileOpen(false);
+      }
+    }
   }
 
   // detectar resize
   @HostListener('window:resize')
   onResize() {
     const wasMobile = this.isMobile();
-    const isNowMobile = window.innerWidth < 768;
+    const isNowMobile = window.innerWidth < 992;
 
-    this.sidebarState.setIsMobile(isNowMobile);
+    this.navbarState.setIsMobile(isNowMobile);
 
     // Si entra en modo móvil, resetear el estado colapsado
     if (!wasMobile && isNowMobile) {
-      this.sidebarState.setCollapsed(false);
+      this.navbarState.setCollapsed(false);
+    }
+
+    // Si sale de modo móvil, cerrar el menú móvil
+    if (wasMobile && !isNowMobile) {
+      this.navbarState.setMobileOpen(false);
     }
   }
 
@@ -136,7 +164,7 @@ export class SidebarMenu {
     // si usas signals o estado global
     this.expandedItems.set(new Set());
     // opcional: cerrar menú en mobile
-    this.sidebarState.setMobileOpen(false);
+    this.navbarState.setMobileOpen(false);
 
     this.userService.logout();
     this.router.navigate(['/login']);

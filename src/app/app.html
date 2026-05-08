@@ -1,6 +1,6 @@
 @if (isAuthenticated()) {
-<div class="main-layout" [class.sidebar-collapsed]="sidebarState.collapsed()">
-    <app-side-bar-menu />
+<div class="main-layout">
+    <app-nav-bar-menu />
     <main class="content">
         <router-outlet />
     </main>

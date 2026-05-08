@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { MenuItem } from '../models/side-bar-menu.model';
+import { MenuItem } from '../models/nav-bar-menu.model';
 
 @Injectable({ providedIn: 'root' })
 export class SidebarMenuService {

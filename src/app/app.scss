@@ -1,5 +1,6 @@
 .main-layout {
     display: flex;
+    flex-direction: column;
     min-height: 100vh;
     transition: all 0.3s ease;
     overflow-x: hidden;
@@ -13,19 +14,12 @@
 
 .content {
     flex: 1;
-    margin-left: 260px;
-    /* Same width as expanded sidebar */
-    transition: margin-left 0.3s ease;
+    margin-left: 0;
+    transition: none;
     overflow-x: hidden;
     max-width: 100%;
     width: 100%;
     box-sizing: border-box;
-}
-
-/* When sidebar is collapsed */
-.main-layout.sidebar-collapsed .content {
-    margin-left: 50px;
-    /* Same width as collapsed sidebar */
 }
 
 /* Full width content when no sidebar */
