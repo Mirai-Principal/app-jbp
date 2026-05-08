@@ -1,10 +1,13 @@
 @use '../../shared/styles/colors' as *;
 
 .topbar {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     z-index: 1000;
-    background: $white;
+    background: $primary-100;
     border-bottom: 1px solid $gray-200;
     box-shadow: 0 2px 8px $primary-alpha-10;
 }
@@ -64,7 +67,6 @@
     font-weight: 600;
     padding: 0 8px;
     white-space: nowrap;
-    display: none;
 }
 
 .nav-items {
@@ -94,7 +96,7 @@
     }
 
     &.active {
-        background: $gradient-soft;
+        background: $primary-500;
         color: $white;
 
         .nav-icon {
