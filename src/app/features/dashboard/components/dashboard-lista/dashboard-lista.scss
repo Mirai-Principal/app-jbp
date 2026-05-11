@@ -81,7 +81,7 @@
 
         .data-row {
             &:hover {
-                background-color: $gray-200;
+                background-color: $hover-table;
                 transition: $transition-fast;
             }
         }
