@@ -1,0 +1,32 @@
+<div style="padding: 20px;">
+    <table class="w3-table w3-striped">
+        <tr>
+            <th>Tipo Documento</th>
+            <th>Fecha Envío</th>
+            <th>Fecha Documento</th>
+            <th>Nro Documento</th>
+            <th>Monto</th>
+            <th>Puntos</th>
+            <th>Cod. Resp. WS</th>
+            <th>Respuesta Ws</th>
+            <th>Fecha Documento Original</th>
+            <th>Descripcion</th>
+        </tr>
+        <tbody>
+            @for (de of this.docEnviadosservice.documentosEnviados(); track $index) {
+            <tr>
+                <td>{{de.tipoDocumento}}</td>
+                <td>{{de.fechaEnvio}}</td>
+                <td>{{de.fechaDocumento}}</td>
+                <td>{{de.nroDocumento}}</td>
+                <td>{{de.monto}}</td>
+                <td>{{de.puntos}}</td>
+                <td>{{de.codRespWS}}</td>
+                <td>{{de.respWs}}</td>
+                <td>{{de.fechaDocumentoOriginal}}</td>
+                <td>{{de.descripcion}}</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,6 +1,7 @@
 export interface SocioNegocioItem {
     Ruc: string;
     Nombre: string;
+    ParticipantePlanPuntos: boolean;
 }
 
 export interface ParticipantePuntosMsg {

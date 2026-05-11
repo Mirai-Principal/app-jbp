@@ -117,6 +117,8 @@ export class NotaCreditoTablaComponent implements OnChanges {
       numDocumento: item.cliente.Ruc,
       montoFactura: item.montoFactura.toString(),
       puntos: item.puntosEquivalentes.toString(),
+      id: 0,
+      tipoDocumento: 'notaCreditoManual',
     }));
 
     this.notaCreditoService.enviarNotaCredito(datosResponse).subscribe({

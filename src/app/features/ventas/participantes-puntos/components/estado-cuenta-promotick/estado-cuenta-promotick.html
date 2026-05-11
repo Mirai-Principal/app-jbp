@@ -1,0 +1,228 @@
+<div style="padding: 20px;">
+    @if (estadoCuenta) {
+    <table align="center">
+        <tr>
+            <td class="origenInfoTitle" colspan="2">Información Promotick</td>
+        </tr>
+        <tr>
+            <td style="padding-right: 20px;"><b>Mensaje del Servidor Promotick:</b></td>
+            <td>
+                {{estadoCuenta.mensaje}}
+                @if (procesando()) {
+                <mat-progress-spinner [mode]="'indeterminate'" [diameter]="30"></mat-progress-spinner>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td><b>Ruc:</b></td>
+            <td>{{estadoCuenta.data.ruc}}</td>
+        </tr>
+        <tr>
+            <td><b>Participante:</b></td>
+            <td>{{estadoCuenta.data.participante}}</td>
+        </tr>
+        <tr>
+            <td><b>Monto Anual Facturación:</b></td>
+            <td>USD {{estadoCuenta.data.montoFacturacion}}</td>
+        </tr>
+        <tr>
+            <td><b>Acelerador:</b></td>
+            <td>{{estadoCuenta.data.acelerador}}</td>
+        </tr>
+        <tr>
+            <td><b>Bono Semestral 1:</b></td>
+            <td>{{estadoCuenta.data.bonoSemestral1}}</td>
+        </tr>
+        <tr>
+            <td><b>Bono Semestral 2:</b></td>
+            <td>{{estadoCuenta.data.bonoSemestral2}}</td>
+        </tr>
+        <tr>
+            <td><b>Cupo Anual:</b></td>
+            <td>USD {{estadoCuenta.data.cupoAnual}}</td>
+        </tr>
+        <tr>
+            <td><b>Puntos Disponibles:</b></td>
+            <td>{{estadoCuenta.data.puntosDisponibles}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <mat-accordion>
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header style="background-color: rgb(199, 235, 199);">
+                            <mat-panel-title>
+                                <b>Detalle Estado de cuenta</b>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <table>
+                            <tr style="font-weight: bold;">
+                                <td>Mes</td>
+                                <td>Facturado</td>
+                                <td>Canjeado</td>
+                                <td>Descargado</td>
+                                <td>Acumulado</td>
+                            </tr>
+                            @for (det of estadoCuenta.data.detalleEstadoCuenta; track det.mes) {
+                            <tr class="resaltar">
+                                @if (mostrarDetEstadoCuenta(det)) {
+                                <td>{{det.mes}}</td>
+                                <td>USD {{det.facturado}}</td>
+                                <td>{{det.canjeado}}</td>
+                                <td>{{det.descargado}}</td>
+                                <td>{{det.acumulado}}</td>
+                                }
+                            </tr>
+                            }
+                        </table>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <mat-accordion>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header style="background-color: rgb(199, 235, 199);">
+                            <mat-panel-title>
+                                <b>Detalle de canjes</b>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        @for (c of estadoCuenta.data.canjes; track c) {
+                        <div>
+                            <span style="font-weight: bold; color: green;">Fecha: {{c.fecha}}, Total Puntos:
+                                {{c.totalPuntos}}:</span>
+                            <table>
+                                <tr>
+                                    <td colspan="2">
+                                        <table>
+                                            <tr style="font-weight: bold;">
+                                                <td>Codigo Producto</td>
+                                                <td>Cantidad</td>
+                                                <td>Producto</td>
+                                                <td>Descripción</td>
+                                                <td>Puntos</td>
+                                            </tr>
+                                            <tbody>
+                                                @for (det of c.detalles; track det) {
+                                                <tr class="resaltar">
+                                                    <td>{{det.codProducto}}</td>
+                                                    <td>{{det.cantidad}}</td>
+                                                    <td>{{det.nombreProducto}}</td>
+                                                    <td>{{det.descripcionProducto}}</td>
+                                                    <td>{{det.puntosUnitario}}</td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        }
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </td>
+        </tr>
+        @if (participante()) {
+        <tr>
+            <td class="origenInfoTitle" colspan="2">Información SAP</td>
+        </tr>
+        <tr>
+            <td><b>Meta Anual:</b></td>
+            <td>USD {{participante().metaAnual}}</td>
+        </tr>
+        <tr>
+            <td><b>Meta Mensual:</b></td>
+            <td>USD {{metaMensual.toFixed(2)}}</td>
+        </tr>
+        <tr>
+            <td><b>Email:</b></td>
+            <td>{{participante().email}}</td>
+        </tr>
+        <tr>
+            <td><b>Tipo Participante:</b></td>
+            <td>{{participante().idCatalogo==1?'A':'B'}}</td>
+        </tr>
+        <tr>
+            <td><b>Vendedor:</b></td>
+            <td>{{participante().vendedorStr}}</td>
+        </tr>
+        <tr>
+            <td><b>Comentario:</b></td>
+            <td>{{participante().Comentario}}</td>
+        </tr>
+        }
+    </table>
+    }
+    <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header style="background-color: rgb(199, 235, 199);">
+                <mat-panel-title>
+                    <b>Detalle Puntos registrados SAP</b>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table>
+                @for (obj of documentosPorMes; track obj) {
+                <tr>
+                    <td colspan="2">
+                        <mat-accordion>
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <table>
+                                            <tr>
+                                                <td><b>Mes</b></td>
+                                                <td><b>Monto</b></td>
+                                                <td><b>Para cumplir meta</b></td>
+                                                <td><b>Puntos</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td>{{obj.mes}}</td>
+                                                @if (obj.cumpleMetaMes) {
+                                                <td style="color: green;">USD {{obj.monto}}</td>
+                                                } @else {
+                                                <td style="color: red;">USD {{obj.monto}}</td>
+                                                }
+                                                <td style="color: rgb(0, 195, 255);" align="right">USD
+                                                    {{obj.paraCumplirMeta.toFixed(2)}}</td>
+                                                <td>{{obj.puntos}}</td>
+                                            </tr>
+                                        </table>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <table align="center">
+                                    <thead>
+                                        <tr style="background-color: black; color: white;">
+                                            <th>Ruc</th>
+                                            <th>Ruc Principal</th>
+                                            <th>Fecha</th>
+                                            <th>Tipo Documento</th>
+                                            <th>Numero Documento</th>
+                                            <th>Monto</th>
+                                            <th>Puntos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (d of obj.documentos; track d) {
+                                        <tr class="resaltar">
+                                            <td>{{d.ruc}}</td>
+                                            <td>{{d.rucPrincipal}}</td>
+                                            <td>{{d.fechaDocumento}}</td>
+                                            <td>{{d.tipoDocumento}}</td>
+                                            <td>{{d.numDocumento}}</td>
+                                            <td>USD {{d.monto}}</td>
+                                            <td>{{d.puntos}}</td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </td>
+                </tr>
+                }
+            </table>
+        </mat-expansion-panel>
+
+    </mat-accordion>
+</div>

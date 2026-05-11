@@ -34,5 +34,7 @@ export interface NotaCreditoItemResponse {
     numDocumento: string;   //ruc
     montoFactura: string;
     puntos: string;
+    id: number;
+    tipoDocumento: string;
 }
 

@@ -1,30 +1,30 @@
-export class EstadoCuentaMsg{
+export class EstadoCuentaMsg {
     codigo!: number;
     mensaje!: string;
     data!: DataMsg;
-    constructor(){
-        this.data=new DataMsg();
+    constructor() {
+        this.data = new DataMsg();
     }
 }
 
-export class DataMsg{
+export class DataMsg {
     acelerador!: number;
     bonoSemestral1!: number;
     bonoSemestral2!: number;
     canjes: CanjeMsg[];
-    cupoAnual!:number;
+    cupoAnual!: number;
     detalleEstadoCuenta!: DetalleEstadoCuentaMsg[];
     montoFacturacion!: number;
     participante!: string;
     puntosCanjeados!: number;
     puntosDisponibles!: number;
     ruc!: string;
-    
-    constructor(){
-        this.canjes=[];
+
+    constructor() {
+        this.canjes = [];
     }
 }
-export class DetalleEstadoCuentaMsg{
+export class DetalleEstadoCuentaMsg {
     mes!: number;
     facturado!: number;
     canjeado!: number;
@@ -33,18 +33,21 @@ export class DetalleEstadoCuentaMsg{
     mostrar!: boolean;
 }
 
-export class CanjeMsg{
+export class CanjeMsg {
     idPedido!: number;
     totalPuntos!: number;
     fecha!: string;
     detalles: DetalleCompraMsg[];
-    constructor(){
-        this.detalles=[];
+    constructor() {
+        this.detalles = [];
     }
 }
 
-export class DetalleCompraMsg{
+export class DetalleCompraMsg {
     idProducto!: number;
+    codProducto!: string;
     cantidad!: number;
     puntosUnitario!: number;
+    nombreProducto!: string;
+    descripcionProducto!: string;
 }

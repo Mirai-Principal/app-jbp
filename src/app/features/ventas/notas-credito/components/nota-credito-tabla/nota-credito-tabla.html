@@ -62,15 +62,10 @@
                 <th mat-header-cell *matHeaderCellDef>Estado</th>
                 <td mat-cell *matCellDef="let item" class="estado-cell">
                     @if (item.estado === 'error') {
-                    <app-info-button 
-                        icon="error" 
-                        color="warn" 
-                        tooltipText="Ver error" 
-                        ariaLabel="Ver error" 
-                        cssClass="error-icon"
-                        (onClick)="mostrarMensajeError(item)">
+                    <app-info-button icon="error" color="warn" tooltipText="Ver error" ariaLabel="Ver error"
+                        cssClass="error-icon" (onClick)="mostrarMensajeError(item)">
                     </app-info-button>
-                    } 
+                    }
                 </td>
             </ng-container>
 
@@ -97,12 +92,8 @@
     <!-- Botones de acción -->
     <div class="acciones-tabla">
         <div class="botones-accion">
-            <app-button-loader 
-                [isLoading]="isLoading" 
-                text="Enviar Notas de Crédito"
-                icon="send"
-                color="accent"
-                (buttonClick?)="enviar()">
+            <app-button-loader [isLoading]="isLoading" text="Enviar Notas de Crédito" icon="send" color="accent"
+                (buttonClick)="enviar()">
             </app-button-loader>
             <button mat-raised-button color="warn" (click)="limpiarTodos()" class="btn-limpiar">
                 <mat-icon>clear_all</mat-icon>

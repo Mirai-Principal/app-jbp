@@ -1,0 +1,20 @@
+@use '../../../../../shared/styles/colors' as *;
+
+
+.origenInfoTitle {
+    background-color: rgb(27, 40, 75);
+    color: white;
+    padding-left: 20px;
+}
+
+th,
+td {
+    border-bottom: 1px solid #ddd;
+    padding-right: 15px;
+    padding-left: 15px;
+    vertical-align: top;
+}
+
+.resaltar:hover {
+    background-color: #f1cb7f;
+}

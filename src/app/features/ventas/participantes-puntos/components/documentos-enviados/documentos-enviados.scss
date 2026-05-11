@@ -1,0 +1,15 @@
+@use '../../../../../shared/styles/colors' as *;
+
+th,
+td {
+    padding-right: 15px;
+    padding-left: 15px;
+    vertical-align: top;
+    border-bottom: 1px solid #ddd;
+}
+
+
+
+tbody tr:hover {
+    background-color: $gray-100;
+}

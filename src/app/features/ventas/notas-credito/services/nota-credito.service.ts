@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { NotaCreditoRequest, NotaCreditoItemResponse } from '../models/nota-credito.model';
+import { NotaCreditoItemResponse } from '../models/nota-credito.model';
 import { GetUrlEndpointService } from '../../../../core/services/get-url-endpoint.service';
 
 @Injectable({

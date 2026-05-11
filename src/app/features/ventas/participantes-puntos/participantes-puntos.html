@@ -3,6 +3,166 @@
     <mat-card>
         <mat-card-content>
 
+            <form [formGroup]="searchForm">
+                <div>
+                    <mat-form-field appearance="outline" class="search-form-field">
+                        <mat-label>Buscar por RUC o Nombre</mat-label>
+                        <input [formControl]="txtSearch" (input)="onSearchInput()" autofocus matInput
+                            placeholder="Escribe al menos 3 caracteres...">
+                        @if (procesando()) {
+                        <mat-progress-spinner matPrefix mode="indeterminate" diameter="20"
+                            strokeWidth="3"></mat-progress-spinner>
+                        }@else {
+                        <mat-icon matPrefix>search</mat-icon>
+                        }
+                        @if (txtSearch.value) {
+                        <button mat-icon-button matSuffix (click)="txtSearch.setValue('')" type="button">
+                            <mat-icon>clear</mat-icon>
+                        </button>
+                        }
+                    </mat-form-field>
+                </div>
+            </form>
+
+            <mat-tab-group [selectedIndex]="selectedTab()" (selectedIndexChange)="selectedTab.set($event)">
+                <!-- Contenido de la pestaña Búsqueda -->
+                <mat-tab label="Resultados de la Búsqueda">
+                    <div class="results-section">
+                        @if(listSociosNegocio().length > 0){
+                        <h3 class="results-title">
+                            Resultados ({{listSociosNegocio().length}})
+                        </h3>
+                        <div class="results-list">
+                            @for(sn of listSociosNegocio(); track sn.Ruc) {
+                            <mat-card class="result-card" [class.selected]="selectedRuc() === sn.Ruc"
+                                (click)="seleccionarSN(sn.Ruc)">
+                                <mat-card-content class="result-card-content">
+                                    <span class="participant-name">{{sn.Nombre}}</span>
+                                    <span class="participant-ruc">{{sn.Ruc}}</span>
+                                </mat-card-content>
+                            </mat-card>
+                            }
+                        </div>
+                        }@else{
+                        <p class="no-results">Sin resultados</p>
+                        }
+                    </div>
+                </mat-tab>
+                <!-- Info web service promotick -->
+                <mat-tab label="Información del Participante" [disabled]="!seSeleccionoSocioNegocio()">
+                    <app-estado-cuenta-promotick [participante]="participante()"></app-estado-cuenta-promotick>
+                </mat-tab>
+                <!-- documentos enviados -->
+                <mat-tab label="Documentos Enviados" [disabled]="!seSeleccionoSocioNegocio()">
+                    <app-documentos-enviados />
+                </mat-tab>
+                <!-- Gestion participante -->
+                <!-- <mat-tab label="Gestionar Datos Participante"> 
+          <cdk-virtual-scroll-viewport class="gestionParticipantesScroll" itemSize="1">
+            <form [formGroup]="form" fxLayout="column" fxLayoutAlign="end none" >
+              <mat-label>Estado</mat-label>
+              <mat-slide-toggle formControlName="Activo">{{this.form.get('Activo').value?'Activo':'Inactivo'}}</mat-slide-toggle>
+              <mat-form-field>
+                <mat-label>TipoDocumento</mat-label>
+                <mat-select formControlName='tipoDocumento'>
+                <mat-option *ngFor="let item of TiposDocumento" [value]="item.Id">
+                  {{item.Nombre}}
+                </mat-option>
+                </mat-select>
+                <mat-error>
+                  Debe seleccionar el tipo de documento
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Nro. Documento" formControlName='nroDocumento'>
+                <mat-error>
+                  Debe ingresar el nro. de documento
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Clave de acceso sistema Promotick" formControlName='clave'>
+                <mat-error>
+                  Debe ingresar la clave
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Categoría</mat-label>
+                <mat-select formControlName='idCatalogo'>
+                  <mat-option *ngFor="let item of categorias" [value]="item.Id">
+                    {{item.Nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>
+                  Debe seleccionar la categoría del cliente
+                </mat-error>
+              </mat-form-field>
+              <mat-label>Tipo</mat-label>
+              <mat-slide-toggle formControlName="Elite">{{this.form.get('Elite').value?'Elite':'Normal'}}</mat-slide-toggle>
+              <mat-form-field>
+                <input matInput placeholder="Nombres" formControlName='nombres'>
+                <mat-error>
+                  Debe ingresar el Nombre del cliente
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Apellidos" formControlName='apellidos'>
+                <mat-error>
+                  Debe ingresar el Apellido del cliente
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select placeholder="Género" formControlName='tipoGenero'>
+                  <mat-option *ngFor="let genero of generos" [value]="genero.Id">
+                    {{genero.Nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>
+                  Debe seleccionar un género
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Email" formControlName='email'>
+                <mat-error>
+                  El email es incorrecto
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput [matDatepicker]="fechaNacimiento" placeholder="Fecha de Nacimiento" formControlName="FechaNacimiento">
+                <mat-datepicker-toggle matSuffix [for]="fechaNacimiento"></mat-datepicker-toggle>
+                <mat-datepicker #fechaNacimiento></mat-datepicker>
+                <mat-error>Debe registrar la fecha de Nacimiento</mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Cupo Anual" formControlName='metaAnual'>
+                <mat-error>
+                  Debe ingresar el Cupo Anual del cliente
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Celular" formControlName='celular'>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Teléfono Convencional" formControlName='telefono'>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select placeholder="Vendedor" formControlName='vendedor'>
+                  <mat-option *ngFor="let v of vendedores" [value]="v.Cod">
+                    {{v.Nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>
+                  Debe ingresar el vendedor
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <textarea matInput placeholder="Comentario" formControlName='Comentario' rows="3"></textarea>
+              </mat-form-field>
+              <button fxFlexAlign="center" mat-button disabled="true" (click)="guardar()">Guardar</button>  
+            </form>    
+          </cdk-virtual-scroll-viewport>
+        </mat-tab> -->
+            </mat-tab-group>
         </mat-card-content>
     </mat-card>
 </div>
+<app-scroll-to-top />
