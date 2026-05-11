@@ -32,7 +32,6 @@ export class SidebarMenuService {
                 { name: 'Hoja de Ruta', icon: 'route', url: '/hoja-de-ruta' },
                 { name: 'Participantes Puntos', icon: 'people', url: '/participantes-puntos' },
                 { name: 'Notas de Crédito', icon: 'receipt_long', url: '/notas-credito' },
-                { name: 'Histórico de Facturas', icon: 'receipt', url: '/historico-facturas' }
             ],
             visible: this.ModulosAcceso.Ventas
         },

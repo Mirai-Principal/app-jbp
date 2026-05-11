@@ -36,5 +36,4 @@ export class DocumentosEnviados {
   ];
 
   displayedColumns = this.columns.map(c => c.columnDef);
-
 }

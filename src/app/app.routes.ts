@@ -10,7 +10,6 @@ import { EntregasUrbano } from './features/ventas/entregas-urbano/entregas-urban
 import { HojaRuta } from './features/ventas/hoja-ruta/hoja-ruta';
 import { ParticipantesPuntos } from './features/ventas/participantes-puntos/participantes-puntos';
 import { NotasCreditoComponent } from './features/ventas/notas-credito/notas-credito';
-import { HistoricoFacturas } from './features/ventas/historico-facturas/historico-facturas';
 import { GenerarQrUbicaciones } from './features/bodega/generar-qr-ubicaciones/generar-qr-ubicaciones';
 import { ConsultarUbicacion } from './features/bodega/consultar-ubicacion/consultar-ubicacion';
 import { ReaccionesReporte } from './features/reacciones-reporte/reacciones-reporte';
@@ -29,7 +28,6 @@ export const routes: Routes = [
     { path: 'hoja-de-ruta', component: HojaRuta, title: 'Hoja de Ruta', canActivate: [AuthGuard] },
     { path: 'participantes-puntos', component: ParticipantesPuntos, title: 'Participantes Puntos', canActivate: [AuthGuard] },
     { path: 'notas-credito', component: NotasCreditoComponent, title: 'Notas de Crédito', canActivate: [AuthGuard] },
-    { path: 'historico-facturas', component: HistoricoFacturas, title: 'Histórico de Facturas', canActivate: [AuthGuard] },
     { path: 'generar-qr-ubicaciones', component: GenerarQrUbicaciones, title: 'Generar QR de Ubicaciones', canActivate: [AuthGuard] },
     { path: 'consultar-ubicacion', component: ConsultarUbicacion, title: 'Consultar Ubicación' },
     { path: 'consulta-lote/lote/:lote/codArticulo/:codArticulo', component: ConsultaLote, title: 'Consulta Lote' },
