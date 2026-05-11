@@ -1,4 +1,4 @@
-<div style="padding: 20px;">
+<div>
     @if (estadoCuenta) {
     <table align="center">
         <tr>
@@ -8,9 +8,6 @@
             <td style="padding-right: 20px;"><b>Mensaje del Servidor Promotick:</b></td>
             <td>
                 {{estadoCuenta.mensaje}}
-                @if (procesando()) {
-                <mat-progress-spinner [mode]="'indeterminate'" [diameter]="30"></mat-progress-spinner>
-                }
             </td>
         </tr>
         <tr>

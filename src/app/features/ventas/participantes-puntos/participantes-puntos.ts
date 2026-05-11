@@ -26,6 +26,7 @@ import { SocioNegocioItem } from '../../../core/models/socioNegocioMsg';
 import { of } from 'rxjs';
 import { ScrollToTop } from "../../../shared/scroll-to-top/scroll-to-top";
 import { DocumentosEnviados } from "./components/documentos-enviados/documentos-enviados";
+import { LoaderPage } from "../../../shared/loader-page/loader-page";
 
 @Component({
   selector: 'app-participantes-puntos',
@@ -42,7 +43,8 @@ import { DocumentosEnviados } from "./components/documentos-enviados/documentos-
     MatButtonModule,
     EstadoCuentaPromotick,
     ScrollToTop,
-    DocumentosEnviados
+    DocumentosEnviados,
+    LoaderPage
   ],
   templateUrl: './participantes-puntos.html',
   styleUrl: './participantes-puntos.scss'
@@ -71,6 +73,7 @@ export class ParticipantesPuntos {
   elite = signal(false);
   selectedTab = signal(0);
   selectedRuc = signal<string | null>(null);
+  obteniendoEstadoCuenta = signal(false);
 
   participante = signal<any | null>(null);
 
@@ -330,6 +333,14 @@ export class ParticipantesPuntos {
       this.userService.currentUserValue?.GruposDirectorioActivo;
 
     return grupos?.includes(grupo) ?? false;
+  }
+
+  // =========================
+  // MANEJAR ESTADO DE PROCESAMIENTO DEL HIJO
+  // =========================
+
+  onProcesandoChange(estado: boolean): void {
+    this.obteniendoEstadoCuenta.set(estado);
   }
 
   // =========================

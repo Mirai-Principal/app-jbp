@@ -1,63 +1,65 @@
+@if (obteniendoEstadoCuenta()) {
+<app-loader-page message="Cargando información de Promotick..." icon="sync" />
+}
 <app-header title="Participantes Puntos" icon="people" />
 <div class="container">
-    <mat-card>
-        <mat-card-content>
+  <mat-card>
+    <mat-card-content>
 
-            <form [formGroup]="searchForm">
-                <div>
-                    <mat-form-field appearance="outline" class="search-form-field">
-                        <mat-label>Buscar por RUC o Nombre</mat-label>
-                        <input [formControl]="txtSearch" (input)="onSearchInput()" autofocus matInput
-                            placeholder="Escribe al menos 3 caracteres...">
-                        @if (procesando()) {
-                        <mat-progress-spinner matPrefix mode="indeterminate" diameter="20"
-                            strokeWidth="3"></mat-progress-spinner>
-                        }@else {
-                        <mat-icon matPrefix>search</mat-icon>
-                        }
-                        @if (txtSearch.value) {
-                        <button mat-icon-button matSuffix (click)="txtSearch.setValue('')" type="button">
-                            <mat-icon>clear</mat-icon>
-                        </button>
-                        }
-                    </mat-form-field>
-                </div>
-            </form>
+      <form [formGroup]="searchForm">
+        <div>
+          <mat-form-field appearance="outline" class="search-form-field">
+            <mat-label>Buscar por RUC o Nombre</mat-label>
+            <input [formControl]="txtSearch" (input)="onSearchInput()" autofocus matInput
+              placeholder="Escribe al menos 3 caracteres...">
+            @if (procesando()) {
+            <mat-progress-spinner matPrefix mode="indeterminate" diameter="20" strokeWidth="3"></mat-progress-spinner>
+            }@else {
+            <mat-icon matPrefix>search</mat-icon>
+            }
+            @if (txtSearch.value) {
+            <button mat-icon-button matSuffix (click)="txtSearch.setValue('')" type="button">
+              <mat-icon>clear</mat-icon>
+            </button>
+            }
+          </mat-form-field>
+        </div>
+      </form>
 
-            <mat-tab-group [selectedIndex]="selectedTab()" (selectedIndexChange)="selectedTab.set($event)">
-                <!-- Contenido de la pestaña Búsqueda -->
-                <mat-tab label="Resultados de la Búsqueda">
-                    <div class="results-section">
-                        @if(listSociosNegocio().length > 0){
-                        <h3 class="results-title">
-                            Resultados ({{listSociosNegocio().length}})
-                        </h3>
-                        <div class="results-list">
-                            @for(sn of listSociosNegocio(); track sn.Ruc) {
-                            <mat-card class="result-card" [class.selected]="selectedRuc() === sn.Ruc"
-                                (click)="seleccionarSN(sn.Ruc)">
-                                <mat-card-content class="result-card-content">
-                                    <span class="participant-name">{{sn.Nombre}}</span>
-                                    <span class="participant-ruc">{{sn.Ruc}}</span>
-                                </mat-card-content>
-                            </mat-card>
-                            }
-                        </div>
-                        }@else{
-                        <p class="no-results">Sin resultados</p>
-                        }
-                    </div>
-                </mat-tab>
-                <!-- Info web service promotick -->
-                <mat-tab label="Información del Participante" [disabled]="!seSeleccionoSocioNegocio()">
-                    <app-estado-cuenta-promotick [participante]="participante()"></app-estado-cuenta-promotick>
-                </mat-tab>
-                <!-- documentos enviados -->
-                <mat-tab label="Documentos Enviados" [disabled]="!seSeleccionoSocioNegocio()">
-                    <app-documentos-enviados />
-                </mat-tab>
-                <!-- Gestion participante -->
-                <!-- <mat-tab label="Gestionar Datos Participante"> 
+      <mat-tab-group [selectedIndex]="selectedTab()" (selectedIndexChange)="selectedTab.set($event)">
+        <!-- Contenido de la pestaña Búsqueda -->
+        <mat-tab label="Resultados de la Búsqueda">
+          <div class="results-section">
+            @if(listSociosNegocio().length > 0){
+            <h3 class="results-title">
+              Resultados ({{listSociosNegocio().length}})
+            </h3>
+            <div class="results-list">
+              @for(sn of listSociosNegocio(); track sn.Ruc) {
+              <mat-card class="result-card" [class.selected]="selectedRuc() === sn.Ruc" (click)="seleccionarSN(sn.Ruc)">
+                <mat-card-content class="result-card-content">
+                  <span class="participant-name">{{sn.Nombre}}</span>
+                  <span class="participant-ruc">{{sn.Ruc}}</span>
+                </mat-card-content>
+              </mat-card>
+              }
+            </div>
+            }@else{
+            <p class="no-results">Sin resultados</p>
+            }
+          </div>
+        </mat-tab>
+        <!-- Info web service promotick -->
+        <mat-tab label="Información del Participante" [disabled]="!seSeleccionoSocioNegocio()">
+          <app-estado-cuenta-promotick [participante]="participante()"
+            (procesandoChange)="onProcesandoChange($event)"></app-estado-cuenta-promotick>
+        </mat-tab>
+        <!-- documentos enviados -->
+        <mat-tab label="Documentos Enviados" [disabled]="!seSeleccionoSocioNegocio()">
+          <app-documentos-enviados />
+        </mat-tab>
+        <!-- Gestion participante -->
+        <!-- <mat-tab label="Gestionar Datos Participante"> 
           <cdk-virtual-scroll-viewport class="gestionParticipantesScroll" itemSize="1">
             <form [formGroup]="form" fxLayout="column" fxLayoutAlign="end none" >
               <mat-label>Estado</mat-label>
@@ -161,8 +163,8 @@
             </form>    
           </cdk-virtual-scroll-viewport>
         </mat-tab> -->
-            </mat-tab-group>
-        </mat-card-content>
-    </mat-card>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
 </div>
 <app-scroll-to-top />

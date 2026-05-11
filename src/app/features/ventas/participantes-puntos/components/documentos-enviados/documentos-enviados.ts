@@ -1,33 +1,40 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { MatCard, MatCardContent } from '@angular/material/card';
-import { Header } from '../../../../../shared/header/header';
-import { SweetAlertService } from '../../../../../shared/alert/services/sweet-alert.service';
 import { DocumentosEnviadosService } from '../../services/documentos-enviados.service';
+import { Table, TableColumn } from '../../../../../shared/table/table';
 
 @Component({
   selector: 'app-documentos-enviados',
   imports: [
     ReactiveFormsModule,
     MatInputModule,
-    // MatCard,
-    // MatCardContent,
-    // Header,
+    Table,
   ],
   templateUrl: './documentos-enviados.html',
   styleUrl: './documentos-enviados.scss',
 })
 export class DocumentosEnviados {
   // DI
-  private sweetAlert = inject(SweetAlertService);
   docEnviadosservice = inject(DocumentosEnviadosService);
 
   // estados
+  documentos = computed(() => this.docEnviadosservice.documentosEnviados());
 
-  procesando = signal(false);
+  // Columnas de la tabla
+  columns: TableColumn[] = [
+    { columnDef: 'tipoDocumento', header: 'Tipo Documento' },
+    { columnDef: 'fechaEnvio', header: 'Fecha Envío' },
+    { columnDef: 'fechaDocumento', header: 'Fecha Documento' },
+    { columnDef: 'nroDocumento', header: 'Nro Documento' },
+    { columnDef: 'monto', header: 'Monto' },
+    { columnDef: 'puntos', header: 'Puntos' },
+    { columnDef: 'codRespWS', header: 'Cod. Resp. WS' },
+    { columnDef: 'respWs', header: 'Respuesta Ws' },
+    { columnDef: 'fechaDocumentoOriginal', header: 'Fecha Documento Original' },
+    { columnDef: 'descripcion', header: 'Descripción' },
+  ];
 
-
-
+  displayedColumns = this.columns.map(c => c.columnDef);
 
 }

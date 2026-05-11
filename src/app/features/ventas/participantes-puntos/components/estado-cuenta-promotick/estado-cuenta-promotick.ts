@@ -1,10 +1,8 @@
-import { Component, inject, input, signal, effect } from '@angular/core';
+import { Component, inject, input, signal, effect, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from "@angular/material/expansion";
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { PromotickServices } from '../../services/promotick.service';
-import { SocioNegocioService } from '../../services/socio-negocio.service';
 import { DetalleEstadoCuentaMsg, EstadoCuentaMsg } from '../../../../../core/models/estadoCuentaMsg';
 
 @Component({
@@ -17,19 +15,20 @@ import { DetalleEstadoCuentaMsg, EstadoCuentaMsg } from '../../../../../core/mod
     MatExpansionPanel,
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
-    MatProgressSpinner,
   ],
   templateUrl: './estado-cuenta-promotick.html',
   styleUrl: './estado-cuenta-promotick.scss'
 })
 export class EstadoCuentaPromotick {
   // DI
-  private socioNegocioService = inject(SocioNegocioService);
   private ptkService = inject(PromotickServices);
 
   // estados
   participante = input<any>(null);
   procesando = signal(false);
+
+  // Output para emitir estado de procesamiento al padre
+  procesandoChange = output<boolean>();
 
   documentosPorMes: any[];
   metaMensual: number;
@@ -48,6 +47,11 @@ export class EstadoCuentaPromotick {
           this.documentosPorMes.sort((a, b) => (a.mes < b.mes) ? 1 : -1)
         }
       }
+    });
+
+    // Emitir estado de procesamiento al padre cuando cambie
+    effect(() => {
+      this.procesandoChange.emit(this.procesando());
     });
   }
 
