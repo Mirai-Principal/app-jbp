@@ -5,6 +5,17 @@
      max-width: 100%;
  }
 
+ mat-card-actions,
+ mat-card-header {
+     display: flex;
+     justify-content: center;
+     background-color: $gray-100;
+ }
+
+ mat-card-header {
+     text-align: center;
+ }
+
  .clickable-icon {
      cursor: pointer;
      margin-left: 8px;
@@ -14,7 +25,7 @@
 
      &:hover {
          color: $primary-400;
-         transform: scale(1.2);
+         transform: scale(1.3);
      }
  }
 
@@ -42,7 +53,85 @@
      }
 
      @media (max-width: 360px) {
-         padding: 0; // Even less padding on extra small screens
-         min-width: 100vw;
+         padding: 0;
      }
+ }
+
+ table {
+     font-size: 0.95rem;
+     width: 100%;
+     max-width: 1200px;
+     margin: 20px auto;
+     background-color: $white;
+     border-radius: 12px;
+     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+     overflow: hidden;
+     border-collapse: collapse;
+
+     thead {
+         background-color: rgb(9, 21, 43);
+         color: $white;
+
+         th {
+             padding: 10px 12px;
+             text-align: left;
+             font-weight: 600;
+             font-size: 0.9rem;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+         }
+     }
+
+     tbody {
+         tr {
+             border-bottom: 1px solid #f0f0f0;
+
+             &:hover {
+                 background-color: $hover-table;
+             }
+
+             &:last-child {
+                 border-bottom: none;
+             }
+         }
+
+         td {
+             padding: 14px 12px;
+             vertical-align: middle;
+             color: #2c3e50;
+
+             .link {
+                 color: #3498db;
+                 font-weight: 500;
+                 cursor: pointer;
+                 transition: color 0.2s ease;
+             }
+
+             mat-icon {
+                 font-size: 18px;
+                 width: 18px;
+                 height: 18px;
+                 vertical-align: middle;
+                 margin-left: 8px;
+                 color: #7f8c8d;
+                 cursor: pointer;
+                 transition: color 0.2s ease;
+
+                 &.clickable-icon:hover {
+                     color: #3498db;
+                 }
+             }
+         }
+     }
+ }
+
+ @media screen and (max-width: 768px) {
+     table {
+         width: 100%;
+     }
+ }
+
+ td {
+     border-bottom: solid 1px $gray-300 !important;
  }

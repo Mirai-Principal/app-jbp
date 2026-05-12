@@ -1,5 +1,14 @@
  @use '../../../shared/styles/colors' as *;
 
+ .container {
+
+     h2,
+     h4,
+     h6 {
+         text-align: center;
+     }
+ }
+
  .empty-state {
      display: flex;
      flex-direction: column;
@@ -26,206 +35,59 @@
      }
  }
 
- .container {
-     padding: 20px;
-     max-width: 100%;
-     background: #f8f9fa;
-     border-radius: 0;
-     max-height: 100vh;
-     overflow-y: auto;
-
-     @media screen and (min-width: 768px) {
-         margin: 0 40px;
-     }
- }
-
- // Header Card
- .header-card {
-     background: white;
-     border-radius: 12px;
-     padding: 24px;
-     margin-bottom: 24px;
-     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     gap: 20px;
-
-     .status-badge {
-         width: 100%;
-         padding: 10px 0;
-         font-weight: 600;
-         font-size: 14px;
-         text-transform: uppercase;
-         text-align: center;
-
-         &.APROBADO {
-             background: #d4edda;
-             color: #155724;
-         }
-
-         &.CUARENTENA {
-             background: #fff3cd;
-             color: #856404;
-         }
-
-         &.RECHAZADO {
-             background: #f8d7da;
-             color: $primary-500;
-         }
-     }
-
-     .product-info {
-         flex: 1;
-
-         .product-code {
-             color: #6c757d;
-             font-size: 14px;
-             margin: 0 0 4px 0;
-             font-weight: 500;
-         }
-
-         .product-name {
-             margin: 0;
-             color: #2c3e50;
-             font-size: 24px;
-             font-weight: 600;
-         }
-     }
- }
-
-
- // Locations Card
- .locations-card {
-     background: white;
-     border-radius: 12px;
-     padding: 20px;
-     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-     .card-title {
-         margin: 0 0 16px 0;
-         color: #2c3e50;
-         font-size: 18px;
-         font-weight: 600;
-         border-bottom: 2px solid #e9ecef;
-         padding-bottom: 8px;
-     }
-
-     .locations-table {
-         width: 100%;
-         border-collapse: collapse;
-         margin-top: 12px;
-
-         thead {
-             th {
-                 background: #f8f9fa;
-                 padding: 12px;
-                 text-align: left;
-                 font-weight: 600;
-                 color: #2c3e50;
-                 border-bottom: 2px solid #e9ecef;
-                 font-size: 14px;
-             }
-         }
-
-         tbody {
-             tr {
-                 border-bottom: 1px solid #f8f9fa;
-
-                 &:hover {
-                     background: #f8f9fa;
-                 }
-
-                 &:last-child {
-                     border-bottom: none;
-                 }
-
-                 td {
-                     padding: 12px;
-                     color: #2c3e50;
-                     font-size: 14px;
-
-                     &:first-child {
-                         font-weight: 600;
-                     }
-
-                     &:nth-child(2) {
-                         color: #6c757d;
-                     }
-
-                     &:last-child {
-                         font-weight: 600;
-                         text-align: right;
-                     }
-                 }
-             }
-         }
-     }
- }
-
- // Responsive Design
- @media (max-width: 768px) {
-     .container {
-         padding: 16px;
-     }
-
-     .header-card {
-         flex-direction: column;
-         text-align: center;
-         gap: 16px;
-     }
-
-     .info-grid {
-         grid-template-columns: 1fr;
-         gap: 16px;
-     }
-
-     .locations-grid {
-         grid-template-columns: 1fr;
-     }
-
-     .info-row {
-         flex-direction: column;
-         align-items: flex-start;
-         gap: 4px;
-
-         .label {
-             margin-bottom: 2px;
-         }
-     }
- }
-
- .info-table-container {
-     background-color: $gray-100;
+ table {
+     font-size: 1.1rem;
+     width: 800px;
      margin: 0 auto;
-     display: flex;
-     align-items: center;
-     justify-content: center;
+     padding: 0 10px;
 
-     .info-table {
-         border-collapse: separate;
-         border-spacing: 0;
-
-         tbody {
-             tr {
-                 &:hover {
-                     background-color: $gray-200;
-                 }
-
-                 td {
-                     border-bottom: 1px solid #ccc;
-
-                     &.label {
-                         font-weight: 600;
-                         background-color: $gray-100;
-                         border-right: 1px solid #ccc;
-                     }
-
-                     &.value {
-                         padding: 5px 40px;
-                     }
-                 }
-             }
-         }
+     tr:hover {
+         background-color: $hover-table;
      }
+ }
+
+ @media screen and (max-width: 768px) {
+     table {
+         width: 100%;
+     }
+ }
+
+ .estado {
+     padding: 10px 0;
+ }
+
+ .CUARENTENA {
+     background-color: yellow;
+     text-align: center;
+     font-weight: bold;
+ }
+
+ .APROBADO {
+     background-color: green;
+     text-align: center;
+     font-weight: bold;
+ }
+
+ .RECHAZADO {
+     background-color: red;
+     text-align: center;
+     font-weight: bold;
+ }
+
+ .BAJA {
+     background-color: red;
+     text-align: center;
+     font-weight: bold;
+ }
+
+ td {
+     border-bottom: solid 1px $gray-300 !important;
+ }
+
+ th {
+     padding-left: 5px;
+     padding-right: 5px;
+     background-color: rgb(9, 21, 43);
+     font-weight: bold;
+     color: #fff;
  }

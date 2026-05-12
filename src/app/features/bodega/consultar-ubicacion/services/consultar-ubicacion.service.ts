@@ -10,6 +10,7 @@ export interface UbicacionItem {
   CodArticulo: string;
   Articulo: string;
   Cantidad: number;
+  UnidadMedida: string;
 }
 
 export interface ConsultaUbicacionResponse {

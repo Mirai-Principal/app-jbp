@@ -4,130 +4,125 @@
 
 @if(detalleLote().CodArticulo) {
 <div class="container">
-    <!-- Header Card -->
-    <div class="header-card">
-        <div class="status-badge" [class]="estadoLote()">{{estadoLote()}}</div>
-        <div class="product-info">
-            <h6 class="product-code">{{esProductoTerminado()?detalleLote().CodPoePT : detalleLote().CodPoe}}</h6>
-            <h3 class="product-name">{{detalleLote().Articulo}}</h3>
-        </div>
-    </div>
+    <table>
+        @if (detalleLote()) {
+        <tr>
+            <td style="background-color: #fff">
 
-    <!-- Main Info Table -->
-    <div class="info-table-container">
-        <table class="info-table">
-            <tbody>
-                <tr>
-                    <td class="label">Código Artículo:</td>
-                    <td class="value">{{detalleLote().CodArticulo}}</td>
-                </tr>
-                <tr>
-                    <td class="label">Lote:</td>
-                    <td class="value highlight">{{lote()}}</td>
-                </tr>
-                @if (!esProductoTerminado()) {
-                <tr>
-                    <td class="label">Lote Proveedor:</td>
-                    <td class="value">{{detalleLote().LoteProveedor}}</td>
-                </tr>
-                <tr>
-                    <td class="label">Proveedor:</td>
-                    <td class="value">{{detalleLote().Proveedor}}</td>
-                </tr>
-                <tr>
-                    <td class="label">Fabricante:</td>
-                    <td class="value">{{detalleLote().Fabricante}}</td>
-                </tr>
-                }
-                @if (esProductoTerminado()) {
-                <tr>
-                    <td class="label">Titular del Producto:</td>
-                    <td class="value">{{detalleLote().Cliente}}</td>
-                </tr>
-                }
-                <tr>
-                    <td class="label">Condiciones:</td>
-                    <td class="value">
-                        {{esProductoTerminado()?detalleLote().CondicionAlmacenamientoPT:detalleLote().CondicionAlmacenamiento}}
-                    </td>
-                </tr>
-                @if (esProductoTerminado()) {
-                <tr>
-                    <td class="label">Empacado Por:</td>
-                    <td class="value">{{detalleLote().ResponsableEmpaque}}</td>
-                </tr>
-                }
-                @if (!esProductoTerminado()) {
-                <tr>
-                    <td class="label">Fecha Ingreso:</td>
-                    <td class="value">{{detalleLote().FechaIngreso}}</td>
-                </tr>
-                }
-                <tr>
-                    <td class="label">Fecha Fabricación:</td>
-                    <td class="value">{{detalleLote().FechaFabricacion}}</td>
-                </tr>
-                <tr>
-                    <td class="label">Fecha Vencimiento:</td>
-                    <td class="value date-important">{{detalleLote().FechaVencimiento}}</td>
-                </tr>
-                @if (!esProductoTerminado()) {
-                <tr>
-                    <td class="label">Fecha Retest:</td>
-                    <td class="value">{{detalleLote().FechaRetest}}</td>
-                </tr>
-                }
-                @if (esProductoTerminado()) {
-                <tr>
-                    <td class="label">Cantidad Por Caja:</td>
-                    <td class="value">{{detalleLote().CantidadPT}} {{detalleLote().UnidadMedida}}</td>
-                </tr>
-                }
-                <tr>
-                    <td class="label">Bultos Totales:</td>
-                    <td class="value highlight">{{detalleLote().Bultos}}</td>
-                </tr>
-                <tr>
-                    <td class="label">Observaciones:</td>
-                    <td class="value">{{detalleLote().Observaciones || 'N/A'}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                <h2 class="estado" [class]="estadoLote()">{{estadoLote()}}</h2>
+                <h6>
+                    {{esProductoTerminado()?detalleLote().CodPoePT:detalleLote().CodPoe}}</h6>
+                <h4>{{detalleLote().Articulo}}</h4>
+                <table class="infoLote">
+                    <tr>
+                        <td><b>Cod Articulo:</b></td>
+                        <td width="80%">{{detalleLote().CodArticulo}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Lote:</b></td>
+                        <td> {{lote()}}</td>
+                    </tr>
+                    @if(!esProductoTerminado()) {
+                    <tr>
+                        <td><b>Lote Proveedor:</b></td>
+                        <td>{{detalleLote().LoteProveedor}}</td>
+                    </tr>
+                    }
+                    <tr>
+                        <td><b>Proveedor:</b></td>
+                        <td> {{detalleLote().Proveedor}}</td>
+                    </tr>
 
-    <!-- Locations Section -->
-    @if (detalleLote().UbicacionesCantidad && detalleLote().UbicacionesCantidad.length > 0) {
-    <div class="locations-card">
-        <h4 class="card-title">Ubicaciones y Cantidades</h4>
-        <table class="locations-table">
-            <thead>
-                <tr>
-                    <th>CodBodega</th>
-                    <th>Ubicación</th>
-                    <th>Cantidad ({{detalleLote().UnidadMedida}})</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (uc of detalleLote().UbicacionesCantidad; track uc) {
-                <tr>
-                    <td>{{uc.CodBodega}}</td>
-                    <td>{{uc.Ubicacion || 'General'}}</td>
-                    <td>
-                        @if (!uc.Ubicacion) {
-                        <span>{{uc.CantBodega}}</span>
+                    @if(!esProductoTerminado()) {
+                    <tr>
+                        <td><b>Fabricante:</b></td>
+                        <td>{{detalleLote().Fabricante}}</td>
+                    </tr>
+                    }
+                    @if(esProductoTerminado()) {
+                    <tr>
+                        <td><b>Titular del Producto:</b></td>
+                        <td>{{detalleLote().Cliente}}</td>
+                    </tr>
+                    }
+                    <tr>
+                        <td style="padding-right: 10px;"><b>Condiciones de Almacenamiento:</b></td>
+                        <td> {{esProductoTerminado()?detalleLote().CondicionAlmacenamientoPT:detalleLote().CondicionAlmacenamiento}}
+                        </td>
+                    </tr>
+                    @if(esProductoTerminado()) {
+                    <tr>
+                        <td style="padding-right: 10px;"><b>Empacado Por:</b></td>
+                        <td> {{detalleLote().ResponsableEmpaque}}</td>
+                    </tr>
+                    }
+                    @if(!esProductoTerminado()) {
+                    <tr>
+                        <td><b>Fecha Ingreso:</b></td>
+                        <td>{{detalleLote().FechaIngreso}}</td>
+                    </tr>
+                    }
+                    <tr>
+                        <td><b>Fecha Fab.:</b></td>
+                        <td>{{detalleLote().FechaFabricacion}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Fecha Ven.:</b></td>
+                        <td> {{detalleLote().FechaVencimiento}}</td>
+                    </tr>
+                    @if(!esProductoTerminado()) {
+                    <tr>
+                        <td><b>Fecha Retest:</b></td>
+                        <td>{{detalleLote().FechaRetest}}</td>
+                    </tr>
+                    }
+                    @if(esProductoTerminado()) {
+                    <tr>
+                        <td><b>Cantidad Por Caja:</b></td>
+                        <td>{{detalleLote().CantidadPT}} {{detalleLote().UnidadMedida}}</td>
+                    </tr>
+                    }
+                    <tr>
+                        <td><b>Bultos Totales:</b></td>
+                        <!-- Internamente la api discrimina los bultos de MP y los bultos de PT -->
+                        <td> {{detalleLote().Bultos}}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><b>Observaciones:</b></td>
+                        <td> {{detalleLote().Observaciones}}</td>
+                    </tr>
+                </table>
+                <br>
+                @if (detalleLote().UbicacionesCantidad && detalleLote().UbicacionesCantidad.length>0) {
+                <table width="100%">
+                    <thead>
+                        <th>CodBodega</th>
+                        <th>Ubicación</th>
+                        <th>Cantidad ({{detalleLote().UnidadMedida}})</th>
+                    </thead>
+                    <tbody class="infoLote">
+                        @for (uc of detalleLote().UbicacionesCantidad; track uc) {
+                        <tr>
+                            <td>{{uc.CodBodega}}</td>
+                            <td>{{uc.Ubicacion}}</td>
+                            @if(!uc.Ubicacion) {
+                            <td>{{uc.CantBodega}}</td>
+                            }
+                            @if(uc.Ubicacion) {
+                            <td>{{uc.CantUbicacion}}</td>
+                            }
+                        </tr>
                         }
-                        @if (uc.Ubicacion) {
-                        <span>{{uc.CantUbicacion}}</span>
-                        }
-                    </td>
-                </tr>
+                    </tbody>
+                </table>
                 }
-            </tbody>
-        </table>
-    </div>
-    }
+            </td>
+        </tr>
+        }
+    </table>
 </div>
-}@else {
+}
+@else {
 <div class="empty-state">
     <mat-icon>warning</mat-icon>
     <p>No se encontraron los datos</p>

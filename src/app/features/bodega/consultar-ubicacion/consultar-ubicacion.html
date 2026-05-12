@@ -10,6 +10,7 @@
         <mat-card-content>
             <mat-card-header>
                 <mat-card-title>Seleccione la bodega</mat-card-title>
+                <mat-card-subtitle>Seleccione la bodega de la que quiere ver el contenido:</mat-card-subtitle>
             </mat-card-header>
             <mat-card-actions>
                 <mat-radio-group [value]="bodegaSeleccionada()" class="example-radio-group"
@@ -20,19 +21,35 @@
                 </mat-radio-group>
             </mat-card-actions>
 
-            <app-table [data]="dataFiltrada()" [columns]="tableColumns" [displayedColumns]="displayedColumns"
-                [showPaginator]="true" [cellTemplate]="cellTemplate"></app-table>
-
-            <ng-template #cellTemplate let-column="column" let-element="element">
-                @if (column.columnDef === 'Lote') {
-                <span>{{ element.Lote }} <mat-icon class="clickable-icon"
-                        (click)="verDetalleLote(element.Lote, element.CodArticulo)">visibility</mat-icon></span>
-                }
-                @else {
-                {{ element[column.columnDef] }}
-                }
-            </ng-template>
-
+            @if(dataFiltrada()){
+            <table>
+                <thead>
+                    <tr>
+                        <th>Lote</th>
+                        <th>Bodega</th>
+                        <th>CodArticulo</th>
+                        <th>Articulo</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of dataFiltrada(); track $index) {
+                    <tr>
+                        <td>
+                            <span class="link"
+                                (click)="verDetalleLote(item.Lote, item.CodArticulo)">{{item.Lote}}</span>
+                            <span> <mat-icon class="clickable-icon"
+                                    (click)="verDetalleLote(item.Lote, item.CodArticulo)">visibility</mat-icon></span>
+                        </td>
+                        <td>{{item.CodBodega}}</td>
+                        <td>{{item.CodArticulo}}</td>
+                        <td>{{item.Articulo}}</td>
+                        <td>{{item.Cantidad}} {{item.UnidadMedida}}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+            }
         </mat-card-content>
     </mat-card>
 </div>

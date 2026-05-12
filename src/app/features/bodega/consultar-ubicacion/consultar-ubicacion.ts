@@ -1,14 +1,11 @@
-import { Component, inject, input, signal, computed, effect, ViewChild } from '@angular/core';
+import { Component, inject, input, signal, computed } from '@angular/core';
 import { Header } from "../../../shared/header/header";
-import { MatCard, MatCardContent, MatCardActions, MatCardHeader, MatCardTitle } from "@angular/material/card";
+import { MatCard, MatCardContent, MatCardActions, MatCardHeader, MatCardTitle, MatCardSubtitle } from "@angular/material/card";
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Table } from '../../../shared/table/table';
-import { MatTableDataSource } from '@angular/material/table';
 import { ConsultarUbicacionService, UbicacionItem } from './services/consultar-ubicacion.service';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import { switchMap, of, startWith, finalize, catchError, tap } from 'rxjs';
 import { LoaderPage } from "../../../shared/loader-page/loader-page";
-import { MatPaginator } from '@angular/material/paginator';
 import { MatRadioGroup, MatRadioButton } from "@angular/material/radio";
 import { MatIcon } from "@angular/material/icon";
 import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.service';
@@ -17,7 +14,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-consultar-ubicacion',
   imports: [Header, MatCard, MatCardContent,
-    ReactiveFormsModule, Table, LoaderPage, MatRadioGroup, MatRadioButton, FormsModule, MatCardActions, MatCardHeader, MatCardTitle, MatIcon],
+    ReactiveFormsModule, LoaderPage, MatRadioGroup, MatRadioButton, FormsModule, MatCardActions, MatCardHeader, MatCardTitle, MatIcon, MatCardSubtitle],
   templateUrl: './consultar-ubicacion.html',
   styleUrl: './consultar-ubicacion.scss',
 })
@@ -33,18 +30,6 @@ export class ConsultarUbicacion {
   protected readonly isLoading = signal(false);
   protected readonly error = signal<string | null>(null);
 
-  // columnas
-  displayedColumns = ['Lote', 'CodBodega', 'CodArticulo', 'Articulo', 'Cantidad'];
-
-  tableColumns = [
-    { columnDef: 'Lote', header: 'Lote' },
-    { columnDef: 'CodBodega', header: 'Bodega' },
-    { columnDef: 'CodArticulo', header: 'CodArticulo' },
-    { columnDef: 'Articulo', header: 'Articulo' },
-    { columnDef: 'Cantidad', header: 'Cantidad' },
-  ];
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  dataSource: MatTableDataSource<UbicacionItem> = new MatTableDataSource<UbicacionItem>([]);
 
   // data desde backend
   private response$ = toObservable(this.ubicacion).pipe(
@@ -57,11 +42,6 @@ export class ConsultarUbicacion {
         tap({
           next: (response) => {
             console.log(response);
-            this.dataSource.data = response.Items;
-            // Use setTimeout to ensure paginator is properly initialized
-            setTimeout(() => {
-              this.dataSource.paginator = this.paginator;
-            }, 0);
           },
           error: (error: any) => {
             console.error(error);
