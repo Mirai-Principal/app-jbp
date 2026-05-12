@@ -1,13 +1,17 @@
  @use '../../../shared/styles/colors' as *;
 
  .container {
+     box-sizing: border-box;
 
-     h2,
+     h2 {
+         margin: 0;
+     }
+
      h4,
      h6 {
          text-align: center;
-         padding: px 0;
-         margin: 10px;
+         padding: 2px 0;
+         margin: 0;
      }
  }
 
@@ -39,9 +43,9 @@
 
  table {
      font-size: 1.1rem;
+     font-weight: 400;
      width: 800px;
      margin: 0 auto;
-     padding: 0 10px;
 
      tr:hover {
          background-color: $hover-table;
