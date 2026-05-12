@@ -100,7 +100,12 @@ export class ConsultarUbicacion {
 
   verDetalleLote(lote: string, codArticulo: string) {
     //redirigir a la pantalla de consulta de lote
-    this.router.navigate(['/consulta-lote/lote', lote, 'codArticulo', codArticulo]);
+    this.router.navigate(['/consultaLote'], {
+      queryParams: {
+        lote: lote,
+        codArticulo: codArticulo
+      }
+    });
   }
 }
 
