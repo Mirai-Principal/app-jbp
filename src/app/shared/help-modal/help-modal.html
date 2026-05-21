@@ -1,0 +1,14 @@
+<button mat-button (click)="openModal()">
+    <mat-icon>{{ icon }}</mat-icon>
+    <span>{{ buttonText }}</span>
+</button>
+
+<app-modal [isOpen]="isOpen()" [title]="title" (close)="closeModal()" (backdropClick)="closeModal()">
+    <div class="help-content">
+        @if (helpContent) {
+        <div [innerHTML]="helpContent"></div>
+        } @else {
+        <ng-content></ng-content>
+        }
+    </div>
+</app-modal>
