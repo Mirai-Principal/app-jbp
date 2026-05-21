@@ -1,8 +1,7 @@
-import { Component, Input, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, HostListener, Input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
-import { Modal } from '../modal/modal';
 
 @Component({
   selector: 'app-help-modal',
@@ -10,8 +9,7 @@ import { Modal } from '../modal/modal';
   imports: [
     MatButtonModule,
     MatIconModule,
-    CommonModule,
-    Modal
+    CommonModule
   ],
   templateUrl: './help-modal.html',
   styleUrl: './help-modal.scss'
@@ -22,7 +20,8 @@ export class HelpModal {
   @Input() title = '¿Cómo usar?';
   @Input() buttonText = '¿Cómo usar?';
   @Input() icon = 'help_outline';
-  @Input() helpContent: string = '';
+  @Input() helpContent = '';
+  @Input() maxWidth = '720px';
 
   openModal() {
     this.isOpen.set(true);
@@ -30,5 +29,12 @@ export class HelpModal {
 
   closeModal() {
     this.isOpen.set(false);
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey() {
+    if (this.isOpen()) {
+      this.closeModal();
+    }
   }
 }

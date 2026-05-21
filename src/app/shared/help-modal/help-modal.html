@@ -1,14 +1,28 @@
-<button mat-button (click)="openModal()">
+<button mat-button type="button" (click)="openModal()">
     <mat-icon>{{ icon }}</mat-icon>
     <span>{{ buttonText }}</span>
 </button>
 
-<app-modal [isOpen]="isOpen()" [title]="title" (close)="closeModal()" (backdropClick)="closeModal()">
-    <div class="help-content">
-        @if (helpContent) {
-        <div [innerHTML]="helpContent"></div>
-        } @else {
-        <ng-content></ng-content>
-        }
-    </div>
-</app-modal>
+@if (isOpen()) {
+<div class="help-modal-overlay" (click)="closeModal()">
+    <section class="help-modal-panel" [style.max-width]="maxWidth" (click)="$event.stopPropagation()" role="dialog"
+        aria-modal="true" [attr.aria-label]="title">
+        <header class="help-modal-header">
+            <h2 class="help-modal-title">{{ title }}</h2>
+            <button class="help-modal-close" type="button" (click)="closeModal()" aria-label="Cerrar ayuda">
+                <mat-icon>close</mat-icon>
+            </button>
+        </header>
+
+        <div class="help-modal-body">
+            @if (helpContent) {
+            <div class="help-content" [innerHTML]="helpContent"></div>
+            } @else {
+            <div class="help-content">
+                <ng-content></ng-content>
+            </div>
+            }
+        </div>
+    </section>
+</div>
+}

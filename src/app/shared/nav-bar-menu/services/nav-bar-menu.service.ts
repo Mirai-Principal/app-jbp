@@ -31,6 +31,7 @@ export class SidebarMenuService {
                 { name: 'Entregas Urbano', icon: 'local_shipping', url: '/entregas-urbano' },
                 { name: 'Hoja de Ruta', icon: 'route', url: '/hoja-de-ruta' },
                 { name: 'Participantes Puntos', icon: 'people', url: '/participantes-puntos' },
+                { name: 'Actualizar Participantes', icon: 'update', url: '/actualizar-participantes' },
                 { name: 'Notas de Crédito', icon: 'receipt_long', url: '/notas-credito' },
             ],
             visible: this.ModulosAcceso.Ventas
