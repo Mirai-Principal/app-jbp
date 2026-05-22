@@ -1,6 +1,41 @@
 <app-header title="Notas de Crédito" icon="receipt_long"></app-header>
 <div class="container">
     <mat-card>
+        <div header-actions class="ayuda">
+            <app-help-modal buttonText="¿Cómo usar?" icon="help_outline">
+                <h3>Cómo usar Notas de Crédito</h3>
+                <p>Esta página te permite gestionar las notas de crédito del plan de puntos.</p>
+                <h4>Pasos para usar:</h4>
+                <ol>
+                    <li>Haz clic en el botón <strong>"Agregar Nota de Crédito"</strong> para crear una nueva nota.</li>
+                    <li>Completa el formulario con la información requerida:</li>
+                    <ul>
+                        <li>Buscar y seleccionar un cliente</li>
+                        <li>Número de factura (opcional)</li>
+                        <li>Fecha de emisión</li>
+                        <li>Monto</li>
+                        <li>Motivo o descripción de la nota</li>
+                    </ul>
+                    <li>Guarda la nota de crédito.</li>
+                    <li>Las notas aparecerán en la tabla donde podrás:</li>
+                    <ul>
+                        <li>Ver el listado completo</li>
+                        <li>Editar notas existentes</li>
+                        <li>Eliminar notas</li>
+                    </ul>
+                    <li>Finalmente, haz click en enviar notas de crédito.</li>
+                    <ul>
+                        <li>Recibirás un mensaje de confirmación indicando que las notas de crédito fueron enviadas
+                            correctamente, y si hubo algún error, comunicar a quien corresponda</li>
+                    </ul>
+
+                </ol>
+                <h4>Consideraciones importantes:</h4>
+                <ul>
+                    <li>Verifica que la información sea correcta antes de enviar las notas de crédito</li>
+                </ul>
+            </app-help-modal>
+        </div>
         <mat-card-header>
             <mat-card-title>Plan de Puntos - Notas de Crédito</mat-card-title>
         </mat-card-header>

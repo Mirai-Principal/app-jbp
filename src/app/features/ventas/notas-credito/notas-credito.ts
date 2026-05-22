@@ -8,6 +8,7 @@ import { NotaCreditoFormComponent } from './components/nota-credito-form/nota-cr
 import { NotaCreditoTablaComponent } from './components/nota-credito-tabla/nota-credito-tabla';
 import { NotaCreditoItem } from './models/nota-credito.model';
 import { Header } from "../../../shared/header/header";
+import { HelpModal } from "../../../shared/help-modal/help-modal";
 
 @Component({
   selector: 'app-notas-credito',
@@ -18,7 +19,8 @@ import { Header } from "../../../shared/header/header";
     MatButtonModule,
     MatIconModule,
     NotaCreditoTablaComponent,
-    Header
+    Header,
+    HelpModal
   ],
   templateUrl: './notas-credito.html',
   styleUrl: './notas-credito.scss'
