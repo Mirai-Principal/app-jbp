@@ -27,7 +27,7 @@ export const routes: Routes = [
     { path: 'actualizar-numero-factura-exportacion', component: UpdateNumFacturaExportacion, title: 'Actualizar número de factura de exportación', canActivate: [AuthGuard] },
     { path: 'entregas-urbano', component: EntregasUrbano, title: 'Entregas Urbano', canActivate: [AuthGuard] },
     { path: 'hoja-de-ruta', component: HojaRuta, title: 'Hoja de Ruta', canActivate: [AuthGuard] },
-    { path: 'participantes-puntos', component: ParticipantesPuntos, title: 'Participantes Puntos', canActivate: [AuthGuard] },
+    { path: 'informacion-participantes', component: ParticipantesPuntos, title: 'Información de Participantes Puntos', canActivate: [AuthGuard] },
     { path: 'actualizar-participantes', component: ActualizarParticipantes, title: 'Actualizar Participantes', canActivate: [AuthGuard] },
     { path: 'notas-credito', component: NotasCreditoComponent, title: 'Notas de Crédito', canActivate: [AuthGuard] },
     { path: 'generar-qr-ubicaciones', component: GenerarQrUbicaciones, title: 'Generar QR de Ubicaciones', canActivate: [AuthGuard] },

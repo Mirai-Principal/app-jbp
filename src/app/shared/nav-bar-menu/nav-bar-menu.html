@@ -36,11 +36,37 @@
 
                     <div class="dropdown-menu">
                         @for (sub of item.children; track sub.name) {
+                        @if (!sub.children) {
                         <a class="dropdown-item" [routerLink]="sub.url" [class.active]="isActive(sub.url)"
                             (click)="onNavLinkClick()">
                             <mat-icon class="nav-icon">{{ sub.icon }}</mat-icon>
                             <span class="nav-text">{{ sub.name }}</span>
                         </a>
+                        }
+
+                        @if (sub.children) {
+                        <div class="nav-dropdown nested" [class.open]="isExpanded(sub.name)"
+                            [class.open-left]="opensToLeft(sub.name)"
+                            (mouseenter)="onNestedHover(sub.name, $event)">
+                            <button class="dropdown-item dropdown-item-button" type="button"
+                                [class.active]="isParentActive(sub)" (click)="toggle(sub, [item.name], $event)">
+                                <mat-icon class="nav-icon">{{ sub.icon }}</mat-icon>
+                                <span class="nav-text">{{ sub.name }}</span>
+                                <mat-icon class="caret">{{ isExpanded(sub.name) ? 'expand_less' : 'expand_more'
+                                    }}</mat-icon>
+                            </button>
+
+                            <div class="dropdown-menu nested-menu">
+                                @for (nested of sub.children; track nested.name) {
+                                <a class="dropdown-item" [routerLink]="nested.url" [class.active]="isActive(nested.url)"
+                                    (click)="onNavLinkClick()">
+                                    <mat-icon class="nav-icon">{{ nested.icon }}</mat-icon>
+                                    <span class="nav-text">{{ nested.name }}</span>
+                                </a>
+                                }
+                            </div>
+                        </div>
+                        }
                         }
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 @if (obteniendoEstadoCuenta()) {
 <app-loader-page message="Cargando información de Promotick..." icon="sync" />
 }
-<app-header title="Participantes Puntos" icon="people" />
+<app-header title="Información de Participantes Puntos" icon="people" />
 <div class="container">
   <mat-card>
     <mat-card-content>
@@ -25,37 +25,52 @@
           </mat-form-field>
         </div>
       </form>
+      <!-- Contenido de la Búsqueda -->
+      <div class="results-section">
+        @if(mostrarListaCompleta()){
+        @if(listSociosNegocio().length > 0){
+        <h3 class="results-title">
+          Resultados ({{listSociosNegocio().length}})
+        </h3>
+        <div class="results-list">
+          @for(sn of listSociosNegocio(); track sn.Ruc) {
+          <mat-card class="result-card" [class.selected]="selectedRuc() === sn.Ruc" (click)="seleccionarSN(sn.Ruc)">
+            <mat-card-content class="result-card-content">
+              <span class="participant-name">{{sn.Nombre}}</span>
+              <span class="participant-ruc">{{sn.Ruc}}</span>
+            </mat-card-content>
+          </mat-card>
+          }
+        </div>
+        }@else{
+        <p class="no-results">Sin resultados</p>
+        }
+        }@else{
+        @if(selectedSocioNegocio()){
+        <h3 class="results-title">
+          Participante Seleccionado
+        </h3>
+        <div class="results-list">
+          <mat-card class="result-card selected" (click)="mostrarListaCompleta.set(true)">
+            <mat-card-content class="result-card-content">
+              <span class="participant-name">{{selectedSocioNegocio()!.Nombre}}</span>
+              <span class="participant-ruc">{{selectedSocioNegocio()!.Ruc}}</span>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        }
+        }
+      </div>
 
+      @if(seSeleccionoSocioNegocio()){
       <mat-tab-group [selectedIndex]="selectedTab()" (selectedIndexChange)="selectedTab.set($event)">
-        <!-- Contenido de la pestaña Búsqueda -->
-        <mat-tab label="Resultados de la Búsqueda">
-          <div class="results-section">
-            @if(listSociosNegocio().length > 0){
-            <h3 class="results-title">
-              Resultados ({{listSociosNegocio().length}})
-            </h3>
-            <div class="results-list">
-              @for(sn of listSociosNegocio(); track sn.Ruc) {
-              <mat-card class="result-card" [class.selected]="selectedRuc() === sn.Ruc" (click)="seleccionarSN(sn.Ruc)">
-                <mat-card-content class="result-card-content">
-                  <span class="participant-name">{{sn.Nombre}}</span>
-                  <span class="participant-ruc">{{sn.Ruc}}</span>
-                </mat-card-content>
-              </mat-card>
-              }
-            </div>
-            }@else{
-            <p class="no-results">Sin resultados</p>
-            }
-          </div>
-        </mat-tab>
         <!-- Info web service promotick -->
-        <mat-tab label="Información del Participante" [disabled]="!seSeleccionoSocioNegocio()">
+        <mat-tab label="Información del Participante">
           <app-estado-cuenta-promotick [participante]="participante()"
             (procesandoChange)="onProcesandoChange($event)"></app-estado-cuenta-promotick>
         </mat-tab>
         <!-- documentos enviados -->
-        <mat-tab label="Documentos Enviados" [disabled]="!seSeleccionoSocioNegocio()">
+        <mat-tab label="Documentos Enviados">
           <app-documentos-enviados />
         </mat-tab>
         <!-- Gestion participante -->
@@ -164,6 +179,7 @@
           </cdk-virtual-scroll-viewport>
         </mat-tab> -->
       </mat-tab-group>
+      }
     </mat-card-content>
   </mat-card>
 </div>

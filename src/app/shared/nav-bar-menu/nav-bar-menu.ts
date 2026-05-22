@@ -29,6 +29,7 @@ export class NavBarMenu {
 
   protected readonly menu = signal<MenuItem[]>([]);
   expandedItems = signal<Set<string>>(new Set());
+  nestedLeftItems = signal<Set<string>>(new Set());
 
   // Use shared service signals
   protected readonly collapsed = this.navbarState.collapsed;
@@ -75,18 +76,37 @@ export class NavBarMenu {
     return this.currentRoute().startsWith(url);
   }
 
-  // 🔥 detectar si algún hijo está activo
+  // 🔥 detectar si algún hijo está activo (recursivo para múltiples niveles)
   isParentActive(item: MenuItem): boolean {
-    return item.children?.some(c => this.isActive(c.url)) ?? false;
+    if (!item.children) return false;
+    return item.children.some(c => {
+      if (this.isActive(c.url)) return true;
+      if (c.children) return this.isParentActive(c);
+      return false;
+    });
   }
 
-  // 🔥 expandir automáticamente el menú activo
+  // 🔥 expandir automáticamente el menú activo (recursivo para múltiples niveles)
   expandActiveParents() {
     const current = new Set<string>();
+
+    const addActiveParents = (item: MenuItem) => {
+      if (item.children) {
+        item.children.forEach(child => {
+          if (this.isActive(child.url) || (child.children && this.isParentActive(child))) {
+            current.add(item.name);
+            if (child.children) {
+              current.add(child.name);
+            }
+          }
+        });
+      }
+    };
 
     this.menu().forEach(item => {
       if (this.isParentActive(item)) {
         current.add(item.name);
+        addActiveParents(item);
       }
     });
 
@@ -99,19 +119,68 @@ export class NavBarMenu {
     }
   }
 
-  toggle(item: MenuItem) {
-    const current = new Set(this.expandedItems());
+  toggle(item: MenuItem, ancestors: string[] = [], event?: MouseEvent) {
+    event?.stopPropagation();
 
-    if (current.has(item.name)) {
-      this.expandedItems.set(new Set());
+    if (!this.isMobile()) {
+      if (item.children) {
+        this.updateNestedDirection(item.name, event?.currentTarget as HTMLElement | null);
+      }
       return;
     }
 
-    this.expandedItems.set(new Set([item.name]));
+    if (item.children) {
+      this.updateNestedDirection(item.name, event?.currentTarget as HTMLElement | null);
+    }
+
+    const current = new Set(this.expandedItems());
+
+    if (current.has(item.name)) {
+      current.delete(item.name);
+      this.expandedItems.set(current);
+      return;
+    }
+
+    this.expandedItems.set(new Set([...ancestors, item.name]));
   }
 
   isExpanded(name: string) {
     return this.expandedItems().has(name);
+  }
+
+  opensToLeft(name: string) {
+    return this.nestedLeftItems().has(name);
+  }
+
+  onNestedHover(name: string, event: MouseEvent) {
+    if (this.isMobile()) return;
+    this.updateNestedDirection(name, event.currentTarget as HTMLElement | null);
+  }
+
+  private updateNestedDirection(name: string, triggerElement: HTMLElement | null) {
+    if (!triggerElement || this.isMobile()) return;
+
+    const host = triggerElement.classList.contains('nav-dropdown')
+      ? triggerElement
+      : triggerElement.closest('.nav-dropdown');
+
+    if (!host) return;
+
+    const dropdown = host.querySelector('.dropdown-menu.nested-menu') as HTMLElement | null;
+    if (!dropdown) return;
+
+    const hostRect = host.getBoundingClientRect();
+    const menuWidth = dropdown.offsetWidth || 220;
+    const opensLeft = hostRect.right + menuWidth + 8 > window.innerWidth;
+    const current = new Set(this.nestedLeftItems());
+
+    if (opensLeft) {
+      current.add(name);
+    } else {
+      current.delete(name);
+    }
+
+    this.nestedLeftItems.set(current);
   }
 
   toggleSidebar() {
@@ -133,6 +202,7 @@ export class NavBarMenu {
     const clickedInside = this.elementRef.nativeElement.contains(target);
     if (!clickedInside) {
       this.expandedItems.set(new Set());
+      this.nestedLeftItems.set(new Set());
       if (this.isMobile() && this.mobileOpen()) {
         this.navbarState.setMobileOpen(false);
       }
@@ -156,6 +226,10 @@ export class NavBarMenu {
     if (wasMobile && !isNowMobile) {
       this.navbarState.setMobileOpen(false);
     }
+
+    if (wasMobile !== isNowMobile) {
+      this.nestedLeftItems.set(new Set());
+    }
   }
 
   // sidebar.component.ts
@@ -163,6 +237,7 @@ export class NavBarMenu {
   logout() {
     // si usas signals o estado global
     this.expandedItems.set(new Set());
+    this.nestedLeftItems.set(new Set());
     // opcional: cerrar menú en mobile
     this.navbarState.setMobileOpen(false);
 

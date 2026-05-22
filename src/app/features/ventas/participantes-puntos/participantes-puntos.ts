@@ -74,11 +74,15 @@ export class ParticipantesPuntos {
   selectedTab = signal(0);
   selectedRuc = signal<string | null>(null);
   obteniendoEstadoCuenta = signal(false);
+  mostrarListaCompleta = signal(true);
 
   participante = signal<any | null>(null);
 
   listSociosNegocio!: Signal<SocioNegocioItem[]>;
   vendedores = signal<ItemMsg[]>([]);
+  selectedSocioNegocio = computed(() =>
+    this.listSociosNegocio().find(sn => sn.Ruc === this.selectedRuc()) ?? null
+  );
 
   // =========================
   // FORM
@@ -161,6 +165,8 @@ export class ParticipantesPuntos {
     ).subscribe(() => {
       this.selectedTab.set(0);
       this.seSeleccionoSocioNegocio.set(false);
+      this.selectedRuc.set(null);
+      this.participante.set(null);
     });
 
     const busquedaResults$ = busquedaControl.valueChanges.pipe(
@@ -236,6 +242,9 @@ export class ParticipantesPuntos {
   onSearchInput(): void {
     this.selectedTab.set(0);
     this.seSeleccionoSocioNegocio.set(false);
+    this.selectedRuc.set(null);
+    this.participante.set(null);
+    this.mostrarListaCompleta.set(true);
   }
 
   seleccionarSN(ruc: string): void {
@@ -243,7 +252,9 @@ export class ParticipantesPuntos {
     this.snService.selectSocioNegocio(ruc);
     this.snService.getParticipanteByRuc(ruc).subscribe(participante => {
       this.setParticipante(participante);
-      this.selectedTab.set(1);
+      this.selectedTab.set(0);
+      this.mostrarListaCompleta.set(false);
+      this.txtSearch.setValue('', { emitEvent: false });
     });
   }
 

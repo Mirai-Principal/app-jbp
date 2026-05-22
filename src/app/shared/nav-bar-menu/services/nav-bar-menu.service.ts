@@ -30,9 +30,15 @@ export class SidebarMenuService {
                 { name: 'Actualizar Num Factura Exp', icon: 'numbers', url: '/actualizar-numero-factura-exportacion' },
                 { name: 'Entregas Urbano', icon: 'local_shipping', url: '/entregas-urbano' },
                 { name: 'Hoja de Ruta', icon: 'route', url: '/hoja-de-ruta' },
-                { name: 'Participantes Puntos', icon: 'people', url: '/participantes-puntos' },
-                { name: 'Actualizar Participantes', icon: 'update', url: '/actualizar-participantes' },
-                { name: 'Notas de Crédito', icon: 'receipt_long', url: '/notas-credito' },
+                {
+                    name: 'Participantes Puntos',
+                    icon: 'people',
+                    children: [
+                        { name: 'Actualizar Participantes', icon: 'update', url: '/actualizar-participantes' },
+                        { name: 'Notas de Crédito', icon: 'receipt_long', url: '/notas-credito' },
+                        { name: 'Información de Participantes', icon: 'people', url: '/informacion-participantes' },
+                    ],
+                },
             ],
             visible: this.ModulosAcceso.Ventas
         },
