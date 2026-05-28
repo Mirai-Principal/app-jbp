@@ -31,8 +31,6 @@ export class UserService {
   }
 
   login(me: LoginMsg): Observable<boolean> {
-    console.log(me);
-
     let url: String | null = this.getUrlEndpointService.getUrlFromEndPointName('user')
     url += '/login';
     console.log(url);

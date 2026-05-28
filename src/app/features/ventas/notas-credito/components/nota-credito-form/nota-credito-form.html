@@ -3,7 +3,7 @@
     <mat-form-field appearance="outline" class="full-width">
         <mat-label>Cliente</mat-label>
         <input type="text" matInput formControlName="clienteBusqueda" [matAutocomplete]="autoCliente"
-            placeholder="Buscar por nombre">
+            placeholder="Buscar cliente">
         @if (isLoading()) {
         <mat-progress-spinner matPrefix mode="indeterminate" diameter="24" strokeWidth="3"></mat-progress-spinner>
         }@else {
@@ -41,9 +41,9 @@
         }
     </mat-form-field>
 
-    <!-- Monto Factura -->
+    <!-- Monto de la factura -->
     <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Monto Factura</mat-label>
+        <mat-label>Monto</mat-label>
         <input matInput type="number" formControlName="montoFactura" placeholder="0" step="1" min="1" max="999999999"
             (input)="prevenirDecimales($event)">
         <span matPrefix style="margin: 0 4px 0 4px;">$</span>
@@ -60,7 +60,7 @@
 
     <!-- Fecha Factura -->
     <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Fecha Factura</mat-label>
+        <mat-label>Fecha</mat-label>
         <input matInput [matDatepicker]="picker" formControlName="fechaFactura" placeholder="mm/dd/yyyy" [max]="today()"
             min="2000-01-02">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

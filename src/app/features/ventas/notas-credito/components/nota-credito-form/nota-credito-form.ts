@@ -70,7 +70,7 @@ export class NotaCreditoFormComponent {
         Validators.pattern(/^\d{3}-\d{3}-\d{9}$/) // Formato: 001-001-000123456
       ]],
       montoFactura: [0, [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]],
-      fechaFactura: [null, Validators.required],
+      fechaFactura: [this.today(), Validators.required],
       descripcion: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(200)]]
     });
 
