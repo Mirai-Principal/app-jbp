@@ -62,7 +62,7 @@ export class NotaCreditoFormComponent {
 
   puntosEquivalentes!: Signal<number>;
 
-  constructor(private dialog: MatDialog) {
+  constructor() {
     // Inicializar formulario
     this.formulario = this.fb.group({
       clienteBusqueda: ['', Validators.required],

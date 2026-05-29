@@ -1,0 +1,40 @@
+@if (procesando()) {
+<app-loader-page message="Consultando documentos..." icon="sync" />
+}
+
+<app-header title="Historial de Notas de Crédito y Facturas" icon="history" />
+<div class="container">
+    <mat-card>
+
+        <mat-card-content>
+            <div class="header-filters">
+                <form [formGroup]="fechaForm" class="date-form">
+                    <mat-form-field appearance="outline" class="date-field">
+                        <mat-label>Seleccionar Fecha</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="fecha">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </form>
+
+                @if (tiposDocumento().length > 0) {
+                <div class="divider"></div>
+                <div class="filtro-chips">
+                    <div class="filtro-header">
+                        <mat-icon class="filter-icon">filter_list</mat-icon>
+                        <span class="filtro-label">Filtrar por Documento</span>
+                    </div>
+                    <mat-chip-listbox [value]="filtroActivo()" (change)="onFiltroTipoDocumentoChange($event.value)" class="custom-chip-list">
+                        <mat-chip-option [value]="null" color="primary">Todos</mat-chip-option>
+                        @for (tipo of tiposDocumento(); track tipo) {
+                        <mat-chip-option [value]="tipo" color="primary">{{ tipo }}</mat-chip-option>
+                        }
+                    </mat-chip-listbox>
+                </div>
+                }
+            </div>
+
+            <app-documentos-enviados />
+        </mat-card-content>
+    </mat-card>
+</div>

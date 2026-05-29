@@ -6,61 +6,9 @@
   <mat-card>
     <mat-card-content>
 
-      <form [formGroup]="searchForm">
-        <div>
-          <mat-form-field appearance="outline" class="search-form-field">
-            <mat-label>Buscar por RUC o Nombre</mat-label>
-            <input [formControl]="txtSearch" (input)="onSearchInput()" autofocus matInput
-              placeholder="Escribe al menos 3 caracteres...">
-            @if (procesando()) {
-            <mat-progress-spinner matPrefix mode="indeterminate" diameter="20" strokeWidth="3"></mat-progress-spinner>
-            }@else {
-            <mat-icon matPrefix>search</mat-icon>
-            }
-            @if (txtSearch.value) {
-            <button mat-icon-button matSuffix (click)="txtSearch.setValue('')" type="button">
-              <mat-icon>clear</mat-icon>
-            </button>
-            }
-          </mat-form-field>
-        </div>
-      </form>
-      <!-- Contenido de la Búsqueda -->
-      <div class="results-section">
-        @if(mostrarListaCompleta()){
-        @if(listSociosNegocio().length > 0){
-        <h3 class="results-title">
-          Resultados ({{listSociosNegocio().length}})
-        </h3>
-        <div class="results-list">
-          @for(sn of listSociosNegocio(); track sn.Ruc) {
-          <mat-card class="result-card" [class.selected]="selectedRuc() === sn.Ruc" (click)="seleccionarSN(sn.Ruc)">
-            <mat-card-content class="result-card-content">
-              <span class="participant-name">{{sn.Nombre}}</span>
-              <span class="participant-ruc">{{sn.Ruc}}</span>
-            </mat-card-content>
-          </mat-card>
-          }
-        </div>
-        }@else{
-        <p class="no-results">Sin resultados</p>
-        }
-        }@else{
-        @if(selectedSocioNegocio()){
-        <h3 class="results-title">
-          Participante Seleccionado
-        </h3>
-        <div class="results-list">
-          <mat-card class="result-card selected" (click)="mostrarListaCompleta.set(true)">
-            <mat-card-content class="result-card-content">
-              <span class="participant-name">{{selectedSocioNegocio()!.Nombre}}</span>
-              <span class="participant-ruc">{{selectedSocioNegocio()!.Ruc}}</span>
-            </mat-card-content>
-          </mat-card>
-        </div>
-        }
-        }
-      </div>
+      <app-buscar-socio-negocio
+        (socioSeleccionado)="seleccionarSN($event)">
+      </app-buscar-socio-negocio>
 
       @if(seSeleccionoSocioNegocio()){
       <mat-tab-group [selectedIndex]="selectedTab()" (selectedIndexChange)="selectedTab.set($event)">

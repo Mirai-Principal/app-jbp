@@ -20,10 +20,7 @@ export class PromotickServices {
     console.log(url);
     return this.http.get<any>(url);
   }
-  getDocumentosEnviadosByRuc(ruc: string): Observable<any> {
-    const url = this.getUrlEndpointService.getUrlFromEndPointName('promotick') + '/getDocumentosEnviados/' + ruc;
-    return this.http.get<any>(url);
-  }
+
   getHeaderWsPromotick(ptkConf: Promotick): any {
     const httpOptions = {
       headers: new HttpHeaders({

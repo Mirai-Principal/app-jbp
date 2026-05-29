@@ -1,8 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { DocumentosEnviadosService } from '../../services/documentos-enviados.service';
-import { Table, TableColumn } from '../../../../../shared/table/table';
+import { DocumentosEnviadosService } from './services/documentos-enviados.service';
+import { Table, TableColumn } from '../../../../shared/table/table';
 
 @Component({
   selector: 'app-documentos-enviados',
@@ -36,4 +36,5 @@ export class DocumentosEnviados {
   ];
 
   displayedColumns = this.columns.map(c => c.columnDef);
+
 }

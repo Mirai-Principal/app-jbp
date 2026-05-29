@@ -9,6 +9,8 @@ import { NotaCreditoTablaComponent } from './components/nota-credito-tabla/nota-
 import { NotaCreditoItem } from './models/nota-credito.model';
 import { Header } from "../../../shared/header/header";
 import { HelpModal } from "../../../shared/help-modal/help-modal";
+import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { NotasCreditoHistorial } from "./components/notas-credito-historial/notas-credito-historial";
 
 @Component({
   selector: 'app-notas-credito',
@@ -20,7 +22,10 @@ import { HelpModal } from "../../../shared/help-modal/help-modal";
     MatIconModule,
     NotaCreditoTablaComponent,
     Header,
-    HelpModal
+    HelpModal,
+    MatTabGroup,
+    MatTab,
+    NotasCreditoHistorial
   ],
   templateUrl: './notas-credito.html',
   styleUrl: './notas-credito.scss'

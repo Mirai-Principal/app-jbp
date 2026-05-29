@@ -1,32 +1,22 @@
-import { Component, computed, effect, inject, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Header } from '../../../shared/header/header';
 import { MatCard } from '@angular/material/card';
 import { MatCardContent } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { toSignal } from '@angular/core/rxjs-interop';
-import {
-  catchError,
-  debounceTime, distinctUntilChanged, filter, finalize, map, startWith, switchMap, tap
-} from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { filter, switchMap, tap } from 'rxjs/operators';
 import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.service';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../../core/services/user.service';
 import { SocioNegocioService } from './services/socio-negocio.service';
-import { DocumentosEnviadosService } from './services/documentos-enviados.service';
+import { DocumentosEnviadosService } from '../components/documentos-enviados/services/documentos-enviados.service';
 import { EstadoCuentaPromotick } from './components/estado-cuenta-promotick/estado-cuenta-promotick';
-import { ArrayUtils } from '../../../shared/arrayUtils';
 import { ItemMsg } from '../../../core/models/common.msg';
-import { SocioNegocioItem } from '../../../core/models/socioNegocioMsg';
-import { of } from 'rxjs';
 import { ScrollToTop } from "../../../shared/scroll-to-top/scroll-to-top";
-import { DocumentosEnviados } from "./components/documentos-enviados/documentos-enviados";
+import { DocumentosEnviados } from "../components/documentos-enviados/documentos-enviados";
 import { LoaderPage } from "../../../shared/loader-page/loader-page";
+import { BuscarSocioNegocio } from "../../../shared/buscar-socio-negocio/buscar-socio-negocio";
 
 @Component({
   selector: 'app-participantes-puntos',
@@ -35,16 +25,12 @@ import { LoaderPage } from "../../../shared/loader-page/loader-page";
     Header,
     MatCard,
     MatCardContent,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatProgressSpinner,
     MatTabsModule,
-    MatIconModule,
-    MatButtonModule,
     EstadoCuentaPromotick,
     ScrollToTop,
     DocumentosEnviados,
-    LoaderPage
+    LoaderPage,
+    BuscarSocioNegocio
   ],
   templateUrl: './participantes-puntos.html',
   styleUrl: './participantes-puntos.scss'
@@ -67,32 +53,15 @@ export class ParticipantesPuntos {
   // SIGNALS
   // =========================
 
-  procesando = signal(false);
   seSeleccionoSocioNegocio = signal(false);
   seEncontraroSN = signal(false);
   elite = signal(false);
   selectedTab = signal(0);
-  selectedRuc = signal<string | null>(null);
   obteniendoEstadoCuenta = signal(false);
-  mostrarListaCompleta = signal(true);
 
   participante = signal<any | null>(null);
 
-  listSociosNegocio!: Signal<SocioNegocioItem[]>;
   vendedores = signal<ItemMsg[]>([]);
-  selectedSocioNegocio = computed(() =>
-    this.listSociosNegocio().find(sn => sn.Ruc === this.selectedRuc()) ?? null
-  );
-
-  // =========================
-  // FORM
-  // =========================
-
-  txtSearch = new FormControl<string>('', { nonNullable: true });
-
-  searchForm: FormGroup = this.fb.group({
-    txtSearch: this.txtSearch
-  });
 
   form: FormGroup = this.fb.group({
     nombres: [null, Validators.required],
@@ -135,72 +104,12 @@ export class ParticipantesPuntos {
   ];
 
   // =========================
-  // SEARCH SIGNAL
-  // =========================
-
-  readonly searchValue = toSignal(
-    this.txtSearch.valueChanges.pipe(
-      startWith(''),
-      debounceTime(300),
-      distinctUntilChanged()
-    ),
-    { initialValue: '' }
-  );
-
-  // =========================
   // CONSTRUCTOR
   // =========================
 
   constructor() {
     this.loadVendedores();
     this.listenQueryParams();
-
-    // Configurar búsqueda
-    const busquedaControl = this.searchForm.get('txtSearch')!;
-
-    // Resetear tab cuando cambia el valor de búsqueda
-    busquedaControl.valueChanges.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe(() => {
-      this.selectedTab.set(0);
-      this.seSeleccionoSocioNegocio.set(false);
-      this.selectedRuc.set(null);
-      this.participante.set(null);
-    });
-
-    const busquedaResults$ = busquedaControl.valueChanges.pipe(
-      startWith(''),
-      debounceTime(300),  //? tiempo de espera antes de enviar la solicitud
-      distinctUntilChanged(),  //? evitar solicitudes duplicadas
-      switchMap(value => {
-        // Si es un objeto Cliente, no buscar
-        if (typeof value !== 'string') {
-          return of([]);
-        }
-
-        const termino = value.trim();
-        if (termino.length < 3) {
-          return of([]);
-        }
-        this.procesando.set(true);
-
-        return this.snService.buscarSocioNegocio(termino).pipe(
-          tap((resp) => console.log(resp)),
-
-          finalize(() => {
-            this.procesando.set(false);
-          }),
-          catchError((error) => {
-            console.error('Error al buscar socios de negocio:', error);
-            this.sweetAlert.error('Error', "Ocurrió un error al buscar los socios de negocio");
-            return of([]); // Devolver array vacío en caso de error
-          })
-        );
-      })
-    );
-
-    this.listSociosNegocio = toSignal(busquedaResults$, { initialValue: [] });
   }
 
   // =========================
@@ -239,22 +148,11 @@ export class ParticipantesPuntos {
   // SELECCIONAR SN
   // =========================
 
-  onSearchInput(): void {
-    this.selectedTab.set(0);
-    this.seSeleccionoSocioNegocio.set(false);
-    this.selectedRuc.set(null);
-    this.participante.set(null);
-    this.mostrarListaCompleta.set(true);
-  }
-
   seleccionarSN(ruc: string): void {
-    this.selectedRuc.set(ruc);
     this.snService.selectSocioNegocio(ruc);
     this.snService.getParticipanteByRuc(ruc).subscribe(participante => {
       this.setParticipante(participante);
       this.selectedTab.set(0);
-      this.mostrarListaCompleta.set(false);
-      this.txtSearch.setValue('', { emitEvent: false });
     });
   }
 
@@ -286,8 +184,7 @@ export class ParticipantesPuntos {
 
     this.form.patchValue(participante);
 
-    this.documentosEnviadosService
-      .consultarDocumentosEnviados(participante.RucPrincipal);
+    this.documentosEnviadosService.consultarDocumentosEnviados(participante.RucPrincipal);
   }
 
   // =========================

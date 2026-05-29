@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { GetUrlEndpointService } from '../../../../core/services/get-url-endpoint.service';
 import { map, Observable, Subject } from 'rxjs';
 import { ItemMsg, SavedME } from '../../../../core/models/common.msg'
-import { SocioNegocioItem, ParticipantePuntosMsg } from '../../../../core/models/socioNegocioMsg'
+import { ParticipantePuntosMsg } from '../models/socioNegocioMsg'
 
 @Injectable({
   providedIn: 'root',
@@ -21,18 +21,6 @@ export class SocioNegocioService {
 
   onSocioNegocioSelected(): Observable<string> {
     return this._selectSocioNegocio.asObservable();
-  }
-
-  buscarSocioNegocio(token: string): Observable<SocioNegocioItem[]> {
-    if (token && token !== '') {
-      let url = this.getUrlEndpointService.getUrlFromEndPointName('socioNegocio');
-      url += '/getItemsByToken/' + token;
-      //? retorna solo los que tienen ParticipantePlanPuntos
-      return this.http.get<SocioNegocioItem[]>(url as string).pipe(
-        map((clientes: SocioNegocioItem[]) => clientes.filter(cliente => cliente.ParticipantePlanPuntos))
-      );
-    }
-    return new Observable<SocioNegocioItem[]>();
   }
 
   getHistoricoClientes(cliente: string): Observable<any> {

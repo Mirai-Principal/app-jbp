@@ -41,16 +41,24 @@
             <mat-card-title>Plan de Puntos - Notas de Crédito</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <div class="actions-container">
-                <button mat-raised-button color="primary" (click)="abrirModal()">
-                    <mat-icon>add</mat-icon>
-                    Agregar Nota de Crédito
-                </button>
-            </div>
+            <mat-tab-group>
+                <mat-tab label="Enviar Notas de Crédito">
+                    <div class="actions-container">
+                        <button mat-raised-button color="primary" (click)="abrirModal()">
+                            <mat-icon>add</mat-icon>
+                            Agregar Nota de Crédito
+                        </button>
+                    </div>
 
-            <app-nota-credito-tabla [items]="items" (itemEliminado)="onItemEliminado($event)"
-                (itemAEditar)="onItemAEditar($event)" (itemsCleared)="onItemsCleared()"
-                (itemsExitososEliminados)="onItemsExitososEliminados($event)" />
+                    <app-nota-credito-tabla [items]="items" (itemEliminado)="onItemEliminado($event)"
+                        (itemAEditar)="onItemAEditar($event)" (itemsCleared)="onItemsCleared()"
+                        (itemsExitososEliminados)="onItemsExitososEliminados($event)" />
+                </mat-tab>
+                <mat-tab label="Historial de Notas de Crédito y Facturas">
+                    <app-notas-credito-historial />
+                </mat-tab>
+            </mat-tab-group>
+
         </mat-card-content>
     </mat-card>
 </div>
