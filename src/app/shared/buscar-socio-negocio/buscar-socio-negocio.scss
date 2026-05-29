@@ -1,0 +1,86 @@
+@use '../styles/colors' as *;
+
+// Search form
+.search-form-field {
+    width: 100%;
+}
+
+mat-progress-spinner {
+    padding-left: 5px;
+}
+
+// Results section
+.results-section {
+    margin-top: 24px;
+    margin-bottom: 20px;
+}
+
+.results-title {
+    margin: 0 0 16px 0;
+    font-weight: 500;
+    color: #666;
+}
+
+.results-list {
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.results-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.results-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.results-list::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.results-list::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+// Result cards
+.result-card {
+    cursor: pointer;
+    margin-bottom: 5px;
+    background-color: $white;
+    border-radius: 5px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
+    &.selected {
+        background-color: #e7f1ff;
+        border-left: 4px solid #0d6efd;
+    }
+
+    &:hover {
+        background-color: $primary-alpha-10;
+        transform: translateY(-1px);
+    }
+}
+
+.result-card-content {
+    padding: 12px 16px;
+}
+
+.participant-name {
+    font-weight: 500;
+}
+
+.participant-ruc {
+    color: #666;
+    font-size: 0.9em;
+    display: block;
+    margin-top: 4px;
+}
+
+.no-results {
+    margin: 0 0 16px 0;
+    font-weight: 500;
+    color: #666;
+}
