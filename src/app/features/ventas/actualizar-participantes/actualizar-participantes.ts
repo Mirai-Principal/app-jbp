@@ -53,6 +53,7 @@ export class ActualizarParticipantes {
 
   //estados
   isLoading = signal(true)
+  isSending = signal(false)
   protected participantesSignal = signal<any[]>([]);
 
   constructor() {
@@ -119,16 +120,20 @@ export class ActualizarParticipantes {
       type: 'warning'
     }).subscribe(result => {
       if (result) {
+        this.isSending.set(true);
+
         this.actualizarService.actualizacionMasivaParticipantes().subscribe({
           next: (resp) => {
             console.log(resp);
             this.sweetAlert.info('Información', resp);
 
             this.getParticipantes()
+            this.isSending.set(false);
           },
           error: (error) => {
             this.sweetAlert.error('Error', 'Ocurrió un problema al actualizar los participantes');
             console.error('Error en actualización masiva:', error.message);
+            this.isSending.set(false);
           }
         })
       }

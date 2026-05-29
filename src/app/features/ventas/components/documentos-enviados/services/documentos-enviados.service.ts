@@ -1,18 +1,19 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { PromotickServices } from '../../../participantes-puntos/services/promotick.service';
 import { DocumentoEnviadoMsg } from '../../../../../core/models/documentoEnviadoMsg';
 import { Observable } from 'rxjs';
 import { GetUrlEndpointService } from '../../../../../core/services/get-url-endpoint.service';
 import { HttpClient } from '@angular/common/http';
 import { documentosEnviadosResponse, response } from '../models/documentos-enviados.model';
+import { SweetAlertService } from '../../../../../shared/alert/services/sweet-alert.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DocumentosEnviadosService {
-  private ptkService = inject(PromotickServices);
   private getUrlEndpointService = inject(GetUrlEndpointService);
   private http = inject(HttpClient);
+  private sweetAlert = inject(SweetAlertService);
+
 
   private readonly _documentosEnviados = signal<DocumentoEnviadoMsg[]>([]);
 
@@ -60,10 +61,19 @@ export class DocumentosEnviadosService {
     this.procesando.set(true);
     this.filtroTipoDocumento.set(null);
     this._documentosEnviados.set([]);
-    this.getNotasDeCreditoEnviadas(fecha).subscribe(resp => {
-      this._documentosEnviados.set(resp.datos as documentosEnviadosResponse[]);
-      this.procesando.set(false);
-    });
+    this.getNotasDeCreditoEnviadas(fecha).subscribe(
+      {
+        next: resp => {
+          this._documentosEnviados.set(resp.datos as documentosEnviadosResponse[]);
+          this.procesando.set(false);
+        }
+        , error: (err) => {
+          this.procesando.set(false);
+          console.log(err);
+          this.sweetAlert.error('Error', 'Ocurrió un error al intentar obtener los documentos');
+
+        },
+      });
 
   }
 }

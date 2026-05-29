@@ -55,8 +55,8 @@
             <!-- Botones de acción -->
             <div class="acciones-tabla">
                 <div class="botones-accion">
-                    <app-button-loader [isLoading]="isLoading()" [disabled]="!todosRevisados()"
-                        text="Enviar actualización" icon="send" color="accent"
+                    <app-button-loader [isLoading]="isSending()" [disabled]="!todosRevisados()"
+                        [waitingText]="'Actualizando...'" text="Enviar actualización" icon="send" color="accent"
                         (buttonClick)="actualizacionMasivaParticipantes()">
                     </app-button-loader>
                 </div>
