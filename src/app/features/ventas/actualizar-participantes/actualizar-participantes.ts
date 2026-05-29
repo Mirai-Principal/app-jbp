@@ -104,6 +104,10 @@ export class ActualizarParticipantes {
     const data = this.modalService.editData();
     if (data) {
       data.revisado = true;
+      // Actualizar el signal para que el computed todosRevisados se actualice
+      this.participantesSignal.update(current =>
+        current.map(p => p.RucPrincipal === data.RucPrincipal ? data : p)
+      );
       this.closeModal();
     }
   }
