@@ -1,7 +1,12 @@
 <header class="topbar">
     <div class="topbar-container">
-        <a class="brand" routerLink="/dashboard" (click)="onNavLinkClick()">
+        <a class="brand" routerLink="/directorio" (click)="onNavLinkClick()">
             <span class="brand-text">{{ companyName }}</span>
+            @if (entorno === 'dev') {
+            <span class="dev-badge" title="Modo Desarrollo">
+                <mat-icon class="dev-icon">bug_report</mat-icon> DEV
+            </span>
+            }
         </a>
 
         <button class="toggler" type="button" (click)="toggleMobile()" aria-label="Toggle navigation">
@@ -46,8 +51,7 @@
 
                         @if (sub.children) {
                         <div class="nav-dropdown nested" [class.open]="isExpanded(sub.name)"
-                            [class.open-left]="opensToLeft(sub.name)"
-                            (mouseenter)="onNestedHover(sub.name, $event)">
+                            [class.open-left]="opensToLeft(sub.name)" (mouseenter)="onNestedHover(sub.name, $event)">
                             <button class="dropdown-item dropdown-item-button" type="button"
                                 [class.active]="isParentActive(sub)" (click)="toggle(sub, [item.name], $event)">
                                 <mat-icon class="nav-icon">{{ sub.icon }}</mat-icon>

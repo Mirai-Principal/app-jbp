@@ -10,6 +10,7 @@ import { UserService } from '../../core/services/user.service';
 import { filter } from 'rxjs';
 import { enviroment } from '../../assets/enviroment';
 import { NavBarStateService } from './services/nav-bar-state.service';
+import { entorno } from '../../assets/conf';
 
 @Component({
   selector: 'app-nav-bar-menu',
@@ -26,6 +27,7 @@ export class NavBarMenu {
   // nombre de la empresa
   protected readonly companyName = enviroment.empresaNombre;
   protected readonly usuario = localStorage.getItem('Nombre');
+  protected readonly entorno = entorno;           //? pa saber si estamos en modo desarrollo o no
 
   protected readonly menu = signal<MenuItem[]>([]);
   expandedItems = signal<Set<string>>(new Set());

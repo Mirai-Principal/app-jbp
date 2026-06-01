@@ -31,8 +31,28 @@
     font-size: 1.1rem;
     display: inline-flex;
     align-items: center;
+    gap: 8px;
     white-space: nowrap;
     flex: 0 0 auto;
+}
+
+.dev-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #ffc107; /* Warning yellow for DEV */
+    color: #212529;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    line-height: 1;
+
+    .dev-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+    }
 }
 
 .toggler {
