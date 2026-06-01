@@ -1,4 +1,4 @@
-<app-header title="Notas de Crédito" icon="receipt_long"></app-header>
+<app-header title="Notas de Crédito Manuales" icon="receipt_long"></app-header>
 <div class="container">
     <mat-card>
         <div header-actions class="ayuda">
@@ -35,14 +35,17 @@
                 <ul>
                     <li>Verifica que la información sea correcta antes de enviar las notas de crédito</li>
                 </ul>
+                <hr>
+                <p>
+                    En la pestaña <strong>Historial de Notas de Crédito Manuales</strong> podrás ver las notas de
+                    crédito enviadas, con la opción de filtrar por fecha y RUC.
+                </p>
             </app-help-modal>
         </div>
-        <mat-card-header>
-            <mat-card-title>Plan de Puntos - Notas de Crédito</mat-card-title>
-        </mat-card-header>
+
         <mat-card-content>
             <mat-tab-group>
-                <mat-tab label="Enviar Notas de Crédito">
+                <mat-tab label="Enviar Notas de Crédito Manuales">
                     <div class="actions-container">
                         <button mat-raised-button color="primary" (click)="abrirModal()">
                             <mat-icon>add</mat-icon>
@@ -54,7 +57,7 @@
                         (itemAEditar)="onItemAEditar($event)" (itemsCleared)="onItemsCleared()"
                         (itemsExitososEliminados)="onItemsExitososEliminados($event)" />
                 </mat-tab>
-                <mat-tab label="Historial de Notas de Crédito y Facturas">
+                <mat-tab label="Historial de Notas de Crédito">
                     <app-notas-credito-historial />
                 </mat-tab>
             </mat-tab-group>

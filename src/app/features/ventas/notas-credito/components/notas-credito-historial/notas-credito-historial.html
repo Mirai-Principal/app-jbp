@@ -2,7 +2,7 @@
 <app-loader-page message="Consultando documentos..." icon="sync" />
 }
 
-<app-header title="Historial de Notas de Crédito y Facturas" icon="history" />
+<app-header title="Historial de Notas de Crédito Manuales" icon="history" />
 <div class="container">
     <mat-card>
 
@@ -11,26 +11,25 @@
                 <form [formGroup]="fechaForm" class="date-form">
                     <mat-form-field appearance="outline" class="date-field">
                         <mat-label>Seleccionar Fecha</mat-label>
-                        <input matInput [matDatepicker]="picker" formControlName="fecha">
+                        <input matInput [matDatepicker]="picker" formControlName="fecha" [max]="today()"
+                            [min]="'2000-01-02'">
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
                 </form>
 
-                @if (tiposDocumento().length > 0) {
+                @if (rucs().length > 0) {
                 <div class="divider"></div>
-                <div class="filtro-chips">
-                    <div class="filtro-header">
-                        <mat-icon class="filter-icon">filter_list</mat-icon>
-                        <span class="filtro-label">Filtrar por Documento</span>
-                    </div>
-                    <mat-chip-listbox [value]="filtroActivo()" (change)="onFiltroTipoDocumentoChange($event.value)" class="custom-chip-list">
-                        <mat-chip-option [value]="null" color="primary">Todos</mat-chip-option>
-                        @for (tipo of tiposDocumento(); track tipo) {
-                        <mat-chip-option [value]="tipo" color="primary">{{ tipo }}</mat-chip-option>
+                <mat-form-field appearance="outline" class="filter-field">
+                    <mat-label>Filtrar por RUC</mat-label>
+                    <mat-icon matPrefix class="filter-icon-prefix">filter_list</mat-icon>
+                    <mat-select [value]="filtroActivo()" (selectionChange)="onFiltroRucChange($event.value)">
+                        <mat-option [value]="null">Todos</mat-option>
+                        @for (ruc of rucs(); track ruc) {
+                        <mat-option [value]="ruc">{{ ruc }}</mat-option>
                         }
-                    </mat-chip-listbox>
-                </div>
+                    </mat-select>
+                </mat-form-field>
                 }
             </div>
 

@@ -17,26 +17,26 @@ export class DocumentosEnviadosService {
 
   private readonly _documentosEnviados = signal<DocumentoEnviadoMsg[]>([]);
 
-  // Filtro por tipo de documento
-  readonly filtroTipoDocumento = signal<string | null>(null);
+  // Filtro por RUC
+  readonly filtroRuc = signal<string | null>(null);
 
-  // Tipos de documento únicos extraídos de los datos
-  readonly tiposDocumentoUnicos = computed(() => {
-    const tipos = this._documentosEnviados().map(d => (d as any).tipoDocumento);
-    return [...new Set(tipos)].filter(Boolean).sort();
+  // RUCs únicos extraídos de los datos
+  readonly rucsUnicos = computed(() => {
+    const rucs = this._documentosEnviados().map(d => (d as any).ruc);
+    return [...new Set(rucs)].filter(Boolean).sort();
   });
 
   readonly documentosEnviados = computed(() => {
-    const filtro = this.filtroTipoDocumento();
+    const filtro = this.filtroRuc();
     const docs = this._documentosEnviados();
     if (!filtro) return docs;
-    return docs.filter(d => (d as any).tipoDocumento === filtro);
+    return docs.filter(d => (d as any).ruc === filtro);
   });
   procesando = signal(false);
 
   consultarDocumentosEnviados(ruc: string) {
     this.procesando.set(true);
-    this.filtroTipoDocumento.set(null);
+    this.filtroRuc.set(null);
     this.getDocumentosEnviadosByRuc(ruc).subscribe(resp => {
       this._documentosEnviados.set(resp);
       this.ordenarDocumentosEnviadosPorFecha();
@@ -59,7 +59,7 @@ export class DocumentosEnviadosService {
 
   consultarNotasDeCreditoEnviadas(fecha: string) {
     this.procesando.set(true);
-    this.filtroTipoDocumento.set(null);
+    this.filtroRuc.set(null);
     this._documentosEnviados.set([]);
     this.getNotasDeCreditoEnviadas(fecha).subscribe(
       {

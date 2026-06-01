@@ -9,6 +9,7 @@ export interface documentosEnviadosResponse {
     puntos: number;
     codRespWS: number;
     respWs: string;
+    ruc: string;
 }
 
 export interface response {

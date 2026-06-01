@@ -1,5 +1,4 @@
-export class DocumentoEnviadoMsg
-{
+export class DocumentoEnviadoMsg {
         tipoDocumento!: string;
         fechaEnvio!: string;
         fechaDocumento!: string;
@@ -10,4 +9,5 @@ export class DocumentoEnviadoMsg
         codRespWS!: number;
         respWs!: string;
         descripcion!: string;
+        ruc!: string;
 }

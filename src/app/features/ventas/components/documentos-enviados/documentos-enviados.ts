@@ -24,14 +24,11 @@ export class DocumentosEnviados {
   // Columnas de la tabla
   columns: TableColumn[] = [
     { columnDef: 'tipoDocumento', header: 'Tipo Documento' },
+    { columnDef: 'ruc', header: 'Cliente RUC' },
     { columnDef: 'fechaEnvio', header: 'Fecha Envío' },
-    { columnDef: 'fechaDocumento', header: 'Fecha Documento' },
     { columnDef: 'nroDocumento', header: 'Nro Documento' },
     { columnDef: 'monto', header: 'Monto' },
     { columnDef: 'puntos', header: 'Puntos' },
-    { columnDef: 'codRespWS', header: 'Cod. Resp. WS' },
-    { columnDef: 'respWs', header: 'Respuesta Ws' },
-    { columnDef: 'fechaDocumentoOriginal', header: 'Fecha Documento Original' },
     { columnDef: 'descripcion', header: 'Descripción' },
   ];
 

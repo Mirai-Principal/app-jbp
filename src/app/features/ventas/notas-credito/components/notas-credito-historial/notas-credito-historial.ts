@@ -7,7 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { SweetAlertService } from '../../../../../shared/alert/services/sweet-alert.service';
 import { DocumentosEnviados } from "../../../components/documentos-enviados/documentos-enviados";
@@ -29,7 +29,7 @@ import { LoaderPage } from "../../../../../shared/loader-page/loader-page";
     MatInputModule,
     MatFormFieldModule,
     MatDatepickerModule,
-    MatChipsModule,
+    MatSelectModule,
     MatIconModule,
     DocumentosEnviados,
     LoaderPage
@@ -62,9 +62,9 @@ export class NotasCreditoHistorial {
     });
   }
 
-  // Tipos de documento disponibles para filtrar
-  tiposDocumento = computed(() => this.documentosEnviadosService.tiposDocumentoUnicos());
-  filtroActivo = computed(() => this.documentosEnviadosService.filtroTipoDocumento());
+  // RUCs disponibles para filtrar
+  rucs = computed(() => this.documentosEnviadosService.rucsUnicos());
+  filtroActivo = computed(() => this.documentosEnviadosService.filtroRuc());
 
   consultarNotasDeCredito(fecha: Date): void {
     // Formatear fecha a YYYY-MM-DD
@@ -72,8 +72,8 @@ export class NotasCreditoHistorial {
     this.documentosEnviadosService.consultarNotasDeCreditoEnviadas(fechaFormateada);
   }
 
-  onFiltroTipoDocumentoChange(tipo: string | null): void {
-    this.documentosEnviadosService.filtroTipoDocumento.set(tipo);
+  onFiltroRucChange(ruc: string | null): void {
+    this.documentosEnviadosService.filtroRuc.set(ruc);
   }
 
   today(): Date {
