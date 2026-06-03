@@ -1,7 +1,7 @@
 @if (isLoading()) {
 <app-loader-page message="Cargando participantes" icon="update" />
 }
-<app-header title="Actualizar Participantes" icon="update">
+<app-header title="Nuevos Participantes" icon="person_add">
 
 </app-header>
 <div class="container">
@@ -9,18 +9,18 @@
         <div header-actions class="ayuda">
             <app-help-modal buttonText="¿Cómo usar?" icon="help_outline">
                 <h2>Actualizar Participantes</h2>
-                <p>Esta página permite revisar y actualizar la información de los participantes que requieren atención.
+                <p>Esta página permite revisar y registrar la información de los participantes en promotick.
                 </p>
 
                 <h3>Pasos para usar:</h3>
                 <ol>
-                    <li>Revise la lista de participantes que necesitan actualización</li>
+                    <li>Revise la lista de participantes que se necesitan registrar</li>
                     <li>Haga click en el icono junto al RUC para ver los detalles completos
                         del participante</li>
                     <li>Haz click en el botón para marcar el participante como revisado</li>
-                    <li>Una vez que todos los participantes estén marcados como revisados, el botón <strong>Enviar
-                            actualización</strong> se habilitará</li>
-                    <li>Haz click en <strong>Enviar actualización</strong> para procesar los cambios</li>
+                    <li>Una vez que todos los participantes estén marcados como revisados, el botón <strong>Registrar
+                            participantes</strong> se habilitará</li>
+                    <li>Haz click en <strong>Registrar participantes</strong> enviar los datos a promotick</li>
                 </ol>
             </app-help-modal>
         </div>
@@ -56,7 +56,7 @@
             <div class="acciones-tabla">
                 <div class="botones-accion">
                     <app-button-loader [isLoading]="isSending()" [disabled]="!todosRevisados()"
-                        [waitingText]="'Actualizando...'" text="Enviar actualización" icon="send" color="accent"
+                        [waitingText]="'Registrando...'" text="Registrar participantes" icon="send" color="accent"
                         (buttonClick)="actualizacionMasivaParticipantes()">
                     </app-button-loader>
                 </div>

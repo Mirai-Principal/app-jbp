@@ -34,6 +34,8 @@ export class SidebarMenuService {
                     name: 'Participantes Puntos',
                     icon: 'people',
                     children: [
+                        { name: 'Gestionar Participante', icon: 'person', url: '/gestionar-participantes' },
+                        { name: 'Nuevo Participante', icon: 'person_add', url: '/nuevos-participantes' },
                         { name: 'Actualizar Participantes', icon: 'update', url: '/actualizar-participantes' },
                         { name: 'Notas de Crédito', icon: 'receipt_long', url: '/notas-credito' },
                         { name: 'Información de Participantes', icon: 'people', url: '/informacion-participantes' },

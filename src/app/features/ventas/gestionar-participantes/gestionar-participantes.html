@@ -1,89 +1,69 @@
 @if (isLoading()) {
-<app-loader-page message="Cargando participantes" icon="update" />
+<app-loader-page message="Cargando participantes" icon="people" />
 }
-<app-header title="Actualizar Participantes" icon="update">
 
-</app-header>
+<app-header title="Gestionar Participantes Promotick" icon="people" />
 <div class="container">
     <mat-card>
-        <div header-actions class="ayuda">
-            <app-help-modal buttonText="¿Cómo usar?" icon="help_outline">
-                <h2>Actualizar Participantes</h2>
-                <p>Esta página permite revisar y actualizar la información de los participantes que requieren atención.
-                </p>
+        <mat-card-title>Participantes pendientes de sincronización</mat-card-title>
 
-                <h3>Pasos para usar:</h3>
-                <ol>
-                    <li>Revise la lista de participantes que necesitan actualización</li>
-                    <li>Haga click en el icono junto al RUC para ver los detalles completos
-                        del participante</li>
-                    <li>Haz click en el botón para marcar el participante como revisado</li>
-                    <li>Una vez que todos los participantes estén marcados como revisados, el botón <strong>Enviar
-                            actualización</strong> se habilitará</li>
-                    <li>Haz click en <strong>Enviar actualización</strong> para procesar los cambios</li>
-                </ol>
-            </app-help-modal>
-        </div>
-        @if(participantes() && participantes().length > 0) {
         <mat-card-content>
-            <mat-table [dataSource]="participantes()">
-                <ng-container matColumnDef="Revisado">
-                    <mat-header-cell *matHeaderCellDef>Revisado?</mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="revisado">
-                        <mat-checkbox [ngModel]="element.revisado"
-                            (ngModelChange)="onRevisadoChange(element, $event)"></mat-checkbox>
-                    </mat-cell>
-                </ng-container>
 
-                @for (column of columnsConfig; track column.columnDef) {
-                <ng-container matColumnDef="{{ column.columnDef }}">
-                    <mat-header-cell *matHeaderCellDef>{{ column.header }}</mat-header-cell>
-                    <mat-cell *matCellDef="let element">
-                        @if (column.columnDef === 'RucPrincipal') {
-                        <ng-container
-                            *ngTemplateOutlet="rucCellTemplate; context: { column: column, element: element }"></ng-container>
-                        } @else {
-                        {{ element[column.columnDef] }}
-                        }
-                    </mat-cell>
-                </ng-container>
-                }
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-            </mat-table>
+            @if(participantes() && participantes().length > 0) {
+            <mat-card-content>
+                <mat-table [dataSource]="participantes()">
 
-            <!-- Botones de acción -->
-            <div class="acciones-tabla">
-                <div class="botones-accion">
-                    <app-button-loader [isLoading]="isSending()" [disabled]="!todosRevisados()"
-                        [waitingText]="'Actualizando...'" text="Enviar actualización" icon="send" color="accent"
-                        (buttonClick)="actualizacionMasivaParticipantes()">
-                    </app-button-loader>
+
+                    @for (column of columnsConfig; track column.columnDef) {
+                    <ng-container matColumnDef="{{ column.columnDef }}">
+                        <mat-header-cell *matHeaderCellDef>{{ column.header }}</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            @if (column.columnDef === 'RucPrincipal') {
+                            <ng-container
+                                *ngTemplateOutlet="rucCellTemplate; context: { column: column, element: element }"></ng-container>
+                            } @else if (column.columnDef === 'EstadoPromotick') {
+                            @if (element.existeEnPromotick === true) {
+                            <span class="chip-status chip-existe">Actualizar datos</span>
+                            } @else if (element.existeEnPromotick === false) {
+                            <span class="chip-status chip-no-existe">Nuevo participante</span>
+                            } @else {
+                            <span class="chip-status chip-loading">Verificando...</span>
+                            }
+                            } @else {
+                            {{ element[column.columnDef] }}
+                            }
+                        </mat-cell>
+                    </ng-container>
+                    }
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+
+            </mat-card-content>
+            } @else {
+            <mat-card-content>
+                <div class="empty-state">
+                    <mat-icon style="font-size: 48px; height: 48px; width: 48px; margin-bottom: 16px;">inbox</mat-icon>
+                    <h3>No hay datos por actualizar</h3>
                 </div>
-            </div>
+            </mat-card-content>
+            }
         </mat-card-content>
-        } @else {
-        <mat-card-content>
-            <div class="empty-state">
-                <mat-icon style="font-size: 48px; height: 48px; width: 48px; margin-bottom: 16px;">inbox</mat-icon>
-                <h3>No hay datos por actualizar</h3>
-            </div>
-        </mat-card-content>
-        }
     </mat-card>
 </div>
 
 <!-- Template para celda RUC clickable -->
 <ng-template #rucCellTemplate let-column="column" let-element="element">
     @if (column.columnDef === 'RucPrincipal') {
-    <span class="verDetalles" (click)="onRucClick(element)">
-        <mat-icon>visibility</mat-icon>
+    <span class="verDetalles" [class.sincronizado]="element.sincronizado" (click)="onRucClick(element)">
+        <mat-icon>{{ element.sincronizado ? 'check_circle' : 'visibility' }}</mat-icon>
         <span class="clickable-cell">{{element[column.columnDef] }}</span>
     </span>
     } @else {
     {{ element[column.columnDef] }}
     }
 </ng-template>
+
 
 <!-- Modal -->
 <app-modal [isOpen]="modalService.isOpen()" title="Detalle del Participante" (close)="closeModal()"
@@ -155,8 +135,8 @@
                         <span>{{ data.estado }}</span>
                     </div>
                     <div class="detail-item">
-                        <label>Revisado</label>
-                        <span>{{ data.revisado ? 'Sí' : 'No' }}</span>
+                        <label>Sincronizado</label>
+                        <span>{{ data.sincronizado ? 'Sí' : 'No' }}</span>
                     </div>
                 </div>
             </div>
@@ -220,7 +200,9 @@
             </div>
         </div>
         <div class="modal-actions">
-            <button mat-raised-button (click)="marcarComoRevisado()">Marcar como Revisado</button>
+            <app-button-loader [isLoading]="isSending()" [waitingText]="'Sincronizando...'" text="Sincronizar"
+                icon="sync" color="accent" (buttonClick)="sincronizarParticipante()">
+            </app-button-loader>
         </div>
         }
     </div>
