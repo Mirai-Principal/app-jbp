@@ -65,7 +65,9 @@ export class EstadoCuentaPromotick {
     let call = this.ptkService.getEstadoCuentaByRuc(ruc).subscribe(resp => {
       call.unsubscribe();
       this.procesando.set(false);
-      this.estadoCuenta = JSON.parse(resp);
+      this.estadoCuenta = resp
+      console.log(resp);
+
       if (this.estadoCuenta)
         this.ordenarEstadoCuenta();
     });

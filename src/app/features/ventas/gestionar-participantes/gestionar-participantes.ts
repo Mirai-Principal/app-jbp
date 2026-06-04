@@ -12,12 +12,13 @@ import { ModalService } from '../../../shared/modal/services/modal.service';
 import { Modal } from "../../../shared/modal/modal";
 import { forkJoin } from 'rxjs';
 import { LoaderPage } from "../../../shared/loader-page/loader-page";
+import { HelpModal } from "../../../shared/help-modal/help-modal";
 
 @Component({
   selector: 'app-gestionar-participantes',
   imports: [Header, MatCard, MatCardContent,
     ReactiveFormsModule, MatHeaderRow, MatRow, ButtonLoader, MatIcon, MatTable, MatHeaderCell, MatCell, MatCellDef,
-    MatColumnDef, MatRowDef, MatHeaderRowDef, MatCardTitle, NgTemplateOutlet, FormsModule, MatHeaderCellDef, Modal, LoaderPage],
+    MatColumnDef, MatRowDef, MatHeaderRowDef, MatCardTitle, NgTemplateOutlet, FormsModule, MatHeaderCellDef, Modal, LoaderPage, HelpModal],
   templateUrl: './gestionar-participantes.html',
   styleUrl: './gestionar-participantes.scss',
 })
@@ -86,13 +87,14 @@ export class GestionarParticipantes {
     if (!data) return;
 
     this.sweetAlert.confirm({
-      title: '¿Está seguro?',
-      message: 'Esta acción procesará el participante',
+      title: 'Sincronizar participante',
+      message: 'Se procedera a sincronizar los datos con Promotick del participante ' + data.nombres + ' ' + data.apellidos,
       type: 'warning'
     }).subscribe(result => {
       if (result) {
         this.isSending.set(true);
 
+        //actualizar o registrar participante segun su estado en promotick
         const action$ = data.existeEnPromotick
           ? this.participantesService.actualizarParticipantePorRuc(data.RucPrincipal)
           : this.participantesService.registrarParticipantePorRuc(data.RucPrincipal);
@@ -100,7 +102,7 @@ export class GestionarParticipantes {
         action$.subscribe({
           next: (resp) => {
             console.log(resp);
-            this.sweetAlert.info('Información', 'Proceso completado exitosamente');
+            this.sweetAlert.info('Información', 'Proceso completado exitosamente para el participante ' + data.nombres + ' ' + data.apellidos);
 
             this.participantesSignal.update(current =>
               current.map(p => p.RucPrincipal === data.RucPrincipal ? { ...p, sincronizado: true } : p)
@@ -121,7 +123,7 @@ export class GestionarParticipantes {
 
   onRucClick(element: any) {
     if (element.sincronizado) return;
-    this.modalService.openModal(element);
+    this.modalService.openModal(element); //envia datos al modal
   }
 
   closeModal() {

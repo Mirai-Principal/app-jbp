@@ -17,8 +17,6 @@ import { RegistrarUsuario } from './features/registrar-usuario/registrar-usuario
 import { EnvioRetenciones } from './features/envio-retenciones/envio-retenciones';
 import { ActualizarMontoCuentas } from './features/actualizar-monto-cuentas/actualizar-monto-cuentas';
 import { ConsultaLote } from './features/bodega/consulta-lote/consulta-lote';
-import { ActualizarParticipantes } from './features/ventas/actualizar-participantes/actualizar-participantes';
-import { NuevosParticipantes } from './features/ventas/nuevos-participantes/nuevos-participantes';
 import { GestionarParticipantes } from './features/ventas/gestionar-participantes/gestionar-participantes';
 
 export const routes: Routes = [
@@ -30,8 +28,6 @@ export const routes: Routes = [
     { path: 'entregas-urbano', component: EntregasUrbano, title: 'Entregas Urbano', canActivate: [AuthGuard] },
     { path: 'hoja-de-ruta', component: HojaRuta, title: 'Hoja de Ruta', canActivate: [AuthGuard] },
     { path: 'informacion-participantes', component: ParticipantesPuntos, title: 'Información de Participantes Puntos', canActivate: [AuthGuard] },
-    { path: 'actualizar-participantes', component: ActualizarParticipantes, title: 'Actualizar Participantes', canActivate: [AuthGuard] },
-    { path: 'nuevos-participantes', component: NuevosParticipantes, title: 'Nuevos Participantes', canActivate: [AuthGuard] },
     { path: 'gestionar-participantes', component: GestionarParticipantes, title: 'Gestionar Participantes', canActivate: [AuthGuard] },
     { path: 'notas-credito', component: NotasCreditoComponent, title: 'Notas de Crédito', canActivate: [AuthGuard] },
     { path: 'generar-qr-ubicaciones', component: GenerarQrUbicaciones, title: 'Generar QR de Ubicaciones', canActivate: [AuthGuard] },

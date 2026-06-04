@@ -5,6 +5,31 @@
 <app-header title="Gestionar Participantes Promotick" icon="people" />
 <div class="container">
     <mat-card>
+        <div header-actions class="ayuda">
+            <app-help-modal buttonText="¿Cómo usar?" icon="help_outline">
+                <ul>
+                    <li>El sistema verificara si existe el participante en Promotick y se mostrara su estado en la
+                        columna Estado Promotick de la siguiente manera:
+                        <ul>
+                            <li><strong>Verificando en Promotick...</strong>: Consultando si el participante ya existe.
+                            </li>
+                            <li><strong>Nuevo participante</strong>: El participante no existe, por lo que será
+                                registrado.</li>
+                            <li><strong>Actualizar datos</strong>: El participante ya existe, por lo que su información
+                                será actualizada.</li>
+                        </ul>
+                    </li>
+                    <li>Haz clic en el RUC de un participante para abrir el panel con todos sus detalles.</li>
+                    <li>Presiona el botón <strong>'Sincronizar con Promotick'</strong> para enviar su información. El
+                        sistema registrará o actualizará los datos automáticamente según su estado.</li>
+                    <li>Una vez que un participante se sincroniza con éxito, su registro quedará completado, mostrándose
+                        con un ícono de check verde, y se inhabilitará el panel de visualización de detalles.</li>
+                </ul>
+                <hr>
+                <p>En caso de error informar a quien corresponda adjuntando una captura de pantalla</p>
+            </app-help-modal>
+        </div>
+
         <mat-card-title>Participantes pendientes de sincronización</mat-card-title>
 
         <mat-card-content>
@@ -12,8 +37,6 @@
             @if(participantes() && participantes().length > 0) {
             <mat-card-content>
                 <mat-table [dataSource]="participantes()">
-
-
                     @for (column of columnsConfig; track column.columnDef) {
                     <ng-container matColumnDef="{{ column.columnDef }}">
                         <mat-header-cell *matHeaderCellDef>{{ column.header }}</mat-header-cell>
@@ -27,7 +50,7 @@
                             } @else if (element.existeEnPromotick === false) {
                             <span class="chip-status chip-no-existe">Nuevo participante</span>
                             } @else {
-                            <span class="chip-status chip-loading">Verificando...</span>
+                            <span class="chip-status chip-loading">Verificando en Promotick...</span>
                             }
                             } @else {
                             {{ element[column.columnDef] }}
@@ -200,8 +223,8 @@
             </div>
         </div>
         <div class="modal-actions">
-            <app-button-loader [isLoading]="isSending()" [waitingText]="'Sincronizando...'" text="Sincronizar"
-                icon="sync" color="accent" (buttonClick)="sincronizarParticipante()">
+            <app-button-loader [isLoading]="isSending()" [waitingText]="'Sincronizando...'"
+                text="Sincronizar con Promotick" icon="sync" color="accent" (buttonClick)="sincronizarParticipante()">
             </app-button-loader>
         </div>
         }
