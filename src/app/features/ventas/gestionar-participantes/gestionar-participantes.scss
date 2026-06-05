@@ -3,6 +3,7 @@
  .container {
      margin: auto;
      max-width: 100%;
+     padding: 0 20px;
  }
 
  .ayuda {
@@ -14,7 +15,7 @@
      border-radius: 0;
      box-shadow: 0 4px 12px $primary-alpha-10;
      overflow: hidden;
-     padding: 0;
+     padding: 0 10px;
 
      .empty-state {
          text-align: center;
@@ -32,6 +33,10 @@
          p {
              margin: 8px 0;
          }
+     }
+
+     mat-card-title {
+         box-shadow: 0px 4px 12px $gray-100;
      }
 
      // Ensure card doesn't overflow on mobile
@@ -67,7 +72,7 @@
          color: #4caf50;
          cursor: not-allowed;
          opacity: 0.8;
-         
+
          &:hover {
              transform: none;
          }
