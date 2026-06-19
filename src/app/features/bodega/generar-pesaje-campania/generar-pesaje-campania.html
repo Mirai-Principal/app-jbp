@@ -1,0 +1,137 @@
+<app-header title="Generar Pesaje Campaña" icon="scale" />
+<div class="container">
+    <mat-card>
+
+        <mat-card-content [formGroup]="form">
+            <!-- Campaign Info -->
+            <div class="campaign-info-card">
+                <div class="title-container">
+                    <mat-icon>assignment</mat-icon>
+                    <h3>Información de la Campaña:</h3>
+                </div>
+                <div class="form-grid">
+                    <!-- Nombre Campaña -->
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Nombre Campaña</mat-label>
+                        <input matInput formControlName="nombreCampania" placeholder="Ej: Campaña Enero 2026" />
+                        <mat-icon matPrefix>campaign</mat-icon>
+                    </mat-form-field>
+
+                    <!-- fecha_desde -->
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Fecha Desde</mat-label>
+                        <input matInput [matDatepicker]="pickerDesde" formControlName="fechaDesde"
+                            placeholder="Seleccionar fecha">
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerDesde></mat-datepicker>
+                    </mat-form-field>
+
+                    <!-- fecha_hasta -->
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Fecha Hasta</mat-label>
+                        <input matInput [matDatepicker]="pickerHasta" formControlName="fechaHasta"
+                            placeholder="Seleccionar fecha">
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerHasta></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Órdenes de Fabricación -->
+            <div class="section-header">
+                <div class="title-container">
+                    <mat-icon>list_alt</mat-icon>
+                    <h3>Órdenes de Fabricación</h3>
+                </div>
+                <button mat-button class="btn-premium-outline" (click)="abrirModal()">
+                    <mat-icon>add</mat-icon> Agregar OF
+                </button>
+            </div>
+
+            <!-- Table -->
+            <ng-template #customCell let-column="column" let-element="element">
+                @if (column.columnDef === 'Acciones') {
+                <button mat-icon-button color="warn" (click)="eliminarOF(element)" title="Eliminar">
+                    <mat-icon>delete</mat-icon>
+                </button>
+                } @else {
+                {{ element[column.columnDef] }}
+                }
+            </ng-template>
+
+            <app-table [data]="ordenesFabricacion()" [columns]="tableColumns" [displayedColumns]="displayedColumns"
+                [cellTemplate]="customCell">
+            </app-table>
+
+            <!-- Footer -->
+            @if (ordenesFabricacion().length > 0) {
+            <div class="footer-actions">
+                <app-button-loader [isLoading]="isSending()" [waitingText]="'Espere un momento...'"
+                    text="Guardar Campaña" icon="save" color="accent" (buttonClick)="guardarCampania()"
+                    [disabled]="ordenesFabricacion().length === 0 || !form.value.nombreCampania || !form.value.fechaDesde || !form.value.fechaHasta">
+                </app-button-loader>
+            </div>
+            }
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<!-- Modal Agregar OF -->
+<app-modal [isOpen]="modalService.isOpen()" title="Agregar Orden de Fabricación" [closeOnBackdropClick]="true"
+    (close)="modalService.closeModal()" (backdropClick)="modalService.closeModal()" maxWidth="500px">
+    <div class="modal-form">
+        <div class="search-row">
+            <mat-form-field appearance="outline" class="flex-grow" (keyup.enter)="buscarOF()">
+                <mat-label>Buscar OF</mat-label>
+                <input #searchInput matInput [(ngModel)]="searchNumOf" (ngModelChange)="ofDetails.set(null)"
+                    (paste)="onPaste()" placeholder="Ej: 30026695" type="number" />
+                @if (isLoading()) {
+                <mat-progress-spinner matPrefix mode="indeterminate" diameter="24"
+                    strokeWidth="3"></mat-progress-spinner>
+                }@else {
+                <mat-icon matPrefix>search</mat-icon>
+                }
+                @if (searchNumOf) {
+                <button mat-icon-button matSuffix (click)="searchNumOf = ''" type="button">
+                    <mat-icon>clear</mat-icon>
+                </button>
+                }
+            </mat-form-field>
+            <button mat-raised-button color="primary" class="buscar-btn" (click)="buscarOF()"
+                [disabled]="isLoading()">Buscar</button>
+        </div>
+
+        <div class="info-card">
+            <div class="info-row">
+                <span class="label">Producto a fabricar:</span>
+                <span class="value">{{ ofDetails()?.Articulo}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Lote a fabricar:</span>
+                <span class="value">{{ ofDetails()?.Lote}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Fecha de inicio:</span>
+                <span class="value">{{ ofDetails()?.FechaInicio}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Fecha de finalización:</span>
+                <span class="value">{{ ofDetails()?.FechaFinalizacion}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Fecha de fabricación:</span>
+                <span class="value">{{ ofDetails()?.FechaFabricacion }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Estado:</span>
+                <span class="value">{{ ofDetails()?.Estado}}</span>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button mat-raised-button class="btn-premium-add" (click)="agregarOF()" [disabled]="!ofDetails()">
+                <mat-icon>add_circle_outline</mat-icon> Agregar OF
+            </button>
+        </div>
+    </div>
+</app-modal>
