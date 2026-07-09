@@ -10,10 +10,9 @@ import { PesajeCampaniaService } from './services/pesaje-campania.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Campania } from './models/models';
 import { ModalService } from '../../../shared/modal/services/modal.service';
-import { DetallesCampania } from './components/detalles-campania/detalles-campania';
+import { DetallesCampania } from "./components/detalles-campania/detalles-campania";
 
 @Component({
-  selector: 'app-gestion-campanias',
   imports: [
     Header,
     MatCard,
@@ -21,10 +20,10 @@ import { DetallesCampania } from './components/detalles-campania/detalles-campan
     Table,
     Modal,
     GenerarPesajeCampania,
-    DetallesCampania,
     MatIconModule,
     MatButtonModule,
-    CommonModule
+    CommonModule,
+    DetallesCampania
   ],
   providers: [DatePipe],
   templateUrl: './gestion-campanias.html',

@@ -1,0 +1,27 @@
+<app-header title="Detalles de Transferencia - OF {{ NRO_OF }}" icon="inventory_2" />
+<mat-dialog-content>
+    <div class="container">
+        @if (isLoading()) {
+        <div class="loading-container">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Cargando detalles de ST...</p>
+        </div>
+        } @else {
+        <mat-card>
+            <mat-card-content>
+                @if (detallesST() && detallesST().length > 0) {
+                <div class="table-container">
+                    <app-table [data]="detallesST()" [columns]="columns" [displayedColumns]="displayedColumns">
+                    </app-table>
+                </div>
+                } @else {
+                <div class="empty-state">
+                    <mat-icon>info</mat-icon>
+                    <p>No se encontraron componentes para esta Solicitud de Transferencia.</p>
+                </div>
+                }
+            </mat-card-content>
+        </mat-card>
+        }
+    </div>
+</mat-dialog-content>

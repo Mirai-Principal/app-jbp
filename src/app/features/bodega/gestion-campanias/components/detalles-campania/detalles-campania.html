@@ -31,9 +31,19 @@
                 <h4>Órdenes de Fabricación asociadas</h4>
             </div>
 
+            <ng-template #customCell let-column="column" let-element="element">
+                @if (column.columnDef === 'Id') {
+                    <button mat-icon-button color="primary" (click)="abrirDetallesST(element.ID_ST, element.NRO_OF)" aria-label="Ver detalles de ST">
+                        <mat-icon>visibility</mat-icon>
+                    </button>
+                } @else {
+                    {{ column.cell ? column.cell(element) : element[column.columnDef] }}
+                }
+            </ng-template>
+
             @if (detalles() && detalles().length > 0) {
             <div class="table-container">
-                <app-table [data]="detalles()" [columns]="columns" [displayedColumns]="displayedColumns">
+                <app-table [data]="detalles()" [columns]="columns" [displayedColumns]="displayedColumns" [cellTemplate]="customCell">
                 </app-table>
             </div>
             } @else {

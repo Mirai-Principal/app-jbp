@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GetUrlEndpointService } from '../../../../core/services/get-url-endpoint.service';
-import { Campania, CampaniaDetalles } from '../models/models';
+import { Campania, CampaniaDetalles, ST_ComponentesMsg } from '../models/models';
 
 
 @Injectable({
@@ -31,6 +31,11 @@ export class PesajeCampaniaService {
   obtenerCampania(id: number): Observable<CampaniaDetalles[]> {
     const url = `${this.getUrlEndpointService.backend_api}/of/campania/${id}`;
     return this.http.get<CampaniaDetalles[]>(url);
+  }
+
+  obtenerDetallesST(idST: number): Observable<ST_ComponentesMsg[]> {
+    const url = `${this.getUrlEndpointService.backend_api}/st/GetComponetesConLotesById/${idST}`;
+    return this.http.get<ST_ComponentesMsg[]>(url);
   }
 
   eliminarCampania(id: number): Observable<any> {
