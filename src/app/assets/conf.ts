@@ -1,4 +1,5 @@
-export const entorno: "services" | "dev" = "services";
+export const entorno: "services" | "dev" = "dev";
+export const backend_api = `http://${entorno}.jbp.com.ec/api`;
 
 export const conf = {
     directorio: `http://${entorno}.jbp.com.ec/api/directorio`,

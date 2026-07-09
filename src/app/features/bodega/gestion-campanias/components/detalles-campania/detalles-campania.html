@@ -1,0 +1,48 @@
+<div class="container">
+    @if (isLoading()) {
+    <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando detalles...</p>
+    </div>
+    } @else {
+    <mat-card>
+        <mat-card-content>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Nombre:</span>
+                    <span class="value">{{ campania.NOMBRE }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Fecha Desde:</span>
+                    <span class="value">{{ campania.FECHA_DESDE | date:'dd/MM/yyyy' }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Fecha Hasta:</span>
+                    <span class="value">{{ campania.FECHA_HASTA | date:'dd/MM/yyyy' }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Estado:</span>
+                    <span class="value">{{ campania.FINALIZADA ? 'Finalizada' : 'Activa' }}</span>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <mat-icon>list_alt</mat-icon>
+                <h4>Órdenes de Fabricación asociadas</h4>
+            </div>
+
+            @if (detalles() && detalles().length > 0) {
+            <div class="table-container">
+                <app-table [data]="detalles()" [columns]="columns" [displayedColumns]="displayedColumns">
+                </app-table>
+            </div>
+            } @else {
+            <div class="empty-state">
+                <mat-icon>info</mat-icon>
+                <p>No hay órdenes de fabricación registradas para esta campaña.</p>
+            </div>
+            }
+        </mat-card-content>
+    </mat-card>
+    }
+</div>

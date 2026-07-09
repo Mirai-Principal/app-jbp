@@ -1,0 +1,43 @@
+<app-header title="Gestión de Campañas de Pesaje" icon="scale" />
+<div class="container">
+    <mat-card>
+        <mat-card-content>
+            <div class="header-actions">
+                <button class="btn-premium-add" (click)="openModal()">
+                    <mat-icon>add</mat-icon>
+                    Nueva Campaña
+                </button>
+            </div>
+
+            <ng-template #customCell let-column="column" let-element="element">
+                @if (column.columnDef === 'Id') {
+                    <button mat-icon-button class="btn-icon-primary" (click)="verDetalles(element)" title="Ver Detalles">
+                        <mat-icon>visibility</mat-icon>
+                    </button>
+                } @else {
+                    {{ column.cell ? column.cell(element) : element[column.columnDef] }}
+                }
+            </ng-template>
+
+            <div class="table-container">
+                <app-table [data]="campanias()" [columns]="columns" [displayedColumns]="displayedColumns"
+                    [showPaginator]="true" [cellTemplate]="customCell">
+                </app-table>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<!-- Modal para Nueva Campaña -->
+<app-modal [isOpen]="isModalOpen()" title="Nueva Campaña de Pesaje" maxWidth="1200px" (close)="closeModal()"
+    (backdropClick)="closeModal()">
+    <app-generar-pesaje-campania></app-generar-pesaje-campania>
+</app-modal>
+
+<!-- Modal para Detalles Campaña -->
+<app-modal [isOpen]="isDetallesModalOpen()" [title]="'Detalles de la Campaña: ' + (campaniaSeleccionada()?.NOMBRE || '')" maxWidth="1000px" (close)="closeDetallesModal()"
+    (backdropClick)="closeDetallesModal()">
+    @if (campaniaSeleccionada()) {
+        <app-detalles-campania [campania]="campaniaSeleccionada()!"></app-detalles-campania>
+    }
+</app-modal>

@@ -47,6 +47,7 @@ export class SidebarMenuService {
             icon: 'inventory',
             children: [
                 { name: 'Generar QR de Ubicaciones', icon: 'qr_code', url: '/generar-qr-ubicaciones' },
+                { name: 'Gestionar Campañas Pesaje', icon: 'scale', url: '/gestion-campanias' },
             ],
             visible: this.ModulosAcceso.Bodega
         },
@@ -62,7 +63,7 @@ export class SidebarMenuService {
             name: 'Registrar Usuario',
             icon: 'person_add',
             url: '/registrar-usuario',
-            visible: true
+            visible: false
         }
         ,
         {

@@ -45,3 +45,6 @@ Thumbs.db
 #movil
 /android
 /ios
+
+.agent/*
+SKILLS.md

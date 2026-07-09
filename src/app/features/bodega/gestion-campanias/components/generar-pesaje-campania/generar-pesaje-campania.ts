@@ -1,20 +1,20 @@
 import { Component, inject, OnInit, signal, ViewChild, ElementRef } from '@angular/core';
-import { Header } from "../../../shared/header/header";
+import { Header } from "../../../../../shared/header/header";
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Table, TableColumn } from '../../../shared/table/table';
-import { Modal } from '../../../shared/modal/modal';
+import { Table, TableColumn } from '../../../../../shared/table/table';
+import { Modal } from '../../../../../shared/modal/modal';
 import { CommonModule, formatDate } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { GenerarPesajeCampaniaService } from './services/generar-pesaje-campania.service';
-import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.service';
-import { ModalService } from '../../../shared/modal/services/modal.service';
+import { SweetAlertService } from '../../../../../shared/alert/services/sweet-alert.service';
+import { ModalService } from '../../../../../shared/modal/services/modal.service';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { ButtonLoader } from "../../../shared/button-loader/button-loader";
+import { ButtonLoader } from "../../../../../shared/button-loader/button-loader";
+import { PesajeCampaniaService } from '../../services/pesaje-campania.service';
 
 interface OrdenFabricacionResponse {
   Articulo: string
@@ -27,14 +27,13 @@ interface OrdenFabricacionResponse {
   FechaInicio: string
   FechaVencimiento: string
   Id: number
-  Lote: string,
+  Lote: string
   Estado: string
 }
 
 @Component({
   selector: 'app-generar-pesaje-campania',
   imports: [
-    Header,
     MatCard,
     MatCardContent,
     ReactiveFormsModule,
@@ -55,7 +54,7 @@ interface OrdenFabricacionResponse {
 })
 export class GenerarPesajeCampania {
   //DI
-  private generarPesajeCampaniaService = inject(GenerarPesajeCampaniaService);
+  private generarPesajeCampaniaService = inject(PesajeCampaniaService);
   private fb = inject(FormBuilder);
   private alertService = inject(SweetAlertService);
   public modalService = inject(ModalService);
@@ -193,7 +192,7 @@ export class GenerarPesajeCampania {
         this.isSending.set(false);
       },
       error: (err) => {
-        this.alertService.error('Error', '❌ Error al crear la campaña')
+        this.alertService.error('Error', `❌ ${err.error.message}\n${err.error.error}`)
         console.error('Error al crear campaña:', err);
         this.isSending.set(false);
       }

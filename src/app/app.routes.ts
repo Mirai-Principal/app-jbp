@@ -17,6 +17,8 @@ import { RegistrarUsuario } from './features/registrar-usuario/registrar-usuario
 import { EnvioRetenciones } from './features/envio-retenciones/envio-retenciones';
 import { ConsultaLote } from './features/bodega/consulta-lote/consulta-lote';
 import { GestionarParticipantes } from './features/ventas/gestionar-participantes/gestionar-participantes';
+import { GenerarPesajeCampania } from './features/bodega/gestion-campanias/components/generar-pesaje-campania/generar-pesaje-campania';
+import { GestionCampanias } from './features/bodega/gestion-campanias/gestion-campanias';
 
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
@@ -35,6 +37,8 @@ export const routes: Routes = [
     { path: 'reacciones-reporte', component: ReaccionesReporte, title: 'Reporte de Reacciones', canActivate: [AuthGuard] },
     { path: 'registrar-usuario', component: RegistrarUsuario, title: 'Registrar Usuario', canActivate: [AuthGuard] },
     { path: 'envio-retenciones', component: EnvioRetenciones, title: 'Envio de Retenciones', canActivate: [AuthGuard] },
+    { path: 'generar-pesaje-campania', component: GenerarPesajeCampania, title: 'Generar Pesaje Campaña', canActivate: [AuthGuard] },
+    { path: 'gestion-campanias', component: GestionCampanias, title: 'Gestión de Campañas', canActivate: [AuthGuard] },
 
     // Ruta para manejar páginas no encontradas
     { path: '**', component: Error }
