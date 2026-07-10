@@ -1,9 +1,18 @@
+@if (isLoading()) {
+<app-loader-page message="Cargando campañas de pesaje..." icon="sync" />
+}
 <app-header title="Gestión de Campañas de Pesaje" icon="scale" />
 <div class="container">
     <mat-card>
         <mat-card-content>
             <div class="header-actions">
-                <button class="btn-premium-add" (click)="openModal()">
+                <mat-form-field appearance="outline" class="search-field">
+                    <mat-label>Buscar por nombre o Num. OF</mat-label>
+                    <input matInput [formControl]="searchControl" placeholder="Ej: Enero 2026, 1000123" />
+                    <mat-icon matSuffix style="cursor: pointer">search</mat-icon>
+                </mat-form-field>
+                
+                <button mat-raised-button color="primary" class="btn-premium" (click)="openModal()">
                     <mat-icon>add</mat-icon>
                     Nueva Campaña
                 </button>
@@ -11,11 +20,12 @@
 
             <ng-template #customCell let-column="column" let-element="element">
                 @if (column.columnDef === 'Id') {
-                    <button mat-icon-button class="btn-icon-primary" (click)="verDetalles(element)" title="Ver Detalles">
-                        <mat-icon>visibility</mat-icon>
-                    </button>
+                <button mat-icon-button class="btn-icon-primary" (click)="accionesDetalles(element)"
+                    title="Ver Detalles">
+                    <mat-icon>visibility</mat-icon>
+                </button>
                 } @else {
-                    {{ column.cell ? column.cell(element) : element[column.columnDef] }}
+                {{ column.cell ? column.cell(element) : element[column.columnDef] }}
                 }
             </ng-template>
 
@@ -35,9 +45,11 @@
 </app-modal>
 
 <!-- Modal para Detalles Campaña -->
-<app-modal [isOpen]="isDetallesModalOpen()" [title]="'Detalles de la Campaña: ' + (campaniaSeleccionada()?.NOMBRE || '')" maxWidth="1000px" (close)="closeDetallesModal()"
-    (backdropClick)="closeDetallesModal()">
+<app-modal [isOpen]="isDetallesModalOpen()"
+    [title]="'Detalles de la Campaña: ' + (campaniaSeleccionada()?.NOMBRE || '')" maxWidth="1000px"
+    (close)="closeDetallesModal()" (backdropClick)="closeDetallesModal()">
     @if (campaniaSeleccionada()) {
-        <app-detalles-campania [campania]="campaniaSeleccionada()!"></app-detalles-campania>
+    <app-detalles-campania [campania]="campaniaSeleccionada()!"
+        (campaniaEliminada)="onCampaniaEliminada()"></app-detalles-campania>
     }
 </app-modal>

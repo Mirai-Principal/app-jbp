@@ -36,36 +36,28 @@ mat-card {
 
 .header-actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
     margin-bottom: 16px;
     padding: 16px 16px 0 16px;
 
-    .btn-premium-add {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        border-radius: 30px;
-        background: $primary;
-        color: $white;
-        padding: 0 32px;
-        height: 44px;
-        font-weight: 600;
-        box-shadow: 0 4px 15px $primary-alpha-30;
-        transition: all 0.3s ease;
-        border: none;
-        cursor: pointer;
+    .search-field {
+        flex: 1;
+        max-width: 600px;
+        margin-bottom: -1.25em; // Remove mat-form-field default bottom margin
+    }
 
-        &:not([disabled]):hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px $primary-alpha-40;
-            background: $primary-dark;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: stretch;
+        
+        .search-field {
+            max-width: 100%;
         }
-
-        &[disabled] {
-            background: $gray-300;
-            color: $gray-500;
-            box-shadow: none;
-            cursor: not-allowed;
+        
+        button {
+            width: 100%;
         }
     }
 }
@@ -76,38 +68,24 @@ mat-card {
     overflow-x: auto;
 }
 
-// Adjust inner card styles for modal to avoid double boxing
-app-modal {
-    ::ng-deep {
-        app-generar-pesaje-campania {
-            display: block;
-            margin: -24px; // Neutralize padding from modal if needed
 
-            .container {
-                padding: 0;
-                margin: 0;
-                max-width: none;
-            }
-
-            mat-card {
-                border: none !important;
-                box-shadow: none !important;
-                border-radius: 0;
-
-                mat-card-content {
-                    padding: 24px;
-                }
-            }
-        }
-    }
-}
 
 .btn-icon-primary {
     color: $primary;
     transition: all 0.3s ease;
-    
+
     &:hover {
         background-color: $primary-alpha-10;
         transform: scale(1.1);
+    }
+}
+
+.table-container {
+    ::ng-deep {
+        .mat-column-Id {
+            width: 100px;
+            max-width: 100px;
+            padding: 0 8px !important;
+        }
     }
 }

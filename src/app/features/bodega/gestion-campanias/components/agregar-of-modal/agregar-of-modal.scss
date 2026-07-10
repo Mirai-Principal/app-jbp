@@ -1,0 +1,101 @@
+@use '../../../../../shared/styles/colors' as *;
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-top: 1rem;
+}
+
+.search-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    .flex-grow {
+        flex: 1;
+    }
+
+    .buscar-btn {
+        height: 56px;
+        /* Match mat-form-field height */
+        padding: 0 2rem;
+        font-size: 1rem;
+        border-radius: 8px;
+    }
+}
+
+.info-card {
+    background-color: $gray-100;
+    padding: 1rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 1px solid var(--border-color);
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border-color);
+
+        &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .value {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            text-align: right;
+        }
+    }
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-premium-add {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+    }
+
+    &:hover:not([disabled]) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active:not([disabled]) {
+        transform: translateY(0);
+    }
+
+    &[disabled] {
+        background: var(--text-muted);
+        cursor: not-allowed;
+        box-shadow: none;
+        opacity: 0.7;
+    }
+}

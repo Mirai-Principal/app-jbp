@@ -42,4 +42,24 @@ export class PesajeCampaniaService {
     const url = `${this.getUrlEndpointService.backend_api}/of/campania/${id}`;
     return this.http.delete<any>(url);
   }
+
+  eliminarOfDeCampania(nroOf: string, idCampania: number): Observable<any> {
+    const url = `${this.getUrlEndpointService.backend_api}/of/campania/${nroOf}/${idCampania}`;
+    return this.http.delete<any>(url);
+  }
+
+  actualizarCampania(id: number, datos: any): Observable<any> {
+    const url = `${this.getUrlEndpointService.backend_api}/of/campania/${id}`;
+    return this.http.put<any>(url, datos);
+  }
+
+  crearDetalleCampania(datos: any): Observable<any> {
+    const url = `${this.getUrlEndpointService.backend_api}/of/campania/detalle/create`;
+    return this.http.post<any>(url, datos);
+  }
+
+  buscarCampania_OF(filter: string): Observable<Campania[]> {
+    const url = `${this.getUrlEndpointService.backend_api}/of/campania/find/${filter}`;
+    return this.http.get<Campania[]>(url);
+  }
 }

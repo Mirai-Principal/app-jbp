@@ -7,6 +7,38 @@
     } @else {
     <mat-card>
         <mat-card-content>
+            @if (isEditing()) {
+            <form [formGroup]="form" class="info-grid" style="align-items: center;">
+                <mat-form-field appearance="outline" class="info-item">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput formControlName="NombreCampania">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="info-item">
+                    <mat-label>Fecha Desde</mat-label>
+                    <input matInput [matDatepicker]="pickerDesde" formControlName="FechaDesde">
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerDesde></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="info-item">
+                    <mat-label>Fecha Hasta</mat-label>
+                    <input matInput [matDatepicker]="pickerHasta" formControlName="FechaHasta">
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerHasta></mat-datepicker>
+                </mat-form-field>
+
+                <div class="info-item"
+                    style="display: flex; gap: 8px; flex-direction: row; align-items: center; justify-content: center;">
+                    <button mat-icon-button color="warn" (click)="toggleEdit()" type="button" [disabled]="isUpdating()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                    <app-button-loader [icon]="'save'" [color]="'primary'" [text]="'Guardar'"
+                        [waitingText]="'Guardando...'" [isLoading]="isUpdating()" (buttonClick)="guardarEdicion()">
+                    </app-button-loader>
+                </div>
+            </form>
+            } @else {
             <div class="info-grid">
                 <div class="info-item">
                     <span class="label">Nombre:</span>
@@ -22,28 +54,50 @@
                 </div>
                 <div class="info-item">
                     <span class="label">Estado:</span>
+                    @if (detalles() && detalles().length > 0) {
                     <span class="value">{{ campania.FINALIZADA ? 'Finalizada' : 'Activa' }}</span>
+                    }
+                </div>
+                <div class="info-item" style="justify-content: center; align-items: center;">
+                    <button mat-button color="primary" (click)="toggleEdit()">
+                        <mat-icon>edit</mat-icon>
+                        Editar Info
+                    </button>
                 </div>
             </div>
+            }
 
-            <div class="section-title">
-                <mat-icon>list_alt</mat-icon>
-                <h4>Órdenes de Fabricación asociadas</h4>
+            <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <mat-icon>list_alt</mat-icon>
+                    <h4>Órdenes de Fabricación asociadas</h4>
+                </div>
+                <button mat-raised-button class="btn-premium-add" (click)="abrirModalAgregarOf()">
+                    <mat-icon>add</mat-icon> Agregar OF
+                </button>
             </div>
 
             <ng-template #customCell let-column="column" let-element="element">
-                @if (column.columnDef === 'Id') {
-                    <button mat-icon-button color="primary" (click)="abrirDetallesST(element.ID_ST, element.NRO_OF)" aria-label="Ver detalles de ST">
+                @if (column.columnDef === 'Acciones') {
+                <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                    <button mat-icon-button color="primary" (click)="abrirDetallesST(element.ID_ST, element.NRO_OF)"
+                        aria-label="Ver detalles de ST" title="Ver Detalles">
                         <mat-icon>visibility</mat-icon>
                     </button>
+                    <button mat-icon-button color="warn" (click)="eliminarOf(element.NRO_OF)" aria-label="Eliminar OF"
+                        title="Eliminar OF">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
                 } @else {
-                    {{ column.cell ? column.cell(element) : element[column.columnDef] }}
+                {{ column.cell ? column.cell(element) : element[column.columnDef] }}
                 }
             </ng-template>
 
             @if (detalles() && detalles().length > 0) {
             <div class="table-container">
-                <app-table [data]="detalles()" [columns]="columns" [displayedColumns]="displayedColumns" [cellTemplate]="customCell">
+                <app-table [data]="detalles()" [columns]="columns" [displayedColumns]="displayedColumns"
+                    [cellTemplate]="customCell">
                 </app-table>
             </div>
             } @else {
@@ -52,7 +106,17 @@
                 <p>No hay órdenes de fabricación registradas para esta campaña.</p>
             </div>
             }
+            <div style="margin-top: 1rem;">
+                <app-button-loader [text]="'Eliminar Campaña'" [icon]="'delete'" [color]="'warn'"
+                    [waitingText]="'Eliminando...'" [isLoading]="isDeleting()" (buttonClick)="eliminarCampania()">
+                </app-button-loader>
+            </div>
         </mat-card-content>
     </mat-card>
     }
+
+    <!-- Modal Agregar OF reutilizable -->
+    <app-agregar-of-modal [isOpen]="isModalAgregarOpen()" (closeModal)="cerrarModalAgregarOf()"
+        (ofAgregada)="onOfAgregada($event)">
+    </app-agregar-of-modal>
 </div>

@@ -75,62 +75,7 @@
     </mat-card>
 </div>
 
-<!-- Modal Agregar OF -->
-<app-modal [isOpen]="modalService.isOpen()" title="Agregar Orden de Fabricación" [closeOnBackdropClick]="true"
-    (close)="modalService.closeModal()" (backdropClick)="modalService.closeModal()" maxWidth="500px">
-    <div class="modal-form">
-        <div class="search-row">
-            <mat-form-field appearance="outline" class="flex-grow" (keyup.enter)="buscarOF()">
-                <mat-label>Buscar OF</mat-label>
-                <input #searchInput matInput [(ngModel)]="searchNumOf" (ngModelChange)="ofDetails.set(null)"
-                    (paste)="onPaste()" placeholder="Ej: 30026695" type="number" />
-                @if (isLoading()) {
-                <mat-progress-spinner matPrefix mode="indeterminate" diameter="24"
-                    strokeWidth="3"></mat-progress-spinner>
-                }@else {
-                <mat-icon matPrefix>search</mat-icon>
-                }
-                @if (searchNumOf) {
-                <button mat-icon-button matSuffix (click)="searchNumOf = ''" type="button">
-                    <mat-icon>clear</mat-icon>
-                </button>
-                }
-            </mat-form-field>
-            <button mat-raised-button color="primary" class="buscar-btn" (click)="buscarOF()"
-                [disabled]="isLoading()">Buscar</button>
-        </div>
-
-        <div class="info-card">
-            <div class="info-row">
-                <span class="label">Producto a fabricar:</span>
-                <span class="value">{{ ofDetails()?.Articulo}}</span>
-            </div>
-            <div class="info-row">
-                <span class="label">Lote a fabricar:</span>
-                <span class="value">{{ ofDetails()?.Lote}}</span>
-            </div>
-            <div class="info-row">
-                <span class="label">Fecha de inicio:</span>
-                <span class="value">{{ ofDetails()?.FechaInicio}}</span>
-            </div>
-            <div class="info-row">
-                <span class="label">Fecha de finalización:</span>
-                <span class="value">{{ ofDetails()?.FechaFinalizacion}}</span>
-            </div>
-            <div class="info-row">
-                <span class="label">Fecha de fabricación:</span>
-                <span class="value">{{ ofDetails()?.FechaFabricacion }}</span>
-            </div>
-            <div class="info-row">
-                <span class="label">Estado:</span>
-                <span class="value">{{ ofDetails()?.Estado}}</span>
-            </div>
-        </div>
-
-        <div class="modal-actions">
-            <button mat-raised-button class="btn-premium-add" (click)="agregarOF()" [disabled]="!ofDetails()">
-                <mat-icon>add_circle_outline</mat-icon> Agregar OF
-            </button>
-        </div>
-    </div>
-</app-modal>
+<!-- Modal Agregar OF reutilizable -->
+<app-agregar-of-modal [isOpen]="modalService.isOpen()" (closeModal)="modalService.closeModal()"
+    (ofAgregada)="agregarOF($event)">
+</app-agregar-of-modal>

@@ -101,3 +101,13 @@ mat-card {
         font-size: 14px;
     }
 }
+
+.table-container {
+    ::ng-deep {
+        .mat-column-Id {
+            width: 120px;
+            max-width: 120px;
+            padding: 0 8px !important;
+        }
+    }
+}

@@ -3,7 +3,7 @@ export interface Campania {
     NOMBRE: string;
     FECHA_DESDE: string;
     FECHA_HASTA: string;
-    FINALIZADA: boolean;
+    FINALIZADA?: boolean;
 }
 
 export interface CampaniaDetalles {
