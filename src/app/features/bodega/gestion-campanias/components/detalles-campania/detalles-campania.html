@@ -8,24 +8,34 @@
     <mat-card>
         <mat-card-content>
             @if (isEditing()) {
-            <form [formGroup]="form" class="info-grid" style="align-items: center;">
-                <mat-form-field appearance="outline" class="info-item">
+            <form [formGroup]="form" class="info-grid">
+                <mat-form-field appearance="outline" class="info-item ">
                     <mat-label>Nombre</mat-label>
                     <input matInput formControlName="NombreCampania">
+                    @if (form.get('NombreCampania')?.hasError('required') && form.get('NombreCampania')?.touched) {
+                    <mat-error>El nombre de la campaña es requerido</mat-error>
+                    }
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="info-item">
-                    <mat-label>Fecha Desde</mat-label>
-                    <input matInput [matDatepicker]="pickerDesde" formControlName="FechaDesde">
-                    <mat-datepicker-toggle matIconSuffix [for]="pickerDesde"></mat-datepicker-toggle>
-                    <mat-datepicker #pickerDesde></mat-datepicker>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="info-item">
-                    <mat-label>Fecha Hasta</mat-label>
-                    <input matInput [matDatepicker]="pickerHasta" formControlName="FechaHasta">
-                    <mat-datepicker-toggle matIconSuffix [for]="pickerHasta"></mat-datepicker-toggle>
-                    <mat-datepicker #pickerHasta></mat-datepicker>
+                    <mat-label>Rango de Fechas</mat-label>
+                    <mat-date-range-input [rangePicker]="pickerFechas">
+                        <input matStartDate formControlName="FechaDesde" placeholder="Fecha Inicio">
+                        <input matEndDate formControlName="FechaHasta" placeholder="Fecha Fin">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerFechas"></mat-datepicker-toggle>
+                    <mat-date-range-picker #pickerFechas></mat-date-range-picker>
+                    @if (form.get('FechaDesde')?.value || form.get('FechaHasta')?.value) {
+                    <button mat-icon-button matSuffix
+                        (click)="form.get('FechaDesde')?.setValue(null); form.get('FechaHasta')?.setValue(null)"
+                        type="button">
+                        <mat-icon>clear</mat-icon>
+                    </button>
+                    }
+                    @if ((form.get('FechaDesde')?.hasError('required') && form.get('FechaDesde')?.touched) ||
+                    (form.get('FechaHasta')?.hasError('required') && form.get('FechaHasta')?.touched)) {
+                    <mat-error>Las fechas son requeridas</mat-error>
+                    }
                 </mat-form-field>
 
                 <div class="info-item"
@@ -96,9 +106,16 @@
 
             @if (detalles() && detalles().length > 0) {
             <div class="table-container">
+                @if (isLoadingRows()) {
+                <div class="loading-container">
+                    <mat-spinner diameter="40"></mat-spinner>
+                    <p>Cargando OFs...</p>
+                </div>
+                } @else {
                 <app-table [data]="detalles()" [columns]="columns" [displayedColumns]="displayedColumns"
                     [cellTemplate]="customCell">
                 </app-table>
+                }
             </div>
             } @else {
             <div class="empty-state">
@@ -117,6 +134,6 @@
 
     <!-- Modal Agregar OF reutilizable -->
     <app-agregar-of-modal [isOpen]="isModalAgregarOpen()" (closeModal)="cerrarModalAgregarOf()"
-        (ofAgregada)="onOfAgregada($event)">
+        (ofAgregada)="onOfAgregada($event)" [btnText]="'Guardar OF'">
     </app-agregar-of-modal>
 </div>

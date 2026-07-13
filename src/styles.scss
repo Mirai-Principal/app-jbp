@@ -1,4 +1,8 @@
 @use '@angular/material' as mat;
+/* Importing @ngxpert/hot-toast base styles. */
+@use '@ngxpert/hot-toast/styles';
+/* Importing @ngxpert/hot-toast glassmorphism theme. */
+@use '@ngxpert/hot-toast/themes/glassmorphism';
 
 html {
   height: 100%;

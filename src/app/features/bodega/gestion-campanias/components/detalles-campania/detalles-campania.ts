@@ -42,6 +42,7 @@ import { AgregarOfModal } from '../agregar-of-modal/agregar-of-modal';
 export class DetallesCampania implements OnInit {
   @Input() campania!: Campania;
   @Output() campaniaEliminada = new EventEmitter<void>();
+  @Output() campaniaActualizada = new EventEmitter<Campania>();
 
   private pesajeCampaniaService = inject(PesajeCampaniaService);
   private dialog = inject(MatDialog);
@@ -53,6 +54,7 @@ export class DetallesCampania implements OnInit {
   isDeleting = signal(false);
   isEditing = signal(false);
   isUpdating = signal(false);
+  isLoadingRows = signal(false);
   isModalAgregarOpen = signal(false);
   form: FormGroup;
 
@@ -99,9 +101,11 @@ export class DetallesCampania implements OnInit {
   }
 
   verificarEstadoCampania() {
+    this.isLoadingRows.set(true);
     const detallesBase = this.detalles();
     if (detallesBase.length === 0) {
       this.campania.FINALIZADA = undefined;
+      this.isLoadingRows.set(false);
       return;
     }
     const ofRequests = detallesBase.map(d => this.pesajeCampaniaService.buscarOF(Number(d.NRO_OF)));
@@ -119,6 +123,7 @@ export class DetallesCampania implements OnInit {
 
       const todasCerradas = ofsResults.every((res: any) => res.length > 0 && res[0].Estado === 'Cerrado');
       this.campania.FINALIZADA = todasCerradas;
+      this.isLoadingRows.set(false);
     });
   }
 
@@ -252,14 +257,17 @@ export class DetallesCampania implements OnInit {
       next: (res) => {
         this.alertService.success('Actualizado', res.message);
 
-        // El setTimeout asegura que la vista se actualice en el siguiente ciclo
-        setTimeout(() => {
-          this.campania.NOMBRE = datos.NombreCampania;
-          this.campania.FECHA_DESDE = datos.FechaDesde ? datos.FechaDesde + 'T00:00:00' : '';
-          this.campania.FECHA_HASTA = datos.FechaHasta ? datos.FechaHasta + 'T00:00:00' : '';
-          this.isEditing.set(false);
-          this.isUpdating.set(false);
-        });
+        const updatedCampania = {
+          ...this.campania,
+          NOMBRE: datos.NombreCampania,
+          FECHA_DESDE: datos.FechaDesde ? datos.FechaDesde + 'T00:00:00' : '',
+          FECHA_HASTA: datos.FechaHasta ? datos.FechaHasta + 'T00:00:00' : ''
+        };
+
+        this.isEditing.set(false);
+        this.isUpdating.set(false);
+
+        this.campaniaActualizada.emit(updatedCampania);
       },
       error: (err) => {
         this.alertService.error('Error', `❌ ${err.error?.message}\n${err.error?.error || ''}`);

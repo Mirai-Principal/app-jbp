@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/ventas/components/documentos-enviados/documentos-enviados.scss"],
-  "sourcesContent": ["@use '../../../../shared/styles/colors' as *;\r\n\r\nth,\r\ntd {\r\n    padding-right: 15px;\r\n    padding-left: 15px;\r\n    vertical-align: top;\r\n    border-bottom: 1px solid #ddd;\r\n}"],
-  "mappings": ";AAEA;AAAA;AAEI,iBAAA;AACA,gBAAA;AACA,kBAAA;AACA,iBAAA,IAAA,MAAA;;",
-  "names": []
-}

@@ -32,7 +32,7 @@ mat-card {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 16px;
     margin-bottom: 24px;
-    padding: 16px;
+    padding: 25px 16px;
     background-color: $gray-100;
     border-radius: 8px;
     border: 1px solid $gray-200;
@@ -54,6 +54,24 @@ mat-card {
             font-weight: 500;
             color: $gray-800;
         }
+    }
+}
+
+form.info-grid {
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+
+    mat-form-field {
+        width: 100%;
+        margin-bottom: -1.25em;
+
+        @media (max-width: 768px) {
+            margin-bottom: 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -82,7 +100,7 @@ mat-card {
     flex-direction: column;
     align-items: center;
     padding: 32px;
-    color: $gray-500;
+    color: $gray-800;
     text-align: center;
     background: $gray-100;
     border-radius: 8px;

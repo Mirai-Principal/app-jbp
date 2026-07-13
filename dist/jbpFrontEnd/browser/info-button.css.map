@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/info-button/info-button.css"],
-  "sourcesContent": [".error-icon {\r\n  color: #f44336;\r\n  font-size: 20px;\r\n  width: 20px;\r\n  height: 20px;\r\n}\r\n\r\n.info-icon {\r\n  color: #2196f3;\r\n  font-size: 20px;\r\n  width: 20px;\r\n  height: 20px;\r\n}\r\n\r\n.warning-icon {\r\n  color: #ff9800;\r\n  font-size: 20px;\r\n  width: 20px;\r\n  height: 20px;\r\n}\r\n\r\n.success-icon {\r\n  color: #4caf50;\r\n  font-size: 20px;\r\n  width: 20px;\r\n  height: 20px;\r\n}"],
-  "mappings": ";AAAA,CAAC;AACC,SAAO;AACP,aAAW;AACX,SAAO;AACP,UAAQ;AACV;AAEA,CAAC;AACC,SAAO;AACP,aAAW;AACX,SAAO;AACP,UAAQ;AACV;AAEA,CAAC;AACC,SAAO;AACP,aAAW;AACX,SAAO;AACP,UAAQ;AACV;AAEA,CAAC;AACC,SAAO;AACP,aAAW;AACX,SAAO;AACP,UAAQ;AACV;",
-  "names": []
-}

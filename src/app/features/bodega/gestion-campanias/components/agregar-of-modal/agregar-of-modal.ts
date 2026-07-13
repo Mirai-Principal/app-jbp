@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output, ViewChild, ElementRef, signal, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Output, ViewChild, ElementRef, signal, Input, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -20,6 +20,7 @@ import { PesajeCampaniaService } from '../../services/pesaje-campania.service';
 })
 export class AgregarOfModal {
   @Input() isOpen = false;
+  @Input() btnText = "Agregar OF"
   @Output() closeModal = new EventEmitter<void>();
   @Output() ofAgregada = new EventEmitter<any>();
 

@@ -8,6 +8,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 
 import { AppTitleStrategy } from './core/strategies/title.strategy';
+import { provideHotToastConfig } from '@ngxpert/hot-toast';
 
 //registramos los datos de localizacion para espaniol
 registerLocaleData(localeEs, 'es');
@@ -15,15 +16,15 @@ registerLocaleData(localeEs, 'es');
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes, withComponentInputBinding()),  //el segundo permite recibir parámetros con input()
+    provideRouter(routes, withComponentInputBinding()), //el segundo permite recibir parámetros con input()
     provideHttpClient(), //proveedor de http para peticiones
     { provide: LOCALE_ID, useValue: 'es' }, //registramos el proveedor de localizacion
     {
       provide: TitleStrategy,
-      useClass: AppTitleStrategy
+      useClass: AppTitleStrategy,
     }, //proveedor de estrategia de título
     provideNativeDateAdapter(), //proveedor de adaptador de fecha
-    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' } //proveedor de locale de fecha
-
-  ]
+    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
+    provideHotToastConfig(), //proveedor de locale de fecha
+  ],
 };

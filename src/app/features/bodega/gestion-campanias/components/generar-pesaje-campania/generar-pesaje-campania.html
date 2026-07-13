@@ -10,28 +10,28 @@
                 </div>
                 <div class="form-grid">
                     <!-- Nombre Campaña -->
-                    <mat-form-field appearance="outline" class="full-width">
+                    <mat-form-field appearance="outline">
                         <mat-label>Nombre Campaña</mat-label>
                         <input matInput formControlName="nombreCampania" placeholder="Ej: Campaña Enero 2026" />
                         <mat-icon matPrefix>campaign</mat-icon>
                     </mat-form-field>
 
-                    <!-- fecha_desde -->
-                    <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Fecha Desde</mat-label>
-                        <input matInput [matDatepicker]="pickerDesde" formControlName="fechaDesde"
-                            placeholder="Seleccionar fecha">
-                        <mat-datepicker-toggle matIconSuffix [for]="pickerDesde"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerDesde></mat-datepicker>
-                    </mat-form-field>
-
-                    <!-- fecha_hasta -->
-                    <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Fecha Hasta</mat-label>
-                        <input matInput [matDatepicker]="pickerHasta" formControlName="fechaHasta"
-                            placeholder="Seleccionar fecha">
-                        <mat-datepicker-toggle matIconSuffix [for]="pickerHasta"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerHasta></mat-datepicker>
+                    <!-- Rango de Fechas -->
+                    <mat-form-field appearance="outline" class="date-field">
+                        <mat-label>Fecha de inicio y fin de la campaña</mat-label>
+                        <mat-date-range-input [rangePicker]="pickerFechas">
+                            <input matStartDate formControlName="fechaDesde" placeholder="Fecha Inicio">
+                            <input matEndDate formControlName="fechaHasta" placeholder="Fecha Fin">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerFechas"></mat-datepicker-toggle>
+                        <mat-date-range-picker #pickerFechas></mat-date-range-picker>
+                        @if (form.get('fechaDesde')?.value || form.get('fechaHasta')?.value) {
+                        <button mat-icon-button matSuffix
+                            (click)="form.get('fechaDesde')?.setValue(null); form.get('fechaHasta')?.setValue(null)"
+                            type="button">
+                            <mat-icon>clear</mat-icon>
+                        </button>
+                        }
                     </mat-form-field>
                 </div>
             </div>

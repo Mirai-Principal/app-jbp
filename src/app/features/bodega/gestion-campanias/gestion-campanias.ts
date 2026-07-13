@@ -21,6 +21,7 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.service';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from '@angular/material/core';
+import { HelpModal } from "../../../shared/help-modal/help-modal";
 
 @Component({
   imports: [
@@ -41,7 +42,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatFormFieldModule,
     MatProgressSpinner,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    HelpModal
   ],
   providers: [DatePipe],
   templateUrl: './gestion-campanias.html',
@@ -212,5 +214,10 @@ export class GestionCampanias {
   onCampaniaEliminada() {
     this.closeDetallesModal();
     this.cargarCampanias();
+  }
+
+  onCampaniaActualizada(campania: Campania) {
+    this.campaniaSeleccionada.set(campania);
+    this.campanias.update(list => list.map(c => c.ID === campania.ID ? campania : c));
   }
 }

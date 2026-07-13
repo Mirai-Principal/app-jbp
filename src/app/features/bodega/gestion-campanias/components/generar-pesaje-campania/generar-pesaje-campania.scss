@@ -5,15 +5,7 @@
     max-width: 100%;
 }
 
-.loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    gap: 16px;
-    color: $gray-600;
-}
+
 
 mat-card {
     background-color: $background-content;
@@ -55,23 +47,22 @@ mat-card {
 
     .form-grid {
         display: grid;
-        grid-template-columns: 2fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
         gap: 24px;
         align-items: start;
 
-        .full-width {
+        mat-form-field {
             width: 100%;
             margin-bottom: -1.25em;
-            /* Remove bottom margin of mat-form-field */
+
+            @media (max-width: 768px) {
+                margin-bottom: 0;
+            }
         }
 
         @media (max-width: 768px) {
             grid-template-columns: 1fr;
             gap: 16px;
-
-            .full-width {
-                margin-bottom: 0;
-            }
         }
     }
 }
@@ -137,38 +128,6 @@ mat-card {
     display: flex;
     justify-content: center;
     margin-top: 16px;
-
-    .btn-premium-save {
-        border-radius: 50px;
-        background: $gradient-primary;
-        color: $white;
-        min-width: 240px;
-        height: 48px;
-        font-size: 16px;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        box-shadow: 0 8px 20px $primary-alpha-30;
-        transition: all $transition-normal;
-
-        &:not([disabled]):hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 28px $primary-alpha-40;
-        }
-
-        &[disabled] {
-            background: $gray-300;
-            color: $gray-500;
-            box-shadow: none;
-        }
-
-        mat-icon {
-            margin-right: 8px;
-        }
-
-        @media (max-width: 768px) {
-            width: 100%;
-        }
-    }
 }
 
 // Table Wrapper specific to this component
@@ -178,120 +137,4 @@ app-table {
     border-radius: 12px;
     overflow-x: auto;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-}
-
-// Modal styles
-.modal-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 8px 0;
-
-    .search-row {
-        display: flex;
-        gap: 16px;
-        align-items: center;
-
-        @media (max-width: 768px) {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 16px;
-
-            .buscar-btn {
-                width: 100%;
-            }
-        }
-
-        .flex-grow {
-            flex-grow: 1;
-            margin-bottom: -1.25em;
-
-            @media (max-width: 768px) {
-                margin-bottom: 0;
-            }
-        }
-
-        .buscar-btn {
-            height: 48px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px $primary-alpha-20;
-        }
-    }
-
-    .info-card {
-        background: $gray-100;
-        border-radius: 12px;
-        padding: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        border: 1px solid $gray-200;
-
-        .info-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-bottom: 8px;
-            border-bottom: 1px dashed $gray-300;
-
-            @media (max-width: 480px) {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
-            }
-
-            &:last-child {
-                border-bottom: none;
-                padding-bottom: 0;
-            }
-
-            .label {
-                font-weight: 600;
-                color: $gray-600;
-                font-size: 14px;
-            }
-
-            .value {
-                color: $gray-800;
-                font-weight: 500;
-            }
-        }
-    }
-
-    .modal-actions {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 16px;
-
-        @media (max-width: 768px) {
-            justify-content: stretch;
-
-            .btn-premium-add {
-                width: 100%;
-            }
-        }
-
-        .btn-premium-add {
-            border-radius: 30px;
-            background: $primary;
-            color: $white;
-            padding: 0 32px;
-            height: 44px;
-            font-weight: 600;
-            box-shadow: 0 4px 15px $primary-alpha-30;
-            transition: all $transition-normal;
-
-            &:not([disabled]):hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px $primary-alpha-40;
-                background: $primary-dark;
-            }
-
-            &[disabled] {
-                background: $gray-300;
-                color: $gray-500;
-                box-shadow: none;
-            }
-        }
-    }
 }

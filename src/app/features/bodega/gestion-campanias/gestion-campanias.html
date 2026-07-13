@@ -5,6 +5,51 @@
 <div class="container">
     <mat-card>
         <mat-card-content>
+            <div class="top-action-container">
+                <button mat-raised-button color="primary" class="btn-premium" (click)="openModal()">
+                    <mat-icon>add</mat-icon>
+                    Nueva Campaña
+                </button>
+                <div header-actions class="ayuda">
+                    <app-help-modal buttonText="¿Cómo usar?" icon="help_outline">
+                        <h3>Gestión de Campañas de Pesaje</h3>
+                        <p>Esta página te permite agrupar y gestionar múltiples Órdenes de Fabricación (OF) bajo una
+                            misma campaña de pesaje.</p>
+
+                        <h4>¿Cómo crear una Nueva Campaña?</h4>
+                        <ol>
+                            <li>Haz clic en el botón central <strong>"Nueva Campaña"</strong>.</li>
+                            <li>En la ventana, ingresa un nombre para la campaña y define un rango de fechas.</li>
+                            <li>Usa el botón "Agregar OF" para buscar y anexar órdenes de fabricación a esta campaña. El
+                                sistema validará que no agregues la misma OF dos veces.</li>
+                            <li>Haz clic en "Guardar Campaña" para registrarla.</li>
+                        </ol>
+
+                        <h4>Búsqueda y Filtros</h4>
+                        <ul>
+                            <li><strong>Buscador de texto:</strong> Permite encontrar campañas escribiendo el nombre de
+                                la campaña o directamente un <strong>Número de OF</strong>.</li>
+                            <li><strong>Filtro de fechas:</strong> Selecciona un rango en el calendario para ver
+                                únicamente las campañas programadas para esos días. Doble click sobre una fecha para
+                                seleccionar un dia en especifico. </li>
+                        </ul>
+
+                        <h4>Visualizar Detalles</h4>
+                        <ul>
+                            <li><strong>Detalles de la Campaña:</strong> En la tabla principal, haz clic en el icono del
+                                ojo (<mat-icon
+                                    style="font-size: 16px; width: 16px; height: 16px; vertical-align: middle;">visibility</mat-icon>)
+                                para ver la información de la campaña y sus Órdenes de Fabricación asociadas. En este
+                                formulario podrás editar la información de la campaña, agregar o eliminar órdenes de
+                                fabricación asociadas o eliminar la campaña.</li>
+                            <li><strong>Detalles de Materiales (OF):</strong> Si deseas ver qué artículos, cantidades y
+                                lotes componen una Orden de Fabricación específica, haz <strong>doble clic</strong>
+                                sobre la fila de la OF en cualquier tabla donde aparezca.</li>
+                        </ul>
+                    </app-help-modal>
+                </div>
+            </div>
+
             <div class="header-actions">
                 <mat-form-field appearance="outline" class="search-field">
                     <mat-label>Buscar por nombre o Num. OF</mat-label>
@@ -40,11 +85,6 @@
                     </button>
                     }
                 </mat-form-field>
-
-                <button mat-raised-button color="primary" class="btn-premium" (click)="openModal()">
-                    <mat-icon>add</mat-icon>
-                    Nueva Campaña
-                </button>
             </div>
 
             <ng-template #customCell let-column="column" let-element="element">
@@ -74,11 +114,10 @@
 </app-modal>
 
 <!-- Modal para Detalles Campaña -->
-<app-modal [isOpen]="isDetallesModalOpen()"
-    [title]="'Detalles de la Campaña: ' + (campaniaSeleccionada()?.NOMBRE || '')" maxWidth="1000px"
+<app-modal [isOpen]="isDetallesModalOpen()" [title]="'Detalles de la Campaña'" maxWidth="1000px"
     (close)="closeDetallesModal()" (backdropClick)="closeDetallesModal()">
     @if (campaniaSeleccionada()) {
-    <app-detalles-campania [campania]="campaniaSeleccionada()!"
-        (campaniaEliminada)="onCampaniaEliminada()"></app-detalles-campania>
+    <app-detalles-campania [campania]="campaniaSeleccionada()!" (campaniaEliminada)="onCampaniaEliminada()"
+        (campaniaActualizada)="onCampaniaActualizada($event)"></app-detalles-campania>
     }
 </app-modal>
