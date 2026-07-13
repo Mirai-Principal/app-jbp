@@ -62,4 +62,9 @@ export class PesajeCampaniaService {
     const url = `${this.getUrlEndpointService.backend_api}/of/campania/find/${filter}`;
     return this.http.get<Campania[]>(url);
   }
+
+  buscarCampaniaPorFechas(fechaInicio: string, fechaFin: string): Observable<Campania[]> {
+    const url = `${this.getUrlEndpointService.backend_api}/of/campania/find/${fechaInicio}/${fechaFin}`;
+    return this.http.get<Campania[]>(url);
+  }
 }

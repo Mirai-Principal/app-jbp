@@ -17,21 +17,6 @@ import { ButtonLoader } from "../../../../../shared/button-loader/button-loader"
 import { PesajeCampaniaService } from '../../services/pesaje-campania.service';
 import { AgregarOfModal } from '../agregar-of-modal/agregar-of-modal';
 
-interface OrdenFabricacionResponse {
-  Articulo: string
-  DocNum: number
-  CodArticulo: string
-  FechaCierre: string
-  FechaCreacion: string
-  FechaFabricacion: string
-  FechaFinalizacion: string
-  FechaInicio: string
-  FechaVencimiento: string
-  Id: number
-  Lote: string
-  Estado: string
-}
-
 @Component({
   selector: 'app-generar-pesaje-campania',
   imports: [

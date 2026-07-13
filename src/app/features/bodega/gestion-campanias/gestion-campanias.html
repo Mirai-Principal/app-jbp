@@ -8,10 +8,39 @@
             <div class="header-actions">
                 <mat-form-field appearance="outline" class="search-field">
                     <mat-label>Buscar por nombre o Num. OF</mat-label>
-                    <input matInput [formControl]="searchControl" placeholder="Ej: Enero 2026, 1000123" />
-                    <mat-icon matSuffix style="cursor: pointer">search</mat-icon>
+                    <input matInput [formControl]="searchControl" placeholder="Escribe al menos 3 caracteres..." />
+                    @if (isSearching()) {
+                    <mat-progress-spinner matPrefix mode="indeterminate" diameter="20"
+                        strokeWidth="3"></mat-progress-spinner>
+                    }@else {
+                    <mat-icon matPrefix>search</mat-icon>
+                    }
+                    @if (searchControl.value) {
+                    <button mat-icon-button matSuffix (click)="searchControl.setValue('')" type="button">
+                        <mat-icon>clear</mat-icon>
+                    </button>
+                    }
                 </mat-form-field>
-                
+
+                <mat-form-field appearance="outline" class="date-field">
+                    <mat-label>Buscar por fechas de la Campaña</mat-label>
+                    <mat-date-range-input [formGroup]="dateRangeForm" [rangePicker]="picker">
+                        <input matStartDate formControlName="start" placeholder="Fecha Inicio">
+                        <input matEndDate formControlName="end" placeholder="Fecha Fin">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                    @if (isSearchingDate()) {
+                    <mat-progress-spinner matPrefix mode="indeterminate" diameter="20"
+                        strokeWidth="3"></mat-progress-spinner>
+                    }
+                    @if (dateRangeForm.get('start')?.value || dateRangeForm.get('end')?.value) {
+                    <button mat-icon-button matSuffix (click)="dateRangeForm.reset()" type="button">
+                        <mat-icon>clear</mat-icon>
+                    </button>
+                    }
+                </mat-form-field>
+
                 <button mat-raised-button color="primary" class="btn-premium" (click)="openModal()">
                     <mat-icon>add</mat-icon>
                     Nueva Campaña

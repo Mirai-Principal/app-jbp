@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/ventas/notas-credito/notas-credito.scss"],
+  "sourcesContent": [" .container {\r\n     padding: 0 20px;\r\n     margin: 0 auto;\r\n }\r\n\r\n mat-card {\r\n     margin-bottom: 20px;\r\n }\r\n\r\n mat-card-header {\r\n     margin-bottom: 20px;\r\n }\r\n\r\n .ayuda {\r\n     margin-left: auto;\r\n }\r\n\r\n .actions-container {\r\n     margin-top: 10px;\r\n     text-align: center;\r\n }\r\n\r\n @media (max-width: 768px) {\r\n     .container {\r\n         padding: 0;\r\n     }\r\n }"],
+  "mappings": ";AAAC,CAAA;AACI,WAAA,EAAA;AACA,UAAA,EAAA;;AAGJ;AACI,iBAAA;;AAGJ;AACI,iBAAA;;AAGJ,CAAA;AACI,eAAA;;AAGJ,CAAA;AACI,cAAA;AACA,cAAA;;AAGJ,QAAA,WAAA;AACI,GAvBJ;AAwBQ,aAAA;;;",
+  "names": []
+}

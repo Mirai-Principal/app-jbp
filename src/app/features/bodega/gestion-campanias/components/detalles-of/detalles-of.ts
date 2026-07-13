@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, signal, inject, Input } from '@angular/core';
+import { Component, Inject, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatCard, MatCardContent } from '@angular/material/card';

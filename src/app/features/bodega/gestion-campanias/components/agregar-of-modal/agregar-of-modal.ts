@@ -27,6 +27,7 @@ export class AgregarOfModal {
   private alertService = inject(SweetAlertService);
   private generarPesajeCampaniaService = inject(PesajeCampaniaService);
 
+
   searchNumOf = '';
   ofDetails = signal<any | null>(null);
   isLoading = signal(false);
@@ -65,7 +66,7 @@ export class AgregarOfModal {
           this.isLoading.set(false);
         },
         error: (err) => {
-          this.alertService.error('Error', '❌ Error al buscar la orden de fabricacion');
+          this.alertService.error('Error', `❌ ${err.error.message}\n${err.error.error}`);
           console.error('Error al buscar OF:', err);
           this.isLoading.set(false);
         }

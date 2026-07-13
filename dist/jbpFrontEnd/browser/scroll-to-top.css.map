@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/scroll-to-top/scroll-to-top.scss"],
+  "sourcesContent": [".scroll-to-top-btn {\n    position: fixed;\n    bottom: 24px;\n    right: 24px;\n    z-index: 1000;\n}\n"],
+  "mappings": ";AAAA,CAAA;AACI,YAAA;AACA,UAAA;AACA,SAAA;AACA,WAAA;;",
+  "names": []
+}
