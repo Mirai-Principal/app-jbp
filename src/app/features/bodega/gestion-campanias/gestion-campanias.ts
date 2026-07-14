@@ -22,6 +22,7 @@ import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.se
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from '@angular/material/core';
 import { HelpModal } from "../../../shared/help-modal/help-modal";
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
   imports: [
@@ -55,6 +56,7 @@ export class GestionCampanias {
   private datePipe = inject(DatePipe);
   modalService = inject(ModalService)
   private alertService = inject(SweetAlertService);
+  private toast = inject(HotToastService);
 
   // signals
   campanias = signal<Campania[]>([]);
@@ -138,7 +140,11 @@ export class GestionCampanias {
           return this.pesajeCampaniaService.listaCampanias().pipe(
             finalize(() => this.isLoading.set(false)),
             catchError(error => {
-              this.alertService.error('Error', `❌ ${error.error.message}\n${error.error.error}`)
+              if (error.error.message) {
+                this.alertService.error('Error', `❌ ${error.error.message}\n${error.error.error}`)
+              } else {
+                this.alertService.error('Error', `❌ Error al obtener campañas\n${error.message}`)
+              }
               console.error('Error al obtener campañas:', error);
               return of([]);
             })
@@ -189,7 +195,6 @@ export class GestionCampanias {
       });
     });
   }
-
 
 
   openModal() {
