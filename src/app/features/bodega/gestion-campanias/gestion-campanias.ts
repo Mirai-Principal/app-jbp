@@ -130,7 +130,6 @@ export class GestionCampanias {
         }
       }),
       debounceTime(500), // tiempo de espera antes de enviar la solicitud
-      distinctUntilChanged(), // evitar solicitudes duplicadas
       switchMap(value => {
         const termino = (value || '').trim();
         this.isLoading.set(true);
@@ -203,6 +202,10 @@ export class GestionCampanias {
 
   closeModal() {
     this.isModalOpen.set(false);
+  }
+
+  onCampaniaCreada() {
+    this.closeModal();
     this.cargarCampanias();
   }
 

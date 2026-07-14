@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ViewChild, ElementRef } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Header } from "../../../../../shared/header/header";
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormsModule } from '@angular/forms';
@@ -38,6 +38,8 @@ import { AgregarOfModal } from '../agregar-of-modal/agregar-of-modal';
   styleUrl: './generar-pesaje-campania.scss',
 })
 export class GenerarPesajeCampania {
+  @Output() campaniaCreada = new EventEmitter<void>();
+
   //DI
   private generarPesajeCampaniaService = inject(PesajeCampaniaService);
   private fb = inject(FormBuilder);
@@ -117,6 +119,7 @@ export class GenerarPesajeCampania {
         this.ordenesFabricacion.set([]);
         console.log(res);
         this.isSending.set(false);
+        this.campaniaCreada.emit();
       },
       error: (err) => {
         this.alertService.error('Error', `❌ ${err.error.message}\n${err.error.error}`)

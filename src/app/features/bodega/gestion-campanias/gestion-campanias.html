@@ -110,7 +110,7 @@
 <!-- Modal para Nueva Campaña -->
 <app-modal [isOpen]="isModalOpen()" title="Nueva Campaña de Pesaje" maxWidth="1200px" (close)="closeModal()"
     (backdropClick)="closeModal()">
-    <app-generar-pesaje-campania></app-generar-pesaje-campania>
+    <app-generar-pesaje-campania (campaniaCreada)="onCampaniaCreada()"></app-generar-pesaje-campania>
 </app-modal>
 
 <!-- Modal para Detalles Campaña -->
