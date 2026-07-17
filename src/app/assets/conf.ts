@@ -1,4 +1,4 @@
-export const entorno: "services" | "dev" = "dev";
+export const entorno: "services" | "dev" = "services";
 export const backend_api = `/api-${entorno}`;
 
 export const conf = {
