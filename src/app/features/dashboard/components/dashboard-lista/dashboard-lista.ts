@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, Input, signal } from '@angular/core';
 import { DashboardService } from '../../services/dashboard.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,6 +25,8 @@ export class DashboardLista {
   dashBoards: any[] = [];
   modulosEmpty: any[] = [];
   editing: boolean = false;
+
+  @Input() ModulosAcceso: boolean = false;
 
   // Sorting properties
   activeSortColumn: string = '';

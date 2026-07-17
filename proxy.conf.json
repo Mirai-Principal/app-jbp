@@ -1,0 +1,20 @@
+{
+  "/api-dev": {
+    "target": "http://dev.jbp.com.ec",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api-dev": "/api"
+    },
+    "logLevel": "debug"
+  },
+  "/api-services": {
+    "target": "http://services.jbp.com.ec",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api-services": "/api"
+    },
+    "logLevel": "debug"
+  }
+}

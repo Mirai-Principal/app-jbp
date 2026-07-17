@@ -3,12 +3,13 @@
 <div class="container">
     <mat-card>
         <mat-card-content>
-
+            @if (ModulosAcceso.tics) {
             <app-button-loader [isLoading]="false" [text]="'Agregar Dashboard'" [icon]="'add'" color="primary"
                 (click)="abrirModal()">
             </app-button-loader>
+            }
 
-            <app-dashboard-lista />
+            <app-dashboard-lista [ModulosAcceso]="ModulosAcceso.tics" />
         </mat-card-content>
     </mat-card>
 </div>

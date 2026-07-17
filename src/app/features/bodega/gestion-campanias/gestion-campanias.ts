@@ -14,8 +14,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { Campania } from './models/models';
 import { ModalService } from '../../../shared/modal/services/modal.service';
 import { DetallesCampania } from "./components/detalles-campania/detalles-campania";
-import { forkJoin, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, startWith, finalize, catchError, tap } from 'rxjs/operators';
+import { forkJoin, of, from } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, startWith, finalize, catchError, tap, mergeMap, map } from 'rxjs/operators';
 import { LoaderPage } from "../../../shared/loader-page/loader-page";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.service';
@@ -97,8 +97,7 @@ export class GestionCampanias {
           .pipe(finalize(() => this.isSearchingDate.set(false)))
           .subscribe(res => {
             this.campanias.set(res);
-            console.log(res);
-            res.forEach((campania: Campania) => this.verificarEstadoCampania(campania));
+            this.verificarEstadosConcurrencia(res);
           });
       } else if (!val.start && !val.end) {
         // Al limpiar las fechas, recarga todas las campañas directamente para evitar bloqueos
@@ -114,7 +113,7 @@ export class GestionCampanias {
           .subscribe(res => {
             if (res) {
               this.campanias.set(res);
-              res.forEach((campania: Campania) => this.verificarEstadoCampania(campania));
+              this.verificarEstadosConcurrencia(res);
             }
           });
       }
@@ -169,7 +168,7 @@ export class GestionCampanias {
       })
     ).subscribe(res => {
       this.campanias.set(res);
-      res.forEach((campania: Campania) => this.verificarEstadoCampania(campania));
+      this.verificarEstadosConcurrencia(res);
     });
   }
 
@@ -178,20 +177,36 @@ export class GestionCampanias {
     this.searchControl.setValue(this.searchControl.value);
   }
 
-  verificarEstadoCampania(campania: Campania) {
-    this.pesajeCampaniaService.obtenerCampania(campania.ID).subscribe(detalles => {
-      if (detalles.length === 0) {
-        campania.FINALIZADA = undefined;
-        this.campanias.update(c => [...c]);
-        return;
-      }
-
-      const ofRequests = detalles.map(d => this.pesajeCampaniaService.buscarOF(Number(d.NRO_OF)));
-      forkJoin(ofRequests).subscribe(ofsResults => {
-        const todasCerradas = ofsResults.every((res: any) => res.length > 0 && res[0].Estado === 'Cerrado');
-        campania.FINALIZADA = todasCerradas;
-        this.campanias.update(c => [...c]);
-      });
+  verificarEstadosConcurrencia(campanias: Campania[]) {
+    if (!campanias || campanias.length === 0) return;
+    
+    // Procesar máximo 3 campañas a la vez para no saturar el servidor
+    from(campanias).pipe(
+      mergeMap(campania => {
+        return this.pesajeCampaniaService.obtenerCampania(campania.ID).pipe(
+          switchMap(detalles => {
+            if (detalles.length === 0) {
+              campania.FINALIZADA = undefined;
+              return of(campania);
+            }
+            const ofRequests = detalles.map(d => this.pesajeCampaniaService.buscarOF(Number(d.NRO_OF)));
+            return forkJoin(ofRequests).pipe(
+              map(ofsResults => {
+                const todasCerradas = ofsResults.every((res: any) => res.length > 0 && res[0].Estado === 'Cerrado');
+                campania.FINALIZADA = todasCerradas;
+                return campania;
+              })
+            );
+          }),
+          catchError(err => {
+            console.error(`Error al verificar estado de campaña ${campania.ID}:`, err);
+            return of(campania); // Continuar aunque falle una
+          })
+        );
+      }, 3) // <-- LÍMITE DE CONCURRENCIA: 3 peticiones simultáneas máximo
+    ).subscribe(() => {
+      // Se actualiza a medida que se resuelven
+      this.campanias.update(c => [...c]);
     });
   }
 

@@ -1,17 +1,17 @@
-export const entorno: "services" | "dev" = "services";
-export const backend_api = `http://${entorno}.jbp.com.ec/api`;
+export const entorno: "services" | "dev" = "dev";
+export const backend_api = `/api-${entorno}`;
 
 export const conf = {
-    directorio: `http://${entorno}.jbp.com.ec/api/directorio`,
-    promotick: `http://${entorno}.jbp.com.ec/api/promotick`,
-    entrega: `http://${entorno}.jbp.com.ec/api/entrega`,
-    transportista: `http://${entorno}.jbp.com.ec/api/transportista`,
-    conf: `http://${entorno}.jbp.com.ec/api/conf`,
-    socioNegocio: `http://${entorno}.jbp.com.ec/api/socioNegocio`,
-    user: `http://${entorno}.jbp.com.ec/api/user`,
-    reacciones: `http://${entorno}.jbp.com.ec/api/reacciones`,
-    factura: `http://${entorno}.jbp.com.ec/api/factura`,
-    facturaHistorico: `http://${entorno}.jbp.com.ec/api/facturahistorico`,
-    bodega: `http://${entorno}.jbp.com.ec/api/bodega`,
-    marketing: `http://${entorno}.jbp.com.ec/api/marketing`
+    directorio: `/api-${entorno}/directorio`,
+    promotick: `/api-${entorno}/promotick`,
+    entrega: `/api-${entorno}/entrega`,
+    transportista: `/api-${entorno}/transportista`,
+    conf: `/api-${entorno}/conf`,
+    socioNegocio: `/api-${entorno}/socioNegocio`,
+    user: `/api-${entorno}/user`,
+    reacciones: `/api-${entorno}/reacciones`,
+    factura: `/api-${entorno}/factura`,
+    facturaHistorico: `/api-${entorno}/facturahistorico`,
+    bodega: `/api-${entorno}/bodega`,
+    marketing: `/api-${entorno}/marketing`
 }
