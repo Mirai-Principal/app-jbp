@@ -90,10 +90,6 @@
             <ng-template #customCell let-column="column" let-element="element">
                 @if (column.columnDef === 'Acciones') {
                 <div style="display: flex; gap: 0.5rem; justify-content: center;">
-                    <button mat-icon-button color="primary" (click)="abrirDetallesST(element.ID_ST, element.NRO_OF)"
-                        aria-label="Ver detalles de ST" title="Ver Detalles">
-                        <mat-icon>visibility</mat-icon>
-                    </button>
                     <button mat-icon-button color="warn" (click)="eliminarOf(element.NRO_OF)" aria-label="Eliminar OF"
                         title="Eliminar OF">
                         <mat-icon>delete</mat-icon>
