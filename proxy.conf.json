@@ -1,4 +1,12 @@
-{
+{ "/api-servicesnube": {
+    "target": "http://servicesnube.jbp.com.ec",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api-servicesnube": "/api"
+    },
+    "logLevel": "debug"
+  },
   "/api-dev": {
     "target": "http://dev.jbp.com.ec",
     "secure": false,
