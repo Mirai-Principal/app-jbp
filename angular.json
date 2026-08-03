@@ -34,7 +34,13 @@
             ],
             "allowedCommonJsDependencies": [
               "file-saver",
-              "qrcode"
+              "qrcode",
+              "jspdf",
+              "html2canvas",
+              "canvg",
+              "core-js",
+              "raf",
+              "rgbcolor"
             ]
           },
           "configurations": {
