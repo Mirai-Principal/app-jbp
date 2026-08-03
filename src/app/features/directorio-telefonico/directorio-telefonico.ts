@@ -9,7 +9,11 @@ import { MatCardContent, MatCard } from "@angular/material/card";
 import { MatFormField, MatInputModule } from "@angular/material/input";
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { Header } from '../../shared/header/header';
 import { LoaderPage } from '../../shared/loader-page/loader-page';
 import { MatDialog } from '@angular/material/dialog';
@@ -29,6 +33,7 @@ import { SweetAlertService } from '../../shared/alert/services/sweet-alert.servi
     MatIconModule,
     ReactiveFormsModule,
     LoaderPage,
+    MatButtonModule,
   ],
   templateUrl: './directorio-telefonico.html',
   styleUrl: './directorio-telefonico.scss',
@@ -97,6 +102,58 @@ export class DirectorioTelefonico {
 
   clearSearch(): void {
     this.txtSearch.setValue('');
+  }
+
+  exportToExcel(): void {
+    if (!this.contactos || this.contactos.length === 0) {
+      this.sweetAlert.warning('Atención', 'No hay datos para exportar');
+      return;
+    }
+
+    const dataToExport = this.contactos.map(item => ({
+      'Contacto': item.CONTACTO,
+      'Extensión': item.Ext,
+      'Departamento': item.DEPARTAMENTO,
+      'Planta': item.PLANTA
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Directorio');
+
+    XLSX.writeFile(wb, 'Directorio_Telefonico.xlsx');
+  }
+
+  exportToPDF(): void {
+    if (!this.contactos || this.contactos.length === 0) {
+      this.sweetAlert.warning('Atención', 'No hay datos para exportar');
+      return;
+    }
+
+    const doc = new jsPDF();
+
+    const dataToExport = this.contactos.map(item => [
+      item.CONTACTO || '',
+      item.Ext?.toString() || '',
+      item.DEPARTAMENTO || '',
+      item.PLANTA || ''
+    ]);
+
+    autoTable(doc, {
+      head: [['Contacto', 'Extensión', 'Departamento', 'Planta']],
+      body: dataToExport,
+      theme: 'grid',
+      styles: { fontSize: 9, cellPadding: 2 },
+      headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+      margin: { top: 20 },
+      didDrawPage: (data) => {
+        // Título del documento
+        doc.setFontSize(16);
+        doc.text('Directorio Telefónico', data.settings.margin.left, 15);
+      }
+    });
+
+    doc.save('Directorio_Telefonico.pdf');
   }
 
   sortByColumn(column: string): void {

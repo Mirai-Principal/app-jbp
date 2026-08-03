@@ -13,8 +13,17 @@
                     aria-label="Buscar en directorio telefónico">
                 <mat-icon matSuffix *ngIf="txtSearch.value" class="clear-icon" (click)="clearSearch()">clear</mat-icon>
             </mat-form-field>
+            <button mat-flat-button color="primary" class="export-button export-excel" (click)="exportToExcel()">
+                <mat-icon>table_view</mat-icon>
+                Excel
+            </button>
+            <button mat-flat-button color="warn" class="export-button export-pdf" (click)="exportToPDF()">
+                <mat-icon>picture_as_pdf</mat-icon>
+                PDF
+            </button>
         </div>
         <div class="table-container">
+            
             <table mat-table [dataSource]="contactosFiltered" class="enhanced-table">
                 <ng-container matColumnDef="CONTACTO">
                     <th mat-header-cell *matHeaderCellDef class="table-header" (click)="sortByColumn('CONTACTO')">
