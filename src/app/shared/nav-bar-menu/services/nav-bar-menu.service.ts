@@ -7,7 +7,7 @@ export class SidebarMenuService {
     //? toca traer esto para controlar el acceso a ciertos menus
     //! vulnerable ya q se puede cambiar en el local storage, el backend deberia validar los permisos
     private readonly currentUser = localStorage.getItem('currentUser');
-    private readonly ModulosAcceso = JSON.parse(this.currentUser || '{}').ModulosAcceso;
+    private readonly ModulosAcceso = JSON.parse(this.currentUser || '{}')?.ModulosAcceso || {};
 
 
     private readonly _menu = signal<MenuItem[]>([

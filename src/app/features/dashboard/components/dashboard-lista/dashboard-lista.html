@@ -31,22 +31,24 @@
                         </mat-icon>
                     </div>
                 </th>
+                @if (ModulosAcceso) {
                 <th class="dashboard-cell">
                     <div class="header-cell-content">
                         <mat-icon class="header-icon">settings</mat-icon>
                         <span>Acciones</span>
                     </div>
                 </th>
+            }
             </tr>
             <tbody>
-                @for (d of dashBoards; track d) {
+                @for (d of dashBoards; track d.id) {
                 <tr class="data-row">
                     <td class="dashboard-cell">
                         <a href="{{d.url}}" target="_blank" class="dashboard-link">{{d.nombre}}</a>
                     </td>
                     <td class="dashboard-cell">{{d.modulosStr}}</td>
+                    @if (ModulosAcceso) {
                     <td class="dashboard-cell">
-                        @if (ModulosAcceso) {
                         <div class="action-buttons">
                             <button (click)="editar(d)" mat-button color="primary" aria-label="Editar dashboard">
                                 <mat-icon>edit</mat-icon>
@@ -55,8 +57,8 @@
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </div>
-                        }
                     </td>
+                    }
                 </tr>
                 }
             </tbody>

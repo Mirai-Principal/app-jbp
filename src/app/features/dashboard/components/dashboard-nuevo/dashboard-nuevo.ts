@@ -32,6 +32,15 @@ import { SweetAlertService } from "../../../../shared/alert/services/sweet-alert
   styleUrl: './dashboard-nuevo.scss',
 })
 export class DashboardNuevo {
+  // DI
+  private sweetAlert = inject(SweetAlertService);
+  private mkService = inject(DashboardService);
+  private usrService = inject(UserService);
+  private dialog = inject(MatDialog);
+  private fb = inject(FormBuilder);
+  private cd = inject(ChangeDetectorRef);
+  private modalService = inject(ModalService);
+
   formulario: FormGroup;
 
   procesando = signal(false);
@@ -40,14 +49,8 @@ export class DashboardNuevo {
   modulosEmpty: any[] = [];
   editing: boolean = false;
 
-  private sweetAlert = inject(SweetAlertService);
 
-  constructor(public mkService: DashboardService,
-    private usrService: UserService,
-    private dialog: MatDialog,
-    private fb: FormBuilder,
-    private cd: ChangeDetectorRef,
-    private modalService: ModalService) {
+  constructor(){
     this.dash.modulos = [];
     this.formulario = this.fb.group({
       nombre: ['', [Validators.required]],
@@ -161,16 +164,10 @@ export class DashboardNuevo {
         if (me.error)
           this.sweetAlert.error('Error', me.error);
         else {
-          if (insertar)//solo para insertar
-            this.dashBoards.push(me);
-          console.log(this.dashBoards);
+          this.mkService.notifyDashboardsChanged();
           this.cargarModulos();
-
-          // Cerrar modal cuando se registra exitosamente
           this.modalService.closeModal();
-
-          this.sweetAlert.success('Éxito', 'Dashboard registrado exitosamente');
-
+          this.sweetAlert.success('Éxito', this.editing ? 'Dashboard actualizado exitosamente' : 'Dashboard registrado exitosamente');
         }
         this.clearDash();
         this.procesando.set(false);

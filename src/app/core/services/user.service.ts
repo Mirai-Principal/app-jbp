@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, map, tap } from 'rxjs';
+import { Observable, BehaviorSubject, timer, throwError } from 'rxjs';
+import { map, tap, retry } from 'rxjs/operators';
 
 import { GetUrlEndpointService } from '../services/get-url-endpoint.service';
 import { LoginMsg, RespAuthMsg } from '../models/loginMsg';
@@ -16,8 +17,7 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private getUrlEndpointService: GetUrlEndpointService) {
-    this.currentUserSubject = new BehaviorSubject<any>(
-      JSON.parse(localStorage.getItem('currentUser') || '{}'));
+    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser') || '{}'));
     this.currentUser = this.currentUserSubject.asObservable();
   }
   public get currentUserValue(): any {
@@ -26,8 +26,26 @@ export class UserService {
 
   getModulos(): Observable<string[]> {
     let url = this.getUrlEndpointService.getUrlFromEndPointName('user')
-    url += '/getModulosAcceso';
-    return this.http.get<any>(url as string);
+    let userName = JSON.parse(localStorage.getItem('currentUser') || '{}').UserName?.trim();
+    url += '/getModulosAcceso/' + userName;
+    return this.http.get<any>(url as string).pipe(
+      map(response => {
+        if (response && response.error && typeof response.error === 'string' && response.error.includes('0x80131014')) {
+          throw new Error('AD_UNLOADED_ERROR');
+        }
+        return response;
+      }),
+      retry({
+        count: 3,
+        delay: (error, retryCount) => {
+          if (error.message === 'AD_UNLOADED_ERROR') {
+            console.warn(`[Intento ${retryCount}/3] (getModulos) AppDomain desconectado. Reintentando en 1 segundo...`);
+            return timer(1000); 
+          }
+          return throwError(() => error);
+        }
+      })
+    );
   }
 
   login(me: LoginMsg): Observable<boolean> {

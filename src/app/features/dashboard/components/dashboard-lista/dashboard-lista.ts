@@ -1,4 +1,4 @@
-import { Component, inject, Input, signal } from '@angular/core';
+import { Component, computed, inject, Input, signal, OnInit } from '@angular/core';
 import { DashboardService } from '../../services/dashboard.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './dashboard-lista.html',
   styleUrl: './dashboard-lista.scss',
 })
-export class DashboardLista {
+export class DashboardLista implements OnInit {
   private modalService = inject(ModalService);
   private dashboardService = inject(DashboardService);
   private sweetAlert = inject(SweetAlertService);
@@ -27,24 +27,36 @@ export class DashboardLista {
   editing: boolean = false;
 
   @Input() ModulosAcceso: boolean = false;
+  userName = signal<string>("")
 
   // Sorting properties
   activeSortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor() {
+    console.log(localStorage.getItem('currentUser'));
+  }
+
+  ngOnInit(): void {
+    this.userName.set(JSON.parse(localStorage.getItem('currentUser') || '{}').UserName?.trim());
     this.cargarDashboards();
+
+    this.dashboardService.onDashboardsChanged.subscribe(() => {
+      this.cargarDashboards();
+    });
   }
 
   cargarDashboards() {
     this.isLoading.set(true);
-    this.dashboardService.getDasboards().subscribe({
+    this.dashboardService.getDasboards(this.userName()).subscribe({
       next: me => {
         if (me.error)
           console.log(me.error);
         else {
           this.dashBoards = me.data;
           console.log(this.dashBoards);
+          console.log("userName", this.userName());
+
         }
         this.isLoading.set(false);
       }, error: error => {
@@ -97,21 +109,25 @@ export class DashboardLista {
 
   borrar(dash: any) {
     console.log(dash);
-    if (!confirm("Esta seguro de eliminar este dashboard?"))
-      return;
-    const index = this.dashBoards.findIndex(p => p.id == dash.id);
-    this.dashboardService.deleteDasboard(dash.id).subscribe({
-      next: me => {
-        if (me == 'ok') {
-          this.dashBoards.splice(index, 1);
-        } else
-          this.sweetAlert.error('Error', me);
-      }, error: error => {
-        console.log(error);
-        this.sweetAlert.error('Error', 'Error al eliminar el dashboard');
+    this.sweetAlert.confirm({
+      title: 'Eliminar Dashboard',
+      message: 'Esta seguro de eliminar este dashboard?',
+      type: 'warning'
+    }).subscribe(result => {
+      if (result) {
+        this.dashboardService.deleteDasboard(dash.id).subscribe({
+          next: me => {
+            this.sweetAlert.success('Éxito', 'Dashboard eliminado exitosamente');
+            this.dashboardService.notifyDashboardsChanged();
+          }, error: error => {
+            console.log(error);
+            this.sweetAlert.error('Error', 'Error al eliminar el dashboard');
+          }
+        });
+        this.clearDash();
       }
     });
-    this.clearDash();
+
   }
 
   editar(dash: any) {

@@ -19,7 +19,7 @@ export class Dashboard {
   readonly editData: any;
 
   private readonly currentUser = localStorage.getItem('currentUser');
-  readonly ModulosAcceso = JSON.parse(this.currentUser || '{}').ModulosAcceso;
+  readonly ModulosAcceso = JSON.parse(this.currentUser || '{}')?.ModulosAcceso || {};
 
   constructor(public modalService: ModalService) {
     this.isOpen = this.modalService.isOpen;
