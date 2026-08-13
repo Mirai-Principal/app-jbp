@@ -44,7 +44,7 @@
             </div>
             <div class="actions-group">
               <a
-                [href]="'/' + apk.fileName"
+                [href]="apk.fileName"
                 [download]="apk.fileName"
                 mat-flat-button
                 color="primary"
@@ -53,10 +53,6 @@
                 <mat-icon>download</mat-icon>
                 <span>Descargar APK</span>
               </a>
-            </div>
-            <div class="direct-link-container">
-              <span class="direct-link-label">Enlace de descarga:</span>
-              <code class="direct-link-text">{{ origin }}/{{ apk.fileName }}</code>
             </div>
           </div>
         </div>

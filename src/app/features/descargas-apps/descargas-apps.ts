@@ -35,8 +35,6 @@ export interface ApkItem {
   styleUrl: './descargas-apps.scss'
 })
 export class DescargasApps {
-  readonly origin = window.location.origin;
-
   readonly apks: ApkItem[] = [
     {
       id: 'bodega-prod',
