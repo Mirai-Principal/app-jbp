@@ -53,16 +53,10 @@
                 <mat-icon>download</mat-icon>
                 <span>Descargar APK</span>
               </a>
-              <button 
-                mat-icon-button 
-                color="primary" 
-                class="copy-btn" 
-                (click)="copyLink(apk.fileName)" 
-                aria-label="Copiar enlace"
-                title="Copiar enlace para compartir"
-              >
-                <mat-icon>content_copy</mat-icon>
-              </button>
+            </div>
+            <div class="direct-link-container">
+              <span class="direct-link-label">Enlace de descarga:</span>
+              <code class="direct-link-text">{{ origin }}/{{ apk.fileName }}</code>
             </div>
           </div>
         </div>

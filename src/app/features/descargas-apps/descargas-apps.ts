@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCard, MatCardContent } from '@angular/material/card';
@@ -6,8 +6,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Header } from '../../shared/header/header';
-import { SweetAlertService } from '../../shared/alert/services/sweet-alert.service';
-
 export interface ApkItem {
   id: string;
   name: string;
@@ -37,17 +35,8 @@ export interface ApkItem {
   styleUrl: './descargas-apps.scss'
 })
 export class DescargasApps {
-  private sweetAlert = inject(SweetAlertService);
+  readonly origin = window.location.origin;
 
-  copyLink(fileName: string) {
-    const url = `${window.location.origin}/${fileName}`;
-    navigator.clipboard.writeText(url).then(() => {
-      this.sweetAlert.success('Enlace copiado', 'El enlace de descarga ha sido copiado al portapapeles');
-    }).catch(err => {
-      console.error('Error al copiar el enlace: ', err);
-      this.sweetAlert.error('Error', 'No se pudo copiar el enlace');
-    });
-  }
   readonly apks: ApkItem[] = [
     {
       id: 'bodega-prod',

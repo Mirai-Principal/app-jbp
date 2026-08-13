@@ -345,20 +345,32 @@ mat-card-content {
         transform: translateY(-1px);
       }
     }
+  }
 
-    .copy-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 8px;
-      flex-shrink: 0;
-      background-color: $primary-100;
+  .direct-link-container {
+    margin-top: 4px;
+    padding: 10px 12px;
+    background-color: $white;
+    border: 1px solid $gray-200;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .direct-link-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: $gray-600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .direct-link-text {
+      font-size: 0.8rem;
       color: $primary-700;
-      transition: all $transition-fast;
-
-      &:hover {
-        background-color: $primary-200;
-        transform: translateY(-1px);
-      }
+      word-break: break-all;
+      font-family: monospace;
+      user-select: all; /* Facilita la selección del texto al hacer clic */
     }
   }
 }
