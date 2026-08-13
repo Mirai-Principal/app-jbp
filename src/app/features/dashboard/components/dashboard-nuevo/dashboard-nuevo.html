@@ -11,7 +11,7 @@
                             <mat-option [value]="modulo">{{modulo}}</mat-option>
                         }
                     </mat-select>
-                    @if (modulosDisponibles?.length === 0) {
+                    @if (modulosDisponibles.length === 0) {
                         <mat-hint>Cargando departamentos...</mat-hint>
                     }
                 </mat-form-field>
