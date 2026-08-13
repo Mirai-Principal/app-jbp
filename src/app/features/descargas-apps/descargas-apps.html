@@ -1,0 +1,110 @@
+<app-header title="Descarga de Aplicaciones Móviles" icon="install_mobile" />
+<div class="container">
+  <mat-card>
+    <mat-card-content>
+      <div class="intro-section">
+        <div class="intro-icon-wrapper">
+          <mat-icon class="intro-icon">android</mat-icon>
+        </div>
+        <div class="intro-text">
+          <p class="intro-subtitle">
+            Descarga directamente en tu dispositivo Android las aplicaciones oficiales de JBP para operaciones de bodega o ventas.
+          </p>
+        </div>
+      </div>
+
+      <div class="apps-grid">
+        @for (apk of apks; track apk.id) {
+        <div class="app-card" [ngClass]="'card-' + apk.tagType">
+          <div class="card-header">
+            <div class="icon-avatar" [ngClass]="'avatar-' + apk.tagType">
+              <mat-icon>{{ apk.icon }}</mat-icon>
+            </div>
+            <div class="header-badges">
+              <span class="badge tag-badge" [ngClass]="'badge-' + apk.tagType">{{ apk.tag }}</span>
+              <span class="badge version-badge">v{{ apk.version }}</span>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <h3 class="app-title">{{ apk.name }}</h3>
+            <p class="app-description">{{ apk.description }}</p>
+          </div>
+
+          <div class="card-footer">
+            <div class="meta-info">
+              <span class="meta-item">
+                <mat-icon>folder_zip</mat-icon>
+                {{ apk.fileSize }}
+              </span>
+              <span class="meta-item">
+                <mat-icon>phone_android</mat-icon>
+                Android
+              </span>
+            </div>
+            <div class="actions-group">
+              <a
+                [href]="apk.fileName"
+                [download]="apk.fileName"
+                mat-flat-button
+                color="primary"
+                class="download-btn"
+              >
+                <mat-icon>download</mat-icon>
+                <span>Descargar APK</span>
+              </a>
+              <button 
+                mat-icon-button 
+                color="primary" 
+                class="copy-btn" 
+                (click)="copyLink(apk.fileName)" 
+                aria-label="Copiar enlace"
+                title="Copiar enlace para compartir"
+              >
+                <mat-icon>content_copy</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+
+      <div class="guide-box">
+        <div class="guide-header">
+          <mat-icon class="guide-icon">help_outline</mat-icon>
+          <h3>¿Cómo instalar el archivo APK en tu celular o tablet Android?</h3>
+        </div>
+        <div class="guide-steps">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <strong>Descarga el archivo:</strong>
+              <p>Desinstalar la versión anterior de la aplicación (si existe).</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <strong>Descarga el archivo:</strong>
+              <p>Presiona el botón "Descargar APK" correspondiente a la aplicación que necesitas.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <strong>Permitir orígenes desconocidos (opcional):</strong>
+              <p>Si Android te solicita permisos para instalar aplicaciones fuera de Play Store, presiona <em>"Configuración"</em> y activa la opción <em>"Permitir desde esta fuente"</em>.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <strong>Instalar y abrir:</strong>
+              <p>Abre el archivo descargado desde las notificaciones o la carpeta <em>Descargas</em> y selecciona <em>"Instalar"</em>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

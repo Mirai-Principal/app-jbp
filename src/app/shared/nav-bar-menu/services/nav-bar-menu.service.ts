@@ -55,7 +55,7 @@ export class SidebarMenuService {
             name: 'Farmacovigilancia',
             icon: 'local_pharmacy',
             children: [
-                { name: 'Reporte de Reacciones', icon: 'radar', url: '/reacciones-reporte' },
+                { name: 'Reporte de Reacciones', icon: 'radar', url: '/reacciones' },
             ],
             visible: this.ModulosAcceso.Farmacovigilancia
         },
@@ -71,6 +71,12 @@ export class SidebarMenuService {
             icon: 'upload',
             url: '/envio-retenciones',
             visible: false
+        },
+        {
+            name: 'Descarga Apps',
+            icon: 'install_mobile',
+            url: '/descargas-apps',
+            visible: this.ModulosAcceso.tics
         }
     ]);
 
