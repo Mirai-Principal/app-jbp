@@ -26,8 +26,7 @@ export class UserService {
 
   getModulos(): Observable<string[]> {
     let url = this.getUrlEndpointService.getUrlFromEndPointName('user')
-    let userName = JSON.parse(localStorage.getItem('currentUser') || '{}').UserName?.trim();
-    url += '/getModulosAcceso/' + userName;
+    url += '/getDepartamentos/';
     return this.http.get<any>(url as string).pipe(
       map(response => {
         if (response && response.error && typeof response.error === 'string' && response.error.includes('0x80131014')) {

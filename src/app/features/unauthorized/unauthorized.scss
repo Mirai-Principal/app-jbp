@@ -1,0 +1,204 @@
+@use '../../shared/styles/colors' as *;
+
+.unauthorized-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba($gray-100, 0.1);
+}
+
+.unauthorized-card {
+    background: $white;
+    border-radius: $border-radius;
+    box-shadow: 0 8px 32px $gray-300;
+    padding: 40px;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    margin-bottom: 30px;
+    border: 1px solid $gray-200;
+    transition: $transition-normal;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px $gray-400;
+    }
+}
+
+.unauthorized-illustration {
+    margin-bottom: 30px;
+    position: relative;
+
+    .unauthorized-icon {
+        font-size: 80px;
+        color: $primary-500;
+        opacity: 0.8;
+        margin-bottom: 10px;
+        display: block;
+        width: 80px;
+        height: 80px;
+        line-height: 80px;
+        text-align: center;
+
+        &::before {
+            font-size: inherit;
+            line-height: inherit;
+        }
+    }
+
+    .unauthorized-code {
+        font-size: 120px;
+        font-weight: 700;
+        color: $primary-500;
+        line-height: 1;
+        text-shadow: 2px 2px 4px rgba($primary-500, 0.2);
+        margin-top: -20px;
+    }
+}
+
+.unauthorized-content {
+    .unauthorized-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: $gray-800;
+        margin-bottom: 15px;
+        line-height: 1.2;
+    }
+
+    .unauthorized-description {
+        font-size: 1.1rem;
+        color: $gray-600;
+        margin-bottom: 10px;
+        line-height: 1.5;
+    }
+
+    .unauthorized-subtitle {
+        font-size: 0.95rem;
+        color: $gray-500;
+        margin-bottom: 30px;
+        line-height: 1.4;
+    }
+}
+
+.unauthorized-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    .home-btn,
+    .back-btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+        font-weight: 500;
+        border-radius: $border-radius;
+        transition: $transition-fast;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 140px;
+        justify-content: center;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px $primary-alpha-30;
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+
+        mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .back-btn {
+        border: 1px solid $accent;
+
+        &:hover {
+            background-color: $accent;
+            color: $white;
+        }
+    }
+}
+
+.unauthorized-footer {
+    text-align: center;
+    max-width: 600px;
+
+    .footer-text {
+        font-size: 0.9rem;
+        color: $gray-600;
+        line-height: 1.4;
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .unauthorized-card {
+        padding: 30px 20px;
+        margin: 0 15px 30px;
+    }
+
+    .unauthorized-illustration {
+        .unauthorized-icon {
+            font-size: 60px;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+        }
+
+        .unauthorized-code {
+            font-size: 80px;
+        }
+    }
+
+    .unauthorized-content {
+        .unauthorized-title {
+            font-size: 1.5rem;
+        }
+
+        .unauthorized-description {
+            font-size: 1rem;
+        }
+    }
+
+    .unauthorized-actions {
+        flex-direction: column;
+        align-items: center;
+
+        .home-btn,
+        .back-btn {
+            width: 100%;
+            max-width: 250px;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .unauthorized-container {
+        padding: 15px;
+    }
+
+    .unauthorized-card {
+        padding: 25px 15px;
+    }
+
+    .unauthorized-illustration {
+        .unauthorized-icon {
+            font-size: 50px;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+        }
+
+        .unauthorized-code {
+            font-size: 60px;
+        }
+    }
+}

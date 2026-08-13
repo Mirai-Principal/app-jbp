@@ -3,22 +3,18 @@
         <mat-card-content class="card-content">
             <form [formGroup]="formulario" class="dashboard-form">
 
-                <!-- Sección de Módulos -->
-                <div class="modules-section">
-                    <mat-label class="modules-label">Módulos Disponibles</mat-label>
-                    <div class="modules-grid">
-                        @for (modulo of dash.modulos; track $index) {
-                        <mat-checkbox [(ngModel)]="modulo.Checked" [ngModelOptions]="{standalone: true}"
-                            class="module-checkbox">
-                            <span class="checkbox-label">{{modulo.Name}}</span>
-                        </mat-checkbox>
+                <!-- Sección de Módulos (Departamentos) -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Departamentos con acceso</mat-label>
+                    <mat-select multiple [(ngModel)]="dash.modulosSeleccionados" [ngModelOptions]="{standalone: true}">
+                        @for (modulo of modulosDisponibles; track modulo) {
+                            <mat-option [value]="modulo">{{modulo}}</mat-option>
                         }
-
-                        @if (dash.modulos?.length === 0) {
-                        <p class="no-modules">No hay módulos disponibles</p>
-                        }
-                    </div>
-                </div>
+                    </mat-select>
+                    @if (modulosDisponibles?.length === 0) {
+                        <mat-hint>Cargando departamentos...</mat-hint>
+                    }
+                </mat-form-field>
 
                 <!-- Campo Nombre -->
                 <mat-form-field appearance="outline" class="full-width">

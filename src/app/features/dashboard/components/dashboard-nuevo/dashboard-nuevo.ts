@@ -4,7 +4,7 @@ import { DashboardService } from '../../services/dashboard.service';
 import { UserService } from '../../../../core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalService } from '../../../../shared/modal/services/modal.service';
-import { MatCheckbox } from "@angular/material/checkbox";
+import { MatSelectModule } from "@angular/material/select";
 import { MatFormField, MatLabel, MatInputModule } from "@angular/material/input";
 import { FormsModule } from '@angular/forms';
 import { MatCardContent, MatCard } from "@angular/material/card";
@@ -17,7 +17,7 @@ import { SweetAlertService } from "../../../../shared/alert/services/sweet-alert
   selector: 'app-dashboard-nuevo',
   imports: [
     ReactiveFormsModule,
-    MatCheckbox,
+    MatSelectModule,
     MatFormField,
     MatInputModule,
     FormsModule,
@@ -46,12 +46,12 @@ export class DashboardNuevo {
   procesando = signal(false);
   dash: any = {}
   dashBoards: any[] = [];
-  modulosEmpty: any[] = [];
+  modulosDisponibles: string[] = [];
   editing: boolean = false;
 
 
   constructor(){
-    this.dash.modulos = [];
+    this.dash.modulosSeleccionados = [];
     this.formulario = this.fb.group({
       nombre: ['', [Validators.required]],
       url: ['', [Validators.required]],
@@ -84,26 +84,23 @@ export class DashboardNuevo {
 
   setModulosTxt() {
     this.dash.modulosStr = '';
-    var i = 0;
-    this.dash.modulos.forEach((modulo: any) => {
-      if (modulo.Checked) {
-        if (i > 0)
-          this.dash.modulosStr += ', ';
-        this.dash.modulosStr += modulo.Name;
-        i++;
-      }
-
-    });
+    if (this.dash.modulosSeleccionados && this.dash.modulosSeleccionados.length > 0) {
+      this.dash.modulosStr = this.dash.modulosSeleccionados.join(', ');
+    }
   }
 
   cargarModulos() {
     this.usrService.getModulos().subscribe({
       next: me => {
-        this.modulosEmpty = me.map(moduleName => ({
-          Name: moduleName,
-          Checked: false
-        }));
-        this.dash.modulos = [...this.modulosEmpty]; // nueva referencia
+        console.log('modulos',me)
+        this.modulosDisponibles = me; // Arreglo de strings
+        
+        // Si estamos en modo edición, pre-seleccionar en base al modulosStr
+        if (this.editing && this.dash.modulosStr) {
+          this.dash.modulosSeleccionados = this.modulosDisponibles.filter(m => this.dash.modulosStr.includes(m));
+        } else {
+          this.dash.modulosSeleccionados = [];
+        }
         this.cd.detectChanges();
       },
       error: error => {
@@ -120,6 +117,13 @@ export class DashboardNuevo {
 
     // Copiar datos del dashboard
     this.dash = { ...editData };
+
+    // Si los módulos ya se descargaron, configurarlos
+    if (this.modulosDisponibles && this.modulosDisponibles.length > 0) {
+      this.dash.modulosSeleccionados = this.modulosDisponibles.filter(m => 
+        this.dash.modulosStr ? this.dash.modulosStr.includes(m) : false
+      );
+    }
 
     // Sincronizar formulario con los datos
     this.formulario.patchValue({
@@ -182,8 +186,7 @@ export class DashboardNuevo {
   clearDash() {
     this.editing = false;
     this.dash = {};
-    this.modulosEmpty.forEach(m => m.Checked = false);
-    this.dash.modulos = this.modulosEmpty;
+    this.dash.modulosSeleccionados = [];
     this.formulario.reset();
   }
 
@@ -197,11 +200,8 @@ export class DashboardNuevo {
     // Resetear estado de edición
     this.editing = false;
 
-    // Resetear módulos si ya están cargados
-    if (this.modulosEmpty.length > 0) {
-      this.modulosEmpty.forEach(m => m.Checked = false);
-      this.dash.modulos = [...this.modulosEmpty];
-    }
+    // Resetear módulos
+    this.dash.modulosSeleccionados = [];
 
     // Resetear estado de procesamiento
     this.procesando.set(false);
