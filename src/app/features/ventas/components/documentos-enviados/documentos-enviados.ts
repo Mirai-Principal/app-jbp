@@ -25,6 +25,7 @@ export class DocumentosEnviados {
   columns: TableColumn[] = [
     { columnDef: 'tipoDocumento', header: 'Tipo Documento' },
     { columnDef: 'ruc', header: 'Cliente RUC' },
+    { columnDef: 'fechaDocumento', header: 'Fecha Documento' },
     { columnDef: 'fechaEnvio', header: 'Fecha Envío' },
     { columnDef: 'nroDocumento', header: 'Nro Documento' },
     { columnDef: 'monto', header: 'Monto' },

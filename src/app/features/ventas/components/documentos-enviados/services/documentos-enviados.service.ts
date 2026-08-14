@@ -39,12 +39,8 @@ export class DocumentosEnviadosService {
     this.filtroRuc.set(null);
     this.getDocumentosEnviadosByRuc(ruc).subscribe(resp => {
       this._documentosEnviados.set(resp);
-      this.ordenarDocumentosEnviadosPorFecha();
       this.procesando.set(false);
     });
-  }
-  ordenarDocumentosEnviadosPorFecha() {
-    this._documentosEnviados.update(docs => docs.sort((a, b) => a.fechaDocumento < b.fechaDocumento ? 1 : -1));
   }
 
   getDocumentosEnviadosByRuc(ruc: string): Observable<any> {
