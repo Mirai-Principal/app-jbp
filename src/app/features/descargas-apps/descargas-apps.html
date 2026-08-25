@@ -43,17 +43,15 @@
               </span>
             </div>
             <div class="actions-group">
-              <a
-                [href]="apk.fileName"
-                [download]="apk.fileName"
-                target="_blank"
-                mat-flat-button
+              <app-button-loader 
+                class="download-btn-wrapper"
+                [isLoading]="downloadingId() === apk.id" 
+                text="Descargar APK" 
+                icon="download" 
                 color="primary"
-                class="download-btn"
-              >
-                <mat-icon>download</mat-icon>
-                <span>Descargar APK</span>
-              </a>
+                waitingText="Descargando..."
+                (click)="descargarApk(apk, $event)">
+              </app-button-loader>
             </div>
           </div>
         </div>

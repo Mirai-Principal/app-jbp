@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCard, MatCardContent } from '@angular/material/card';
@@ -6,6 +6,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Header } from '../../shared/header/header';
+import { HttpClient } from '@angular/common/http';
+import { SweetAlertService } from '../../shared/alert/services/sweet-alert.service';
+import { ButtonLoader } from '../../shared/button-loader/button-loader';
 
 export interface ApkItem {
   id: string;
@@ -30,12 +33,48 @@ export interface ApkItem {
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    ButtonLoader
   ],
   templateUrl: './descargas-apps.html',
   styleUrl: './descargas-apps.scss'
 })
 export class DescargasApps {
+  private http = inject(HttpClient);
+  private sweetAlert = inject(SweetAlertService);
+  
+  downloadingId = signal<string | null>(null);
+
+  descargarApk(apk: ApkItem, event: Event) {
+    event.preventDefault();
+    if (this.downloadingId()) return;
+
+    this.downloadingId.set(apk.id);
+
+    this.http.get(apk.fileName, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        // Forzamos el MIME type correcto para Android
+        const newBlob = new Blob([blob], { type: 'application/vnd.android.package-archive' });
+        const url = window.URL.createObjectURL(newBlob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = apk.fileName;
+        document.body.appendChild(a);
+        a.click();
+        
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        this.downloadingId.set(null);
+      },
+      error: (err) => {
+        console.error('Error al descargar el APK', err);
+        this.sweetAlert.error('Error', 'No se pudo descargar el archivo. Verifique su conexión.');
+        this.downloadingId.set(null);
+      }
+    });
+  }
   readonly apks: ApkItem[] = [
     {
       id: 'bodega-prod',
