@@ -57,7 +57,7 @@ export class SidebarMenuService {
             children: [
                 { name: 'Reporte de Reacciones', icon: 'radar', url: '/reacciones' },
             ],
-            visible: this.ModulosAcceso.Farmacovigilancia
+            visible: this.ModulosAcceso.Farmacovigilancia || this.ModulosAcceso.tics
         },
         {
             name: 'Registrar Usuario',
@@ -73,7 +73,7 @@ export class SidebarMenuService {
             visible: false
         },
         {
-            name: 'Descarga Apps',
+            name: 'Descargas Apps',
             icon: 'install_mobile',
             url: '/descargas-apps',
             visible: this.ModulosAcceso.tics
