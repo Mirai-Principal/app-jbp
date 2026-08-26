@@ -58,21 +58,31 @@ export class DashboardNuevo {
       modulos: [[]]
     });
 
-    // Escuchar cuando el modal se cierra para reiniciar formulario
+    // Escuchar cuando el modal se cierra
     effect(() => {
       const isOpen = this.modalService.isOpen();
       if (!isOpen) {
-        // Cuando el modal se cierra, reiniciar todo
-        this.reiniciarFormulario();
+        // El usuario solicitó mantener los datos si se cierra accidentalmente
+        // this.reiniciarFormulario();
       }
     });
 
     // Escuchar datos de edición para sincronizar con el formulario
     effect(() => {
       const editData = this.modalService.editData();
-      if (editData) {
-        // Si hay datos de edición, cargarlos en el formulario
-        this.cargarDatosEdicion(editData);
+      const isOpen = this.modalService.isOpen();
+      
+      if (isOpen) {
+        if (editData) {
+          // Si hay datos de edición, cargarlos en el formulario
+          this.cargarDatosEdicion(editData);
+        } else {
+          // Es un modal para un nuevo dashboard
+          // Si antes estábamos editando, limpiamos para evitar que se quede el ID y se sobreescriba
+          if (this.editing || this.dash.id) {
+            this.reiniciarFormulario();
+          }
+        }
       }
     });
   }

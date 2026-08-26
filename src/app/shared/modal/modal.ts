@@ -19,13 +19,26 @@ export class Modal {
   @Output() close = new EventEmitter<void>();
   @Output() backdropClick = new EventEmitter<void>();
 
+  private isMouseDownOnBackdrop = false;
+
   onClose() {
     this.close.emit();
   }
 
-  onBackdropClick() {
-    if (this.closeOnBackdropClick) {
-      this.backdropClick.emit();
+  onMouseDown(event: MouseEvent) {
+    if ((event.target as HTMLElement).classList.contains('modal-overlay')) {
+      this.isMouseDownOnBackdrop = true;
+    } else {
+      this.isMouseDownOnBackdrop = false;
     }
+  }
+
+  onMouseUp(event: MouseEvent) {
+    if (this.isMouseDownOnBackdrop && (event.target as HTMLElement).classList.contains('modal-overlay')) {
+      if (this.closeOnBackdropClick) {
+        this.backdropClick.emit();
+      }
+    }
+    this.isMouseDownOnBackdrop = false;
   }
 }
