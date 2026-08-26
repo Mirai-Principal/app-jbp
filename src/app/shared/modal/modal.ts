@@ -26,7 +26,7 @@ export class Modal {
   }
 
   onMouseDown(event: MouseEvent) {
-    if ((event.target as HTMLElement).classList.contains('modal-overlay')) {
+    if (event.target === event.currentTarget) {
       this.isMouseDownOnBackdrop = true;
     } else {
       this.isMouseDownOnBackdrop = false;
@@ -34,7 +34,7 @@ export class Modal {
   }
 
   onMouseUp(event: MouseEvent) {
-    if (this.isMouseDownOnBackdrop && (event.target as HTMLElement).classList.contains('modal-overlay')) {
+    if (this.isMouseDownOnBackdrop && event.target === event.currentTarget) {
       if (this.closeOnBackdropClick) {
         this.backdropClick.emit();
       }
