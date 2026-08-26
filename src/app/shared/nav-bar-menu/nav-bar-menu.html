@@ -27,11 +27,18 @@
                 @if (item.visible) {
 
                 @if (!item.children) {
-                <a class="nav-link" [routerLink]="item.url" [class.active]="isActive(item.url)"
-                    (click)="onNavLinkClick()">
-                    <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
-                    <span class="nav-text">{{ item.name }}</span>
-                </a>
+                    @if (item.external) {
+                        <a class="nav-link" [href]="item.url" target="_blank" (click)="onNavLinkClick()">
+                            <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+                            <span class="nav-text">{{ item.name }}</span>
+                        </a>
+                    } @else {
+                        <a class="nav-link" [routerLink]="item.url" [class.active]="isActive(item.url)"
+                            (click)="onNavLinkClick()">
+                            <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+                            <span class="nav-text">{{ item.name }}</span>
+                        </a>
+                    }
                 }
 
                 @if (item.children) {
@@ -46,11 +53,18 @@
                     <div class="dropdown-menu">
                         @for (sub of item.children; track sub.name) {
                         @if (!sub.children) {
-                        <a class="dropdown-item" [routerLink]="sub.url" [class.active]="isActive(sub.url)"
-                            (click)="onNavLinkClick()">
-                            <mat-icon class="nav-icon">{{ sub.icon }}</mat-icon>
-                            <span class="nav-text">{{ sub.name }}</span>
-                        </a>
+                            @if (sub.external) {
+                                <a class="dropdown-item" [href]="sub.url" target="_blank" (click)="onNavLinkClick()">
+                                    <mat-icon class="nav-icon">{{ sub.icon }}</mat-icon>
+                                    <span class="nav-text">{{ sub.name }}</span>
+                                </a>
+                            } @else {
+                                <a class="dropdown-item" [routerLink]="sub.url" [class.active]="isActive(sub.url)"
+                                    (click)="onNavLinkClick()">
+                                    <mat-icon class="nav-icon">{{ sub.icon }}</mat-icon>
+                                    <span class="nav-text">{{ sub.name }}</span>
+                                </a>
+                            }
                         }
 
                         @if (sub.children) {
@@ -66,11 +80,18 @@
 
                             <div class="dropdown-menu nested-menu">
                                 @for (nested of sub.children; track nested.name) {
-                                <a class="dropdown-item" [routerLink]="nested.url" [class.active]="isActive(nested.url)"
-                                    (click)="onNavLinkClick()">
-                                    <mat-icon class="nav-icon">{{ nested.icon }}</mat-icon>
-                                    <span class="nav-text">{{ nested.name }}</span>
-                                </a>
+                                    @if (nested.external) {
+                                        <a class="dropdown-item" [href]="nested.url" target="_blank" (click)="onNavLinkClick()">
+                                            <mat-icon class="nav-icon">{{ nested.icon }}</mat-icon>
+                                            <span class="nav-text">{{ nested.name }}</span>
+                                        </a>
+                                    } @else {
+                                        <a class="dropdown-item" [routerLink]="nested.url" [class.active]="isActive(nested.url)"
+                                            (click)="onNavLinkClick()">
+                                            <mat-icon class="nav-icon">{{ nested.icon }}</mat-icon>
+                                            <span class="nav-text">{{ nested.name }}</span>
+                                        </a>
+                                    }
                                 }
                             </div>
                         </div>

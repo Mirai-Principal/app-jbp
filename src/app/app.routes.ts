@@ -25,7 +25,7 @@ import { Unauthorized } from './features/unauthorized/unauthorized';
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
     { path: 'login', component: Login, title: 'Login', canActivate: [noAuthGuard] },
-    { path: 'descargas-apps', component: DescargasApps, title: 'Descarga de Aplicaciones Móviles' },
+    { path: 'bodega-ventas-apps', component: DescargasApps, title: 'Descarga de Aplicaciones Móviles' },
     { path: 'directorio', component: DirectorioTelefonico, title: 'Directorio' },
     { path: 'dashboard', component: Dashboard, title: 'Dashboard', canActivate: [AuthGuard] },
     { path: 'actualizar-numero-factura-exportacion', component: UpdateNumFacturaExportacion, title: 'Actualizar número de factura de exportación', canActivate: [AuthGuard] },

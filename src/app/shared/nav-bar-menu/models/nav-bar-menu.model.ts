@@ -4,4 +4,5 @@ export interface MenuItem {
     url?: string;
     children?: MenuItem[];
     visible?: boolean;
+    external?: boolean;
 }
