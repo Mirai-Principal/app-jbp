@@ -76,8 +76,8 @@ export class SidebarMenuService {
             name: 'Apps',
             icon: 'install_mobile',
             children: [
-                { name: 'Bodega y Ventas', icon: 'qr_code', url: '/bodega-ventas-apps' },
-                { name: 'Permisos, horas extras y traslados', icon: 'scale', url: 'https://apps.powerapps.com/play/e/default-f5c864c7-85e9-4e64-80fc-3c9d2c0f9fc3/a/b46fe945-df71-4c24-92fe-541581471e7c?tenantId=f5c864c7-85e9-4e64-80fc-3c9d2c0f9fc3&hint=526bea88-ddeb-41d5-9792-b768cf6eb9b0&sourcetime=1787691508691', external: true },
+                { name: 'Bodega y Ventas', icon: 'warehouse', url: '/bodega-ventas-apps' },
+                { name: 'Permisos, horas extras y traslados', icon: 'edit_note', url: 'https://apps.powerapps.com/play/e/default-f5c864c7-85e9-4e64-80fc-3c9d2c0f9fc3/a/b46fe945-df71-4c24-92fe-541581471e7c?tenantId=f5c864c7-85e9-4e64-80fc-3c9d2c0f9fc3&hint=526bea88-ddeb-41d5-9792-b768cf6eb9b0&sourcetime=1787691508691', external: true },
             ],
             visible: true
         }
