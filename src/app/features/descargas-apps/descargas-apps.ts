@@ -54,52 +54,16 @@ export class DescargasApps {
     if (event) {
       event.preventDefault();
     }
-    if (this.downloadingId()) return;
-
-    this.downloadingId.set(apk.id);
+    
     const fileUrl = this.getApkUrl(apk);
 
-    this.http.get(fileUrl, { responseType: 'blob', observe: 'response' }).subscribe({
-      next: (response) => {
-        const contentType = response.headers.get('content-type') || '';
-        const blob = response.body;
-
-        // Si el servidor devolvió HTML (debido a falta de MIME type en IIS/Nginx o reescritura SPA)
-        if (!blob || contentType.includes('text/html') || blob.type.includes('text/html')) {
-          this.sweetAlert.error(
-            'Configuración del Servidor Requerida',
-            'El servidor devolvió una página HTML en lugar del instalador APK. Asegúrese de que el servidor web (IIS / Nginx / Apache) tenga registrado el tipo MIME para ".apk" (application/vnd.android.package-archive).'
-          );
-          this.downloadingId.set(null);
-          return;
-        }
-
-        const newBlob = new Blob([blob], { type: 'application/vnd.android.package-archive' });
-        const url = window.URL.createObjectURL(newBlob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = apk.fileName;
-        document.body.appendChild(a);
-        a.click();
-
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-
-        this.downloadingId.set(null);
-      },
-      error: (err) => {
-        console.error('Error al descargar el APK', err);
-        // Fallback: descarga directa mediante el navegador
-        const a = document.createElement('a');
-        a.href = fileUrl;
-        a.download = apk.fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        this.downloadingId.set(null);
-      }
-    });
+    // Descarga directa mediante el navegador para que Android/PC gestione el archivo de forma nativa
+    const a = document.createElement('a');
+    a.href = fileUrl;
+    a.download = apk.fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
   readonly apks: ApkItem[] = [
     {
