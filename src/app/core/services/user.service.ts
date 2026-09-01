@@ -77,7 +77,6 @@ export class UserService {
     return this.http.get<any>(url);
   }
   logout() {
-    // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     localStorage.removeItem('Nombre');
     sessionStorage.removeItem('currentUser');
