@@ -56,9 +56,15 @@ export class UserService {
         map(resp => {
           console.log(resp);
           if (resp && (resp as any).Nombre) {
+            // Limpiar cualquier residuo previo en localStorage
+            localStorage.removeItem('Nombre');
+            localStorage.removeItem('currentUser');
+            // Limpiar cualquier residuo previo en sessionStorage
+            sessionStorage.removeItem('Nombre');
+            sessionStorage.removeItem('currentUser');
+
             localStorage.setItem('Nombre', (resp as any).Nombre);
             localStorage.setItem('currentUser', JSON.stringify(resp));
-            // this.auth.isLoged = true;
             this.currentUserSubject.next(resp as RespAuthMsg);
             return true;
           }
@@ -74,6 +80,9 @@ export class UserService {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     localStorage.removeItem('Nombre');
+    sessionStorage.removeItem('currentUser');
+    sessionStorage.removeItem('Nombre');
+    
     this.currentUserSubject.next({} as RespAuthMsg);
   }
 }
