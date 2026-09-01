@@ -47,7 +47,7 @@ export class DescargasApps {
 
   getApkUrl(apk: ApkItem): string {
     const baseUrl = document.baseURI || window.location.origin;
-    return new URL(apk.fileName, baseUrl).href;
+    return new URL(encodeURI(apk.fileName), baseUrl).href;
   }
 
   descargarApk(apk: ApkItem, event?: Event) {
