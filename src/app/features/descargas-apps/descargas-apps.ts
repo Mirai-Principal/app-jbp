@@ -118,7 +118,7 @@ export class DescargasApps {
       id: 'power-apps',
       name: 'Microsoft Power Apps',
       version: 'Corporativo',
-      fileName: 'Power Apps.apk',
+      fileName: 'Power_Apps.apk',
       fileSize: '143 MB',
       icon: 'widgets',
       description: 'Aplicación oficial de Microsoft Power Apps para Android. Permite acceder a soluciones empresariales como permisos, horas extras y traslados.',
