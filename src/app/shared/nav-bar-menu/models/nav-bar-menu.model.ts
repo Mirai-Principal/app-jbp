@@ -5,4 +5,5 @@ export interface MenuItem {
     children?: MenuItem[];
     visible?: boolean;
     external?: boolean;
+    download?: boolean;
 }

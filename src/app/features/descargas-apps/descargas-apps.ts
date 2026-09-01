@@ -19,7 +19,7 @@ export interface ApkItem {
   icon: string;
   description: string;
   tag: string;
-  tagType: 'production' | 'test' | 'sales' | 'powerapps';
+  tagType: 'production' | 'test' | 'sales';
   features: string[];
 }
 
@@ -112,22 +112,6 @@ export class DescargasApps {
         'Ambiente de pruebas / Sandbox',
         'Validación de nuevas versiones',
         'Simulación de procesos logísticos'
-      ]
-    },
-    {
-      id: 'power-apps',
-      name: 'Microsoft Power Apps',
-      version: 'Corporativo',
-      fileName: 'Power_Apps.apk',
-      fileSize: '143 MB',
-      icon: 'widgets',
-      description: 'Aplicación oficial de Microsoft Power Apps para Android. Permite acceder a soluciones empresariales como permisos, horas extras y traslados.',
-      tag: 'Power Apps',
-      tagType: 'powerapps',
-      features: [
-        'Acceso a aplicaciones corporativas JBP',
-        'Gestión de permisos, horas extras y traslados',
-        'Integración con cuenta @jbp.com.ec'
       ]
     }
   ];

@@ -28,7 +28,7 @@
 
                 @if (!item.children) {
                     @if (item.external) {
-                        <a class="nav-link" [href]="item.url" target="_blank" (click)="onNavLinkClick()">
+                        <a class="nav-link" [href]="item.url" target="_blank" [attr.download]="item.download ? '' : null" (click)="onNavLinkClick()">
                             <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
                             <span class="nav-text">{{ item.name }}</span>
                         </a>
@@ -54,7 +54,7 @@
                         @for (sub of item.children; track sub.name) {
                         @if (!sub.children) {
                             @if (sub.external) {
-                                <a class="dropdown-item" [href]="sub.url" target="_blank" (click)="onNavLinkClick()">
+                                <a class="dropdown-item" [href]="sub.url" target="_blank" [attr.download]="sub.download ? '' : null" (click)="onNavLinkClick()">
                                     <mat-icon class="nav-icon">{{ sub.icon }}</mat-icon>
                                     <span class="nav-text">{{ sub.name }}</span>
                                 </a>
@@ -81,7 +81,7 @@
                             <div class="dropdown-menu nested-menu">
                                 @for (nested of sub.children; track nested.name) {
                                     @if (nested.external) {
-                                        <a class="dropdown-item" [href]="nested.url" target="_blank" (click)="onNavLinkClick()">
+                                        <a class="dropdown-item" [href]="nested.url" target="_blank" [attr.download]="nested.download ? '' : null" (click)="onNavLinkClick()">
                                             <mat-icon class="nav-icon">{{ nested.icon }}</mat-icon>
                                             <span class="nav-text">{{ nested.name }}</span>
                                         </a>
