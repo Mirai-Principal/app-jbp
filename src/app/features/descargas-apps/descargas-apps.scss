@@ -139,6 +139,10 @@ mat-card-content {
   &.card-test {
     border-top: 4px solid #f57c00;
   }
+
+  &.card-powerapps {
+    border-top: 4px solid #742774;
+  }
 }
 
 .card-header {
@@ -175,6 +179,11 @@ mat-card-content {
       background-color: #fff3e0;
       color: #e65100;
     }
+
+    &.avatar-powerapps {
+      background-color: rgba(116, 39, 116, 0.12);
+      color: #742774;
+    }
   }
 
   .header-badges {
@@ -204,6 +213,11 @@ mat-card-content {
     .badge-test {
       background-color: #ffe0b2;
       color: #e65100;
+    }
+
+    .badge-powerapps {
+      background-color: #742774;
+      color: $white;
     }
 
     .version-badge {
