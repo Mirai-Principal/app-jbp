@@ -13,7 +13,7 @@ export class SidebarMenuService {
     private readonly _menu = signal<MenuItem[]>([
         {
             name: 'Directorio',
-            icon: 'contacts',
+            icon: 'phone',
             url: '/directorio',
             visible: true
         },
