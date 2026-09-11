@@ -1,0 +1,83 @@
+<app-header title="Desbloqueo de Usuario SAP" icon="lock_open" />
+
+<div class="container">
+    <div class="card-wrapper">
+        <mat-card class="main-card">
+            <mat-card-header>
+                <div class="card-header-content">
+                    <div class="header-icon-circle">
+                        <mat-icon>vpn_key</mat-icon>
+                    </div>
+                    <div>
+                        <mat-card-title>Gestión de Acceso SAP</mat-card-title>
+                        <p class="card-subtitle">
+                            Ingresa el usuario de SAP para desbloquear o bloquear su acceso inmediatamente.
+                        </p>
+                    </div>
+                </div>
+            </mat-card-header>
+
+            <mat-card-content>
+                <form [formGroup]="form" class="action-form">
+                    <!-- Campo de código de usuario -->
+                    <mat-form-field appearance="outline" class="user-field" subscriptSizing="dynamic">
+                        <mat-label>Usuario de SAP</mat-label>
+                        <mat-icon matPrefix>person</mat-icon>
+                        <input matInput type="text" formControlName="userCode"
+                            placeholder="Ej. jespin" autocomplete="off" />
+
+                        @if (form.get('userCode')?.value) {
+                        <button mat-icon-button matSuffix (click)="form.patchValue({ userCode: '' })" type="button"
+                            aria-label="Limpiar campo">
+                            <mat-icon>clear</mat-icon>
+                        </button>
+                        }
+                    </mat-form-field>
+
+                    <!-- Botones de Acción -->
+                    <div class="actions-group">
+                        <button mat-flat-button class="btn-action btn-unlock" type="button" (click)="onUnlock()"
+                            [disabled]="isProcessing() || form.invalid">
+                            @if (isProcessing()) {
+                            <mat-progress-spinner mode="indeterminate" diameter="20" strokeWidth="3"
+                                class="spinner-inline"></mat-progress-spinner>
+                            } @else {
+                            <mat-icon>lock_open</mat-icon>
+                            }
+                            <span>Desbloquear Usuario</span>
+                        </button>
+
+                        <button mat-flat-button class="btn-action btn-lock" type="button" (click)="onLock()"
+                            [disabled]="isProcessing() || form.invalid">
+                            @if (isProcessing()) {
+                            <mat-progress-spinner mode="indeterminate" diameter="20" strokeWidth="3"
+                                class="spinner-inline"></mat-progress-spinner>
+                            } @else {
+                            <mat-icon>lock</mat-icon>
+                            }
+                            <span>Bloquear Usuario</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Tarjeta informativa de resultado -->
+                @if (lastResult(); as result) {
+                <div class="result-card" [class.result-unlocked]="result.status === 'unlocked'"
+                    [class.result-locked]="result.status === 'locked'">
+                    <div class="result-header">
+                        <mat-icon class="result-icon">
+                            {{ result.status === 'unlocked' ? 'task_alt' : 'block' }}
+                        </mat-icon>
+                        <div>
+                            <h4>Operación Exitosa en SAP</h4>
+                            <p>El usuario <strong>{{ result.userCode }}</strong> ahora se encuentra
+                                <strong>{{ result.status === 'unlocked' ? 'DESBLOQUEADO' : 'BLOQUEADO' }}</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                }
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

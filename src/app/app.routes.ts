@@ -22,6 +22,7 @@ import { GenerarPesajeCampania } from './features/bodega/gestion-campanias/compo
 import { GestionCampanias } from './features/bodega/gestion-campanias/gestion-campanias';
 import { Unauthorized } from './features/unauthorized/unauthorized';
 import { Usuarios } from './features/sap/usuarios/usuarios';
+import { UnlockUser } from './features/sap/unlock-user/unlock-user';
 
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
@@ -44,6 +45,7 @@ export const routes: Routes = [
     { path: 'generar-pesaje-campania', component: GenerarPesajeCampania, title: 'Generar Pesaje Campaña', canActivate: [AuthGuard] },
     { path: 'gestion-campanias', component: GestionCampanias, title: 'Gestión de Campañas', canActivate: [AuthGuard] },
     { path: 'sap/usuarios', component: Usuarios, title: 'Usuarios SAP', canActivate: [AuthGuard] },
+    { path: 'sap/desbloquear-usuario', component: UnlockUser, title: 'Desbloquear Usuario SAP', canActivate: [AuthGuard] },
     { path: 'unauthorized', component: Unauthorized, title: 'No Autorizado', canActivate: [AuthGuard] },
 
     // Ruta para manejar páginas no encontradas
