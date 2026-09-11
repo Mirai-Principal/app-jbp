@@ -1,0 +1,155 @@
+<app-header title="Usuarios SAP" icon="manage_accounts" />
+
+@if (isLoading()) {
+<app-loader-page message="Cargando usuarios de SAP..." />
+}
+
+<div class="container">
+    <mat-card>
+        <mat-card-content>
+            <!-- Toolbar: Estadísticas, buscador y acciones -->
+            <div class="toolbar">
+                <div class="stats-chips">
+                    <div class="stat-chip total">
+                        <mat-icon>group</mat-icon>
+                        <span class="stat-label">Total:</span>
+                        <span class="stat-value">{{ usuarios().length }}</span>
+                    </div>
+                    <div class="stat-chip active">
+                        <mat-icon>check_circle</mat-icon>
+                        <span class="stat-label">Activos:</span>
+                        <span class="stat-value">{{ usuariosNoBloqueados().length }}</span>
+                    </div>
+                    <div class="stat-chip locked">
+                        <mat-icon>lock</mat-icon>
+                        <span class="stat-label">Bloqueados:</span>
+                        <span class="stat-value">{{ usuariosBloqueados().length }}</span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+                        <mat-icon matPrefix>search</mat-icon>
+                        <mat-label>Buscar usuario...</mat-label>
+                        <input matInput [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)"
+                            placeholder="Nombre, código o ID" />
+                        @if (searchTerm()) {
+                        <button mat-icon-button matSuffix (click)="searchTerm.set('')" type="button" aria-label="Limpiar">
+                            <mat-icon>clear</mat-icon>
+                        </button>
+                        }
+                    </mat-form-field>
+
+                    <div class="view-toggle">
+                        <button mat-icon-button [class.active-mode]="viewMode() === 'tabs'"
+                            (click)="viewMode.set('tabs')" title="Vista por pestañas">
+                            <mat-icon>tab</mat-icon>
+                        </button>
+                        <button mat-icon-button [class.active-mode]="viewMode() === 'stacked'"
+                            (click)="viewMode.set('stacked')" title="Vista en lista simultánea">
+                            <mat-icon>view_agenda</mat-icon>
+                        </button>
+                    </div>
+
+                    <button mat-flat-button class="btn-refresh" (click)="loadUsuarios()" title="Recargar usuarios">
+                        <mat-icon>refresh</mat-icon>
+                        <span>Actualizar</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modo 1: Vista por Pestañas (Tabs) -->
+            @if (viewMode() === 'tabs') {
+            <mat-tab-group animationDuration="200ms" class="usuarios-tab-group">
+                <!-- Tabla Usuarios Bloqueados -->
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <div class="tab-label-container">
+                            <mat-icon class="icon-tab-locked">lock</mat-icon>
+                            <span class="tab-title">Bloqueados</span>
+                            <span class="tab-count count-locked">{{ usuariosBloqueados().length }}</span>
+                        </div>
+                    </ng-template>
+
+                    <div class="table-section">
+                        <app-table [data]="usuariosBloqueados()" [columns]="columns"
+                            [displayedColumns]="displayedColumns" [showPaginator]="true"
+                            [pageSizeOptions]="[10, 20, 50]" [cellTemplate]="customCell">
+                        </app-table>
+                    </div>
+                </mat-tab>
+                <!-- Tabla Usuarios No Bloqueados -->
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <div class="tab-label-container">
+                            <mat-icon class="icon-tab-active">check_circle</mat-icon>
+                            <span class="tab-title">Activos</span>
+                            <span class="tab-count count-active">{{ usuariosNoBloqueados().length }}</span>
+                        </div>
+                    </ng-template>
+
+                    <div class="table-section">
+                        <app-table [data]="usuariosNoBloqueados()" [columns]="columns"
+                            [displayedColumns]="displayedColumns" [showPaginator]="true"
+                            [pageSizeOptions]="[10, 20, 50]" [cellTemplate]="customCell">
+                        </app-table>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+            } @else {
+            <!-- Modo 2: Vista Simultánea (Stacked) -->
+            <div class="stacked-container">
+                <!-- Sección Bloqueados -->
+                <div class="stacked-section locked-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <mat-icon class="icon-tab-locked">lock</mat-icon>
+                            <h3>Usuarios Bloqueados</h3>
+                        </div>
+                        <span class="tab-count count-locked">{{ usuariosBloqueados().length }} registros</span>
+                    </div>
+                    <app-table [data]="usuariosBloqueados()" [columns]="columns"
+                        [displayedColumns]="displayedColumns" [showPaginator]="true"
+                        [pageSizeOptions]="[10, 20, 50]" [cellTemplate]="customCell">
+                    </app-table>
+                </div>
+                <!-- Sección No Bloqueados -->
+                <div class="stacked-section active-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <mat-icon class="icon-tab-active">check_circle</mat-icon>
+                            <h3>Activos</h3>
+                        </div>
+                        <span class="tab-count count-active">{{ usuariosNoBloqueados().length }} registros</span>
+                    </div>
+                    <app-table [data]="usuariosNoBloqueados()" [columns]="columns"
+                        [displayedColumns]="displayedColumns" [showPaginator]="true"
+                        [pageSizeOptions]="[10, 20, 50]" [cellTemplate]="customCell">
+                    </app-table>
+                </div>
+            </div>
+            }
+
+            <!-- Template personalizado para renderizado de celdas -->
+            <ng-template #customCell let-column="column" let-element="element">
+                @if (column.columnDef === 'Locked') {
+                <span class="status-badge" [class.status-locked]="element.Locked === 'tYES'"
+                    [class.status-active]="element.Locked !== 'tYES'">
+                    <mat-icon>{{ element.Locked === 'tYES' ? 'lock' : 'check_circle' }}</mat-icon>
+                    {{ element.Locked === 'tYES' ? 'Bloqueado' : 'Activo' }}
+                </span>
+                } @else if (column.columnDef === 'UserCode') {
+                <span class="user-code">
+                    <mat-icon class="user-code-icon">account_circle</mat-icon>
+                    {{ element.UserCode }}
+                </span>
+                } @else if (column.cell) {
+                {{ column.cell(element) }}
+                } @else {
+                {{ element[column.columnDef] }}
+                }
+            </ng-template>
+
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -21,6 +21,7 @@ import { GestionarParticipantes } from './features/ventas/gestionar-participante
 import { GenerarPesajeCampania } from './features/bodega/gestion-campanias/components/generar-pesaje-campania/generar-pesaje-campania';
 import { GestionCampanias } from './features/bodega/gestion-campanias/gestion-campanias';
 import { Unauthorized } from './features/unauthorized/unauthorized';
+import { Usuarios } from './features/sap/usuarios/usuarios';
 
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
@@ -42,6 +43,7 @@ export const routes: Routes = [
     { path: 'envio-retenciones', component: EnvioRetenciones, title: 'Envio de Retenciones', canActivate: [AuthGuard] },
     { path: 'generar-pesaje-campania', component: GenerarPesajeCampania, title: 'Generar Pesaje Campaña', canActivate: [AuthGuard] },
     { path: 'gestion-campanias', component: GestionCampanias, title: 'Gestión de Campañas', canActivate: [AuthGuard] },
+    { path: 'sap/usuarios', component: Usuarios, title: 'Usuarios SAP', canActivate: [AuthGuard] },
     { path: 'unauthorized', component: Unauthorized, title: 'No Autorizado', canActivate: [AuthGuard] },
 
     // Ruta para manejar páginas no encontradas
