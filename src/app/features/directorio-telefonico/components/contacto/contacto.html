@@ -1,0 +1,56 @@
+<app-header [title]="isEditMode ? 'Editar Contacto' : 'Nuevo Contacto'" icon="contact_phone"></app-header>
+<div class="dialog-container">
+    <form [formGroup]="contactoForm" (ngSubmit)="onSave()">
+        <mat-dialog-content class="form-content">
+            
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Contacto (Nombre y Apellido)</mat-label>
+                <mat-icon matPrefix>person</mat-icon>
+                <input matInput formControlName="CONTACTO" placeholder="Ej. Juan Pérez" autocomplete="off">
+                <mat-error *ngIf="contactoForm.get('CONTACTO')?.hasError('required')">El nombre es requerido</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Departamento</mat-label>
+                <mat-icon matPrefix>business</mat-icon>
+                <input matInput formControlName="DEPARTAMENTO" placeholder="Ej. Tecnología de la Información" [matAutocomplete]="autoDepto" autocomplete="off">
+                <mat-autocomplete #autoDepto="matAutocomplete">
+                    <mat-option *ngFor="let depto of filteredDepartamentos | async" [value]="depto">
+                        {{depto}}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="contactoForm.get('DEPARTAMENTO')?.hasError('required')">El departamento es requerido</mat-error>
+            </mat-form-field>
+
+            <div class="form-row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Planta</mat-label>
+                    <mat-icon matPrefix>location_on</mat-icon>
+                    <input matInput formControlName="PLANTA" placeholder="Ej. Matriz" [matAutocomplete]="autoPlanta" autocomplete="off">
+                    <mat-autocomplete #autoPlanta="matAutocomplete">
+                        <mat-option *ngFor="let planta of filteredPlantas | async" [value]="planta">
+                            {{planta}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="contactoForm.get('PLANTA')?.hasError('required')">La planta es requerida</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Extensión</mat-label>
+                    <mat-icon matPrefix>phone</mat-icon>
+                    <input matInput formControlName="Ext" type="number" placeholder="Ej. 101" autocomplete="off">
+                    <mat-error *ngIf="contactoForm.get('Ext')?.hasError('required')">La extensión es requerida</mat-error>
+                </mat-form-field>
+            </div>
+
+        </mat-dialog-content>
+
+        <mat-dialog-actions class="dialog-actions">
+            <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="contactoForm.invalid">
+                <mat-icon>save</mat-icon>
+                Guardar
+            </button>
+        </mat-dialog-actions>
+    </form>
+</div>

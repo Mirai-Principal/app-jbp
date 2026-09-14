@@ -1,0 +1,33 @@
+@use '../../../../shared/styles/colors' as *;
+
+.dialog-container {
+    padding: 0 16px;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 400px;
+    padding-top: 24px;
+    padding-bottom: 8px;
+    max-height: 70vh;
+
+    .w-100 {
+        width: 100%;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 16px;
+
+        mat-form-field {
+            flex: 1;
+        }
+    }
+}
+
+.dialog-actions {
+    padding-bottom: 16px;
+    padding-right: 24px;
+}

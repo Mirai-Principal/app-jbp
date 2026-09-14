@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { DirectorioTelefonicoService } from './services/directorio-telefonico.service';
-import { DirectorioMsg } from '../../core/models/directorioMsg';
+import { Contacto } from './directorio-telefonico.model';
+import { Contacto as ContactoComponent } from './components/contacto/contacto';
 import { Observable } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
@@ -46,8 +47,9 @@ export class DirectorioTelefonico {
   // controles de ingreso en la UI para búsqueda
   txtSearch = new FormControl();
   displayedColumns: string[] = ['CONTACTO', 'Ext', 'DEPARTAMENTO', 'PLANTA'];
-  contactos: DirectorioMsg[] = [];
-  contactosFiltered!: Observable<DirectorioMsg[]>;
+  hasTicsAccess = false;
+  contactos: Contacto[] = [];
+  contactosFiltered!: Observable<Contacto[]>;
 
   // Sorting properties
   activeSortColumn: string = '';
@@ -57,6 +59,10 @@ export class DirectorioTelefonico {
 
 
   constructor(private directorioService: DirectorioTelefonicoService, private dialog: MatDialog) {
+    this.hasTicsAccess = this.directorioService.ModulosAcceso?.tics === true;
+    if (this.hasTicsAccess) {
+      this.displayedColumns.push('ACCIONES');
+    }
     this.cargarContactos();
   }
 
@@ -85,8 +91,8 @@ export class DirectorioTelefonico {
       map(value => this.filtrarContacto(value))
     );
   }
-  filtrarContacto(me: string): DirectorioMsg[] {
-    let ms: DirectorioMsg[];
+  filtrarContacto(me: string): Contacto[] {
+    let ms: Contacto[];
     ms = new Array();
     if (me) {
       me = me.toLocaleLowerCase();
@@ -98,6 +104,70 @@ export class DirectorioTelefonico {
       }
     }
     return ms;
+  }
+
+  openContactoDialog(contacto?: Contacto): void {
+    const dialogRef = this.dialog.open(ContactoComponent, {
+      width: '500px',
+      data: contacto || null,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result: Contacto) => {
+      if (result) {
+        this.isLoading.set(true);
+        if (result.ID) {
+          this.directorioService.updateContacto(result.ID, result).subscribe({
+            next: () => {
+              this.sweetAlert.success('Éxito', 'Contacto actualizado correctamente');
+              this.cargarContactos();
+            },
+            error: (err) => {
+              this.isLoading.set(false);
+              this.sweetAlert.error('Error', 'No se pudo actualizar el contacto');
+              console.error(err);
+            }
+          });
+        } else {
+          this.directorioService.addContacto(result).subscribe({
+            next: () => {
+              this.sweetAlert.success('Éxito', 'Contacto creado correctamente');
+              this.cargarContactos();
+            },
+            error: (err) => {
+              this.isLoading.set(false);
+              this.sweetAlert.error('Error', 'No se pudo crear el contacto');
+              console.error(err);
+            }
+          });
+        }
+      }
+    });
+  }
+
+  deleteContacto(contacto: Contacto): void {
+    if (!contacto.ID) return;
+    
+    this.sweetAlert.confirm({
+      title: '¿Estás seguro?',
+      message: `¿Deseas eliminar el contacto ${contacto.CONTACTO}?`,
+      type: 'warning'
+    }).subscribe(confirmed => {
+      if (confirmed) {
+        this.isLoading.set(true);
+        this.directorioService.deleteContacto(contacto.ID!).subscribe({
+          next: () => {
+            this.sweetAlert.success('Éxito', 'Contacto eliminado correctamente');
+            this.cargarContactos();
+          },
+          error: (err) => {
+            this.isLoading.set(false);
+            this.sweetAlert.error('Error', 'No se pudo eliminar el contacto');
+            console.error(err);
+          }
+        });
+      }
+    });
   }
 
   clearSearch(): void {
@@ -208,7 +278,7 @@ export class DirectorioTelefonico {
     });
 
     // Update the filtered data
-    this.contactosFiltered = new Observable<DirectorioMsg[]>(observer => {
+    this.contactosFiltered = new Observable<Contacto[]>(observer => {
       observer.next(sortedData);
     });
   }

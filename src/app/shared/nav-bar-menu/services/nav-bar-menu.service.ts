@@ -86,7 +86,6 @@ export class SidebarMenuService {
             name: 'SAP',
             icon: 'corporate_fare',
             children: [
-                { name: 'Usuarios', icon: 'person', url: '/sap/usuarios' },
                 { name: 'Desbloquear Usuario', icon: 'lock', url: '/sap/desbloquear-usuario' },
 
             ],
