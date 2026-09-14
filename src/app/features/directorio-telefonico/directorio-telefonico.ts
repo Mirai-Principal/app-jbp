@@ -109,8 +109,7 @@ export class DirectorioTelefonico {
   openContactoDialog(contacto?: Contacto): void {
     const dialogRef = this.dialog.open(ContactoComponent, {
       width: '500px',
-      data: contacto || null,
-      disableClose: true
+      data: contacto || null
     });
 
     dialogRef.afterClosed().subscribe((result: Contacto) => {
