@@ -1,4 +1,4 @@
-export const entorno: "services" | "dev" | "servicesnube" = "dev";
+export const entorno: "services" | "dev" | "servicesnube" = "services";
 export const backend_api = `/api-${entorno}`;
 // export const service_layer = 'http://192.168.57.1:3300/api/v1/';
 export const service_layer = 'http://localhost:3300/api/v1/';
