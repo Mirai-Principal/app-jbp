@@ -46,7 +46,7 @@
                             }
                             <span>Desbloquear Usuario</span>
                         </button>
-
+                        @if (ModulosAcceso.tics) {
                         <button mat-flat-button class="btn-action btn-lock" type="button" (click)="onLock()"
                             [disabled]="isProcessing() || form.invalid">
                             @if (isProcessing()) {
@@ -57,6 +57,7 @@
                             }
                             <span>Bloquear Usuario</span>
                         </button>
+                        }
                     </div>
                 </form>
 

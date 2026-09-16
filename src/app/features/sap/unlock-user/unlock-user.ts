@@ -40,6 +40,11 @@ export class UnlockUser {
   // Estados reactivos
   readonly isProcessing = signal<boolean>(false);
   readonly lastResult = signal<UserActionResult | null>(null);
+  private resultTimer: any;
+
+  // variables privadas
+  private readonly currentUser = localStorage.getItem('currentUser');
+  readonly ModulosAcceso = JSON.parse(this.currentUser || '{}')?.ModulosAcceso || {};
 
   // Formulario
   readonly form: FormGroup = this.fb.group({
@@ -94,7 +99,7 @@ export class UnlockUser {
       next: (res) => {
         this.isProcessing.set(false);
         const result = res?.data || { internalKey: 0, userCode, status: 'unlocked' };
-        this.lastResult.set(result);
+        this.showResultTemporarily(result);
 
         this.sweetAlert.success(
           'Usuario Desbloqueado',
@@ -102,6 +107,7 @@ export class UnlockUser {
         );
       },
       error: (err) => {
+        console.log(err);
         this.isProcessing.set(false);
         const msg = err?.error?.error || err?.error?.message || err?.message || 'Error desconocido';
         this.sweetAlert.error('Error al desbloquear', msg);
@@ -115,7 +121,7 @@ export class UnlockUser {
       next: (res) => {
         this.isProcessing.set(false);
         const result = res?.data || { internalKey: 0, userCode, status: 'locked' };
-        this.lastResult.set(result);
+        this.showResultTemporarily(result);
 
         this.sweetAlert.success(
           'Usuario Bloqueado',
@@ -123,6 +129,7 @@ export class UnlockUser {
         );
       },
       error: (err) => {
+        console.log(err);
         this.isProcessing.set(false);
         const msg = err?.error?.error || err?.error?.message || err?.message || 'Error desconocido';
         this.sweetAlert.error('Error al bloquear', msg);
@@ -132,5 +139,15 @@ export class UnlockUser {
 
   private cleanUserCode(): string {
     return (this.form.get('userCode')?.value || '').trim();
+  }
+
+  private showResultTemporarily(result: UserActionResult): void {
+    this.lastResult.set(result);
+    if (this.resultTimer) {
+      clearTimeout(this.resultTimer);
+    }
+    this.resultTimer = setTimeout(() => {
+      this.lastResult.set(null);
+    }, 5000);
   }
 }

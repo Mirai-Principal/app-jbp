@@ -89,7 +89,7 @@ export class SidebarMenuService {
                 { name: 'Desbloquear Usuario', icon: 'lock', url: '/sap/desbloquear-usuario' },
 
             ],
-            visible: this.ModulosAcceso.tics
+            visible: true
         }
     ]);
 

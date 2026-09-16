@@ -84,8 +84,9 @@ mat-card {
 }
 
 .actions-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 1.25rem;
     margin-top: 0.5rem;
 
