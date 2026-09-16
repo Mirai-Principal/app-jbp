@@ -46,7 +46,7 @@ Thumbs.db
 /android
 /ios
 
-.agent/*
+.agents
 SKILL.md
 
 *.apk
