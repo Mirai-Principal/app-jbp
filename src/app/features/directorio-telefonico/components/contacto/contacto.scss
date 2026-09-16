@@ -13,6 +13,11 @@
     padding-bottom: 8px;
     max-height: 70vh;
 
+    @media (max-width: 600px) {
+        min-width: auto;
+        width: 100%;
+    }
+
     .w-100 {
         width: 100%;
     }
@@ -23,6 +28,15 @@
 
         mat-form-field {
             flex: 1;
+        }
+
+        @media (max-width: 600px) {
+            display: block;
+
+            mat-form-field {
+                width: 100%;
+                margin-bottom: 8px;
+            }
         }
     }
 }
