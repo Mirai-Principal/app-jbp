@@ -23,8 +23,7 @@
                     <mat-form-field appearance="outline" class="user-field" subscriptSizing="dynamic">
                         <mat-label>Usuario de SAP</mat-label>
                         <mat-icon matPrefix>person</mat-icon>
-                        <input matInput type="text" formControlName="userCode"
-                            placeholder="Ej. jespin" autocomplete="off" />
+                        <input matInput type="text" formControlName="userCode" autocomplete="off" />
 
                         @if (form.get('userCode')?.value) {
                         <button mat-icon-button matSuffix (click)="form.patchValue({ userCode: '' })" type="button"

@@ -105,6 +105,7 @@ export class UnlockUser {
           'Usuario Desbloqueado',
           `El usuario "${userCode}" fue desbloqueado exitosamente en SAP.`
         );
+        this.form.get('userCode')?.setValue('')
       },
       error: (err) => {
         console.log(err);
@@ -127,6 +128,7 @@ export class UnlockUser {
           'Usuario Bloqueado',
           `El usuario "${userCode}" fue bloqueado exitosamente en SAP.`
         );
+        this.form.get('userCode')?.setValue('')
       },
       error: (err) => {
         console.log(err);
