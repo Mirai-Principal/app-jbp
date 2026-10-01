@@ -14,7 +14,6 @@ import { NotasCreditoComponent } from './features/ventas/notas-credito/notas-cre
 import { GenerarQrUbicaciones } from './features/bodega/generar-qr-ubicaciones/generar-qr-ubicaciones';
 import { ConsultarUbicacion } from './features/bodega/consultar-ubicacion/consultar-ubicacion';
 import { ReaccionesReporte } from './features/reacciones-reporte/reacciones-reporte';
-import { RegistrarUsuario } from './features/registrar-usuario/registrar-usuario';
 import { EnvioRetenciones } from './features/envio-retenciones/envio-retenciones';
 import { ConsultaLote } from './features/bodega/consulta-lote/consulta-lote';
 import { GestionarParticipantes } from './features/ventas/gestionar-participantes/gestionar-participantes';
@@ -23,6 +22,7 @@ import { GestionCampanias } from './features/bodega/gestion-campanias/gestion-ca
 import { Unauthorized } from './features/unauthorized/unauthorized';
 import { Usuarios } from './features/sap/usuarios/usuarios';
 import { UnlockUser } from './features/sap/unlock-user/unlock-user';
+import { ListaMateriales } from './features/asuntos-regulatorios/lista-materiales/lista-materiales';
 
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
@@ -40,12 +40,12 @@ export const routes: Routes = [
     { path: 'consultaUbicacion', component: ConsultarUbicacion, title: 'Consultar Ubicación' },
     { path: 'consultaLote', component: ConsultaLote, title: 'Consulta Lote' },
     { path: 'reacciones', component: ReaccionesReporte, title: 'Reporte de Reacciones', canActivate: [AuthGuard] },
-    { path: 'registrar-usuario', component: RegistrarUsuario, title: 'Registrar Usuario', canActivate: [AuthGuard] },
     { path: 'envio-retenciones', component: EnvioRetenciones, title: 'Envio de Retenciones', canActivate: [AuthGuard] },
     { path: 'generar-pesaje-campania', component: GenerarPesajeCampania, title: 'Generar Pesaje Campaña', canActivate: [AuthGuard] },
     { path: 'gestion-campanias', component: GestionCampanias, title: 'Gestión de Campañas', canActivate: [AuthGuard] },
     { path: 'sap/usuarios', component: Usuarios, title: 'Usuarios SAP', canActivate: [AuthGuard] },
     { path: 'sap/desbloquear-usuario', component: UnlockUser, title: 'Desbloquear Usuario SAP', canActivate: [AuthGuard] },
+    { path: 'lista-de-materiales', component: ListaMateriales, title: 'Lista de Materiales', canActivate: [AuthGuard] },
     { path: 'unauthorized', component: Unauthorized, title: 'No Autorizado', canActivate: [AuthGuard] },
 
     // Ruta para manejar páginas no encontradas

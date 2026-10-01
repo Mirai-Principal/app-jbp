@@ -120,6 +120,7 @@ export class DirectorioTelefonico {
             next: () => {
               this.sweetAlert.success('Éxito', 'Contacto actualizado correctamente');
               this.cargarContactos();
+              this.txtSearch.setValue('');
             },
             error: (err) => {
               this.isLoading.set(false);

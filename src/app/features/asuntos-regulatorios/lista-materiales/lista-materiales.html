@@ -1,0 +1,22 @@
+<app-header title="Lista de Materiales" icon="list" />
+<div class="container">
+    <mat-card>
+
+        <mat-card-content>
+
+
+            <app-buscador-universal
+                [searchFn]="buscarMaterialFn"
+                primaryKey="TreeCode"
+                titleKey="ProductDescription"
+                label="Buscar lista de materiales"
+                placeholder="Escrbie el nombre del producto"
+                [subtitleKey]="subtituloMaterial"
+                (itemSeleccionado)="onMaterialSeleccionado($event)">
+            </app-buscador-universal>
+
+
+
+        </mat-card-content>
+    </mat-card>
+</div>

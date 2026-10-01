@@ -46,10 +46,8 @@ Thumbs.db
 /android
 /ios
 
-# Antigravity / Agents
 .agents/
 .agents
 SKILL.md
-*.skill.md
 
 *.apk

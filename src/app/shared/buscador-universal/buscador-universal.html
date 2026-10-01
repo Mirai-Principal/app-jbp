@@ -1,0 +1,142 @@
+<div class="buscador-container">
+  <!-- Campo de Búsqueda -->
+  <div class="search-input-wrapper">
+    <mat-form-field appearance="outline" class="search-form-field">
+      <mat-label>{{ label }}</mat-label>
+      <input
+        [formControl]="txtSearch"
+        (input)="onSearchInput()"
+        [placeholder]="placeholder"
+        matInput
+        autocomplete="off"
+      />
+
+      @if (procesando()) {
+        <mat-progress-spinner
+          matPrefix
+          mode="indeterminate"
+          diameter="20"
+          strokeWidth="3"
+        ></mat-progress-spinner>
+      } @else {
+        <mat-icon matPrefix>{{ icon }}</mat-icon>
+      }
+
+      @if (txtSearch.value) {
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="txtSearch.setValue('')"
+          type="button"
+          aria-label="Limpiar búsqueda"
+          matTooltip="Borrar texto"
+        >
+          <mat-icon>clear</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Sección de Resultados / Selección -->
+  <div class="results-section">
+    <!-- VISTA 1: Lista completa de resultados -->
+    @if (mostrarListaCompleta()) {
+      @if (resultados().length > 0) {
+        <div class="results-header">
+          <h3 class="results-title">
+            {{ resultsTitle }} ({{ resultados().length }})
+          </h3>
+        </div>
+
+        <div class="results-list">
+          @for (item of resultados(); track getItemKey(item, $index)) {
+            <mat-card
+              class="result-card"
+              [class.selected]="selectedKey() === getItemKey(item, $index)"
+              (click)="seleccionar(item)"
+              tabindex="0"
+              role="button"
+              (keydown.enter)="seleccionar(item)"
+            >
+              <mat-card-content class="result-card-content">
+                @if (itemTemplate) {
+                  <ng-container
+                    *ngTemplateOutlet="itemTemplate; context: { $implicit: item, selected: selectedKey() === getItemKey(item, $index) }"
+                  ></ng-container>
+                } @else {
+                  <div class="item-default-row">
+                    <div class="item-main-info">
+                      <span class="item-title">{{ getItemTitle(item) }}</span>
+                      @if (getItemSubtitle(item)) {
+                        <span class="item-subtitle">{{ getItemSubtitle(item) }}</span>
+                      }
+                    </div>
+                    @if (getItemBadge(item)) {
+                      <span class="item-badge">{{ getItemBadge(item) }}</span>
+                    }
+                  </div>
+                }
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+      } @else if (busquedaRealizada() && !procesando()) {
+        <p class="no-results">{{ emptyMessage }}</p>
+      }
+    } @else {
+      <!-- VISTA 2: Elemento Seleccionado -->
+      @if (selectedItem() && showSelectedCard) {
+        <div class="selected-header">
+          <h3 class="results-title">{{ selectedTitle }}</h3>
+          <div class="selected-actions">
+            <button
+              mat-button
+              type="button"
+              class="action-btn"
+              (click)="reabrirLista()"
+              matTooltip="Ver lista de resultados de la búsqueda"
+            >
+              <mat-icon>list</mat-icon>
+              Cambiar
+            </button>
+            <button
+              mat-button
+              color="warn"
+              type="button"
+              class="action-btn"
+              (click)="limpiar()"
+              matTooltip="Eliminar selección"
+            >
+              <mat-icon>close</mat-icon>
+              Quitar
+            </button>
+          </div>
+        </div>
+
+        <div class="results-list">
+          <mat-card class="result-card selected" (click)="reabrirLista()">
+            <mat-card-content class="result-card-content">
+              @if (selectedTemplate || itemTemplate) {
+                <ng-container
+                  *ngTemplateOutlet="(selectedTemplate || itemTemplate)!; context: { $implicit: selectedItem()!, selected: true }"
+                ></ng-container>
+              } @else {
+                <div class="item-default-row">
+                  <div class="item-main-info">
+                    <span class="item-title">{{ getItemTitle(selectedItem()!) }}</span>
+                    @if (getItemSubtitle(selectedItem()!)) {
+                      <span class="item-subtitle">{{ getItemSubtitle(selectedItem()!) }}</span>
+                    }
+                  </div>
+                  @if (getItemBadge(selectedItem()!)) {
+                    <span class="item-badge">{{ getItemBadge(selectedItem()!) }}</span>
+                  }
+                </div>
+              }
+            </mat-card-content>
+          </mat-card>
+        </div>
+      }
+    }
+  </div>
+</div>

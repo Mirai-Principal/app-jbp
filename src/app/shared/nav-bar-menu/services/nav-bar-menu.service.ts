@@ -60,13 +60,6 @@ export class SidebarMenuService {
             visible: this.ModulosAcceso.FarmacoVigilancia || this.ModulosAcceso.tics
         },
         {
-            name: 'Registrar Usuario',
-            icon: 'person_add',
-            url: '/registrar-usuario',
-            visible: false
-        }
-        ,
-        {
             name: 'Envio de Retenciones',
             icon: 'upload',
             url: '/envio-retenciones',
@@ -87,7 +80,13 @@ export class SidebarMenuService {
             icon: 'corporate_fare',
             children: [
                 { name: 'Desbloquear Usuario', icon: 'lock', url: '/sap/desbloquear-usuario' },
-
+                {
+                    name: 'Asuntos regulatorios',
+                    icon: 'list_alt',
+                    children: [
+                        { name: 'Lista de materiales', icon: 'list', url: '/lista-de-materiales' },
+                    ],
+                },
             ],
             visible: true
         }
