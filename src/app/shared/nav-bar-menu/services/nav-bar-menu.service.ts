@@ -86,6 +86,7 @@ export class SidebarMenuService {
                     children: [
                         { name: 'Lista de materiales', icon: 'list', url: '/lista-de-materiales' },
                     ],
+                    visible: this.ModulosAcceso.tics
                 },
             ],
             visible: true

@@ -78,10 +78,16 @@ export class NavBarMenu {
     return this.currentRoute().startsWith(url);
   }
 
+  // 🔥 comprobar si un elemento debe ser visible
+  isVisible(item: MenuItem): boolean {
+    return 'visible' in item ? Boolean(item.visible) : true;
+  }
+
   // 🔥 detectar si algún hijo está activo (recursivo para múltiples niveles)
   isParentActive(item: MenuItem): boolean {
     if (!item.children) return false;
     return item.children.some(c => {
+      if (!this.isVisible(c)) return false;
       if (this.isActive(c.url)) return true;
       if (c.children) return this.isParentActive(c);
       return false;
@@ -95,6 +101,7 @@ export class NavBarMenu {
     const addActiveParents = (item: MenuItem) => {
       if (item.children) {
         item.children.forEach(child => {
+          if (!this.isVisible(child)) return;
           if (this.isActive(child.url) || (child.children && this.isParentActive(child))) {
             current.add(item.name);
             if (child.children) {
@@ -106,7 +113,7 @@ export class NavBarMenu {
     };
 
     this.menu().forEach(item => {
-      if (this.isParentActive(item)) {
+      if (this.isVisible(item) && this.isParentActive(item)) {
         current.add(item.name);
         addActiveParents(item);
       }
