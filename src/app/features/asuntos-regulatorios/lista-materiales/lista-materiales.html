@@ -1,22 +1,163 @@
+@if (cargandoDetalle()) {
+  <app-loader-page message="Cargando lista de materiales..." icon="list" />
+}
+
 <app-header title="Lista de Materiales" icon="list" />
+
 <div class="container">
-    <mat-card>
+  <mat-card class="search-card">
+    <mat-card-content>
+      <app-buscador-universal
+        [searchFn]="buscarMaterialFn"
+        primaryKey="TreeCode"
+        titleKey="ProductDescription"
+        label="Buscar lista de materiales"
+        placeholder="Escribe el nombre del producto"
+        [subtitleKey]="subtituloMaterial"
+        (itemSeleccionado)="onProductoSeleccionado($event)"
+        (limpiado)="onLimpiar()"
+      >
+      </app-buscador-universal>
+    </mat-card-content>
+  </mat-card>
 
-        <mat-card-content>
+  <!-- Estado de carga -->
+  @if (cargandoDetalle()) {
+    <div class="loading-container">
+      <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+      <p>Cargando lista de materiales...</p>
+    </div>
+  }
 
+  <!-- Detalle del Producto y Tabla de Materiales -->
+  @if (productoSeleccionado() && !cargandoDetalle()) {
+    <mat-card class="detail-card">
+      <mat-card-content>
+        <!-- Resumen de la Cabecera -->
+        @if (detalleListaMateriales()) {
+          <div class="product-summary">
+            <div class="summary-item">
+              <span class="summary-label">Producto:</span>
+              <span class="summary-value">{{ detalleListaMateriales()!.ProductDescription }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Código:</span>
+              <span class="summary-badge">{{ detalleListaMateriales()!.TreeCode }}</span>
+            </div>
+            @if (detalleListaMateriales()!.Quantity) {
+              <div class="summary-item">
+                <span class="summary-label">Cantidad Base:</span>
+                <span class="summary-value">{{ detalleListaMateriales()!.Quantity }}</span>
+              </div>
+            }
+            @if (detalleListaMateriales()!.Warehouse) {
+              <div class="summary-item">
+                <span class="summary-label">Almacén:</span>
+                <span class="summary-value">{{ detalleListaMateriales()!.Warehouse }}</span>
+              </div>
+            }
+          </div>
+        }
 
-            <app-buscador-universal
-                [searchFn]="buscarMaterialFn"
-                primaryKey="TreeCode"
-                titleKey="ProductDescription"
-                label="Buscar lista de materiales"
-                placeholder="Escrbie el nombre del producto"
-                [subtitleKey]="subtituloMaterial"
-                (itemSeleccionado)="onMaterialSeleccionado($event)">
-            </app-buscador-universal>
+        <div class="table-section-header">
+          <h3 class="section-title">
+            <mat-icon>inventory_2</mat-icon>
+            Materiales / Componentes ({{ materiales().length }})
+          </h3>
+        </div>
 
+        <!-- Tabla reutilizable desde shared/table -->
+        <app-table
+          [data]="materiales()"
+          [columns]="columns"
+          [displayedColumns]="displayedColumns"
+          [showPaginator]="true"
+          [pageSizeOptions]="[10, 20, 50]"
+          [cellTemplate]="customCell"
+        >
+        </app-table>
 
-
-        </mat-card-content>
+        <!-- Template personalizado para renderizado de celdas con edición de cantidad -->
+        <ng-template #customCell let-column="column" let-element="element">
+          @if (column.columnDef === 'Quantity') {
+            <div class="quantity-cell">
+              @if (editandoChildNum() === element.ChildNum) {
+                <div class="quantity-edit-container">
+                  <input
+                    type="number"
+                    class="quantity-input"
+                    [ngModel]="valorEditandoCantidad()"
+                    (ngModelChange)="valorEditandoCantidad.set($event)"
+                    (keydown.enter)="guardarEdicion(element)"
+                    (keydown.escape)="cancelarEdicion()"
+                    [disabled]="guardandoChildNum() === element.ChildNum"
+                    min="0.000001"
+                    max="9999999"
+                    step="any"
+                    autofocus
+                  />
+                  @if (guardandoChildNum() === element.ChildNum) {
+                    <mat-progress-spinner mode="indeterminate" diameter="20" strokeWidth="2.5"></mat-progress-spinner>
+                  } @else {
+                    <button
+                      mat-icon-button
+                      type="button"
+                      class="btn-table-action btn-save"
+                      (click)="guardarEdicion(element)"
+                      matTooltip="Guardar (Enter)"
+                    >
+                      <mat-icon>check</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      type="button"
+                      class="btn-table-action btn-cancel"
+                      (click)="cancelarEdicion()"
+                      matTooltip="Cancelar (Esc)"
+                    >
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  }
+                </div>
+              } @else {
+                <div class="quantity-display-container">
+                  <span class="quantity-text">{{ formatCantidad(element.Quantity) }}</span>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    class="btn-table-action btn-edit"
+                    (click)="iniciarEdicion(element)"
+                    matTooltip="Editar cantidad"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </div>
+              }
+            </div>
+          } @else if (column.columnDef === 'Acciones') {
+            <div class="actions-cell">
+              @if (eliminandoChildNum() === element.ChildNum) {
+                <mat-progress-spinner mode="indeterminate" diameter="20" strokeWidth="2.5"></mat-progress-spinner>
+              } @else {
+                <button
+                  mat-icon-button
+                  type="button"
+                  class="btn-table-action btn-delete"
+                  (click)="eliminarLinea(element)"
+                  [disabled]="guardandoChildNum() === element.ChildNum"
+                  matTooltip="Eliminar componente"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+            </div>
+          } @else if (column.cell) {
+            {{ column.cell(element) }}
+          } @else {
+            {{ element[column.columnDef] }}
+          }
+        </ng-template>
+      </mat-card-content>
     </mat-card>
+  }
 </div>

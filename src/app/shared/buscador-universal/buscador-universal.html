@@ -26,7 +26,7 @@
         <button
           mat-icon-button
           matSuffix
-          (click)="txtSearch.setValue('')"
+          (click)="limpiarBusqueda()"
           type="button"
           aria-label="Limpiar búsqueda"
           matTooltip="Borrar texto"
@@ -80,7 +80,7 @@
             </mat-card>
           }
         </div>
-      } @else if (busquedaRealizada() && !procesando()) {
+      } @else if( !procesando()) {
         <p class="no-results">{{ emptyMessage }}</p>
       }
     } @else {
@@ -98,17 +98,6 @@
             >
               <mat-icon>list</mat-icon>
               Cambiar
-            </button>
-            <button
-              mat-button
-              color="warn"
-              type="button"
-              class="action-btn"
-              (click)="limpiar()"
-              matTooltip="Eliminar selección"
-            >
-              <mat-icon>close</mat-icon>
-              Quitar
             </button>
           </div>
         </div>

@@ -117,8 +117,8 @@ export class BuscadorUniversal<T = any> implements OnInit, OnChanges, OnDestroy 
   // OUTPUTS
   // ==========================================
 
-  @Output() readonly itemSeleccionado = new EventEmitter<T>();
-  @Output() readonly idSeleccionado = new EventEmitter<string | number>();
+  @Output() readonly itemSeleccionado = new EventEmitter<T | null>();
+  @Output() readonly idSeleccionado = new EventEmitter<string | number | null>();
   @Output() readonly limpiado = new EventEmitter<void>();
   @Output() readonly procesandoChange = new EventEmitter<boolean>();
   @Output() readonly resultadosChange = new EventEmitter<T[]>();
@@ -170,8 +170,8 @@ export class BuscadorUniversal<T = any> implements OnInit, OnChanges, OnDestroy 
     if (changes['initialValue'] && !changes['initialValue'].isFirstChange()) {
       if (this.initialValue) {
         this.seleccionar(this.initialValue, false);
-      } else if (this.selectedItem()) {
-        this.limpiar(false);
+      } else {
+        this.deseleccionar(false);
       }
     }
   }
@@ -270,10 +270,20 @@ export class BuscadorUniversal<T = any> implements OnInit, OnChanges, OnDestroy 
   // ==========================================
 
   onSearchInput(): void {
-    this.mostrarListaCompleta.set(true);
+    if (this.selectedItem()) {
+      this.deseleccionar();
+    } else {
+      this.mostrarListaCompleta.set(true);
+    }
   }
 
   seleccionar(item: T, emitEvent: boolean = true): void {
+    const isAlreadySelected = this.selectedKey() === this.getItemKey(item);
+    if (isAlreadySelected) {
+      this.deseleccionar(emitEvent);
+      return;
+    }
+
     this.selectedItem.set(item);
     this.mostrarListaCompleta.set(false);
 
@@ -288,20 +298,35 @@ export class BuscadorUniversal<T = any> implements OnInit, OnChanges, OnDestroy 
     }
   }
 
-  limpiar(emitEvent: boolean = true): void {
+  deseleccionar(emitEvent: boolean = true): void {
     this.selectedItem.set(null);
-    this.resultados.set([]);
-    this.busquedaRealizada.set(false);
     this.mostrarListaCompleta.set(true);
-    this.txtSearch.setValue('', { emitEvent: false });
 
     if (emitEvent) {
+      this.itemSeleccionado.emit(null);
+      this.idSeleccionado.emit(null);
       this.limpiado.emit();
     }
   }
 
   reabrirLista(): void {
-    this.mostrarListaCompleta.set(true);
+    this.deseleccionar();
+  }
+
+  limpiar(emitEvent: boolean = true): void {
+    this.deseleccionar(emitEvent);
+    this.resultados.set([]);
+    this.busquedaRealizada.set(false);
+    this.txtSearch.setValue('', { emitEvent: false });
+  }
+
+  limpiarBusqueda(): void {
+    this.txtSearch.setValue('');
+    this.resultados.set([]);
+    this.busquedaRealizada.set(false);
+    if (this.selectedItem()) {
+      this.deseleccionar();
+    }
   }
 
   // ==========================================
