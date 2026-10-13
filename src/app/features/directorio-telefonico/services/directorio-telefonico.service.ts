@@ -12,9 +12,10 @@ export class DirectorioTelefonicoService {
   private http = inject(HttpClient);
   private getUrlEndpointService = inject(GetUrlEndpointService);
 
-  // variables privadas
-  private readonly currentUser = localStorage.getItem('currentUser');
-  readonly ModulosAcceso = JSON.parse(this.currentUser || '{}')?.ModulosAcceso || {};
+  get ModulosAcceso() {
+    const currentUser = localStorage.getItem('currentUser');
+    return JSON.parse(currentUser || '{}')?.ModulosAcceso || {};
+  }
 
   getDirectorio(): Observable<Contacto[]> {
     const url = this.getUrlEndpointService.getUrlFromEndPointName('directorio');

@@ -1,7 +1,7 @@
 // sidebar.component.ts
 import { Component, signal, computed, HostListener, inject, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SidebarMenuService } from './services/nav-bar-menu.service';
+import { NavbarMenuService } from './services/nav-bar-menu.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
@@ -26,10 +26,15 @@ export class NavBarMenu {
 
   // nombre de la empresa
   protected readonly companyName = enviroment.empresaNombre;
-  protected readonly usuario = localStorage.getItem('Nombre');
+  protected get usuario(): string {
+    return localStorage.getItem('Nombre') || '';
+  }
   protected readonly entorno = entorno;           //? pa saber si estamos en modo desarrollo o no
 
-  protected readonly menu = signal<MenuItem[]>([]);
+  private menuService = inject(NavbarMenuService);
+  private userService = inject(UserService);
+
+  protected readonly menu = this.menuService.menu;
   expandedItems = signal<Set<string>>(new Set());
   nestedLeftItems = signal<Set<string>>(new Set());
 
@@ -41,11 +46,8 @@ export class NavBarMenu {
   // ruta actual 
   currentRoute = signal(this.router.url);
 
-  constructor(
-    private menuService: SidebarMenuService,
-    private userService: UserService
-  ) {
-    this.menu.set(this.menuService.getMenu());
+  constructor() {
+    // Initialize mobile state
 
     // Initialize mobile state
     this.navbarState.setIsMobile(window.innerWidth < 992);
