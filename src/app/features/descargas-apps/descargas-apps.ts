@@ -54,16 +54,38 @@ export class DescargasApps {
     if (event) {
       event.preventDefault();
     }
+
+    if (this.downloadingId()) {
+      return;
+    }
     
     const fileUrl = this.getApkUrl(apk);
+    this.downloadingId.set(apk.id);
 
-    // Descarga directa mediante el navegador para que Android/PC gestione el archivo de forma nativa
-    const a = document.createElement('a');
-    a.href = fileUrl;
-    a.download = apk.fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = apk.fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        this.downloadingId.set(null);
+      },
+      error: (err) => {
+        console.error('Error al descargar APK vía Blob:', err);
+        this.downloadingId.set(null);
+        // Fallback a descarga directa en caso de error
+        const a = document.createElement('a');
+        a.href = fileUrl;
+        a.download = apk.fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    });
   }
   readonly apks: ApkItem[] = [
     {
