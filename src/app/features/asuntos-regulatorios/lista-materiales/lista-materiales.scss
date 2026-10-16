@@ -71,7 +71,14 @@
 
 // Cabecera de la sección
 .table-section-header {
-  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
 
   .section-title {
     display: flex;
@@ -85,6 +92,215 @@
     mat-icon {
       color: $primary;
     }
+  }
+
+  .btn-toggle-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #16a34a;
+    color: #ffffff;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.88rem;
+    padding: 0 16px;
+    height: 36px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+
+    mat-icon {
+      font-size: 19px;
+      width: 19px;
+      height: 19px;
+    }
+
+    &:hover {
+      background-color: #15803d;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+// Contenedor interno del modal de agregar material
+.modal-add-material-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .search-material-wrapper {
+    width: 100%;
+  }
+
+  .selected-material-panel {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    animation: fadeIn 0.2s ease-in;
+
+    .material-details-strip {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e2e8f0;
+
+      .material-code-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background-color: #dbeafe;
+        color: #1e40af;
+        padding: 4px 10px;
+        border-radius: 5px;
+        font-weight: 700;
+        font-size: 0.88rem;
+
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      .material-info {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .material-name {
+          font-weight: 600;
+          color: #0f172a;
+          font-size: 0.95rem;
+        }
+
+        .material-uom {
+          font-size: 0.85rem;
+          color: #475569;
+          background: #f1f5f9;
+          padding: 2px 8px;
+          border-radius: 4px;
+        }
+      }
+    }
+
+    .material-form-fields {
+      display: flex;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+
+      .field-item {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex: 1;
+        min-width: 140px;
+
+        .field-label {
+          font-size: 0.82rem;
+          font-weight: 600;
+          color: #475569;
+
+          .required {
+            color: #ef4444;
+          }
+        }
+
+        .form-control-custom {
+          height: 40px;
+          padding: 6px 12px;
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          font-size: 0.92rem;
+          color: #1e293b;
+          background: #ffffff;
+          outline: none;
+          width: 100%;
+          box-sizing: border-box;
+          transition: border-color 0.2s, box-shadow 0.2s;
+
+          &:focus {
+            border-color: $primary;
+            box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.12);
+          }
+
+          &:disabled {
+            background-color: #f1f5f9;
+            cursor: not-allowed;
+            color: #64748b;
+          }
+        }
+      }
+    }
+  }
+
+  .modal-footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    padding-top: 14px;
+    border-top: 1px solid #e2e8f0;
+
+    .btn-modal-cancel {
+      color: #64748b;
+      font-weight: 500;
+
+      &:hover:not(:disabled) {
+        background-color: #f1f5f9;
+        color: #1e293b;
+      }
+    }
+
+    .btn-modal-confirm {
+      height: 40px;
+      background-color: #16a34a;
+      color: #ffffff;
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 0 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.15s, transform 0.1s;
+
+      &:hover:not(:disabled) {
+        background-color: #15803d;
+        transform: translateY(-1px);
+      }
+
+      &:disabled {
+        background-color: #cbd5e1;
+        color: #94a3b8;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

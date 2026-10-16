@@ -30,3 +30,16 @@ export interface ProductTreeStages {
     Name: string;
     Sequence: number;
 }
+
+//materiales o componentes necesarios para la fabricacion de un producto
+export interface Item {
+    ItemCode: string;
+    ItemName: string;
+    InventoryUOM?: string;
+    Uom?: string;
+    DefaultWarehouse?: string;
+    ItemType?: string;
+    OnHand?: number;
+    IsCommited?: number;
+    Available?: number;
+}

@@ -13,9 +13,10 @@ import { Header } from '../../../shared/header/header';
 import { BuscadorUniversal } from '../../../shared/buscador-universal';
 import { Table, TableColumn } from '../../../shared/table/table';
 import { ListaMaterialesService } from './lista-materiales.service';
-import { listaMateriales, ProductTreeLines, producto } from './lista-materiales.model';
+import { Item, listaMateriales, ProductTreeLines, producto } from './lista-materiales.model';
 import { LoaderPage } from '../../../shared/loader-page/loader-page';
 import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.service';
+import { Modal } from '../../../shared/modal/modal';
 
 @Component({
   selector: 'app-lista-materiales',
@@ -33,8 +34,9 @@ import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.se
     MatProgressSpinnerModule,
     BuscadorUniversal,
     Table,
-    LoaderPage
-],
+    LoaderPage,
+    Modal
+  ],
   templateUrl: './lista-materiales.html',
   styleUrl: './lista-materiales.scss',
 })
@@ -54,6 +56,13 @@ export class ListaMateriales implements OnDestroy {
   readonly valorEditandoCantidad = signal<number | null>(null);
   readonly guardandoChildNum = signal<number | null>(null);
   readonly eliminandoChildNum = signal<number | null>(null);
+
+  // Estados para modal de agregar nuevo componente
+  readonly mostrarModalAgregar = signal<boolean>(false);
+  readonly itemSeleccionado = signal<Item | null>(null);
+  nuevaCantidad: number | null = null;
+  nuevoAlmacen: string = '';
+  readonly guardandoNuevoItem = signal<boolean>(false);
 
   // Formato para mostrar cantidades
   formatCantidad(qty: number | undefined | null): string {
@@ -88,6 +97,18 @@ export class ListaMateriales implements OnDestroy {
 
   // Formato de subtítulo para el buscador universal
   readonly subtituloMaterial = (item: producto) => (item?.TreeCode ? `Código: ${item.TreeCode}` : '');
+
+  // Función de búsqueda de ítems/materiales a agregar
+  buscarItemsFn = (material: string) => this.listaMaterialesService.searchItems(material);
+
+  // Formato de subtítulo para el buscador de items
+  readonly subtituloItem = (item: Item) => {
+    if (!item) return '';
+    const parts: string[] = [`Código: ${item.ItemCode}`];
+    if (item.InventoryUOM) parts.push(`Unidad: ${item.InventoryUOM}`);
+    if (item.DefaultWarehouse) parts.push(`Almacén: ${item.DefaultWarehouse}`);
+    return parts.join(' | ');
+  };
 
   ngOnDestroy(): void {
     this.detalleSubscription?.unsubscribe();
@@ -253,6 +274,125 @@ export class ListaMateriales implements OnDestroy {
       });
   }
 
+  abrirModalAgregar(): void {
+    this.onLimpiarItemSeleccionado();
+    this.nuevoAlmacen = this.detalleListaMateriales()?.Warehouse || '';
+    this.mostrarModalAgregar.set(true);
+  }
+
+  cerrarModalAgregar(forzar = false): void {
+    if (!forzar && this.guardandoNuevoItem()) return;
+    this.mostrarModalAgregar.set(false);
+    this.onLimpiarItemSeleccionado();
+  }
+
+  toggleFormularioAgregar(): void {
+    if (this.mostrarModalAgregar()) {
+      this.cerrarModalAgregar();
+    } else {
+      this.abrirModalAgregar();
+    }
+  }
+
+  onItemSeleccionado(item: Item | null): void {
+    this.itemSeleccionado.set(item);
+    if (item) {
+      this.nuevoAlmacen = this.detalleListaMateriales()?.Warehouse || '';
+      if (!this.nuevaCantidad) {
+        this.nuevaCantidad = 1;
+      }
+    } else {
+      this.nuevaCantidad = null;
+    }
+  }
+
+  onLimpiarItemSeleccionado(): void {
+    this.itemSeleccionado.set(null);
+    this.nuevaCantidad = null;
+    this.nuevoAlmacen = '';
+  }
+
+  guardarNuevoComponente(): void {
+    const treeCode = this.productoSeleccionado()?.TreeCode;
+    const item = this.itemSeleccionado();
+    const cantidad = this.nuevaCantidad;
+    // El almacén se toma directamente del producto padre
+    const almacen = this.detalleListaMateriales()?.Warehouse?.trim() || undefined;
+
+    if (!treeCode) {
+      this.sweetAlert.error('Error', 'No hay una lista de materiales seleccionada.');
+      return;
+    }
+
+    if (!item) {
+      this.sweetAlert.warning('Componente requerido', 'Selecciona un componente para agregar a la lista.');
+      return;
+    }
+
+    if (cantidad === null || cantidad === undefined || isNaN(cantidad) || cantidad <= 0) {
+      this.sweetAlert.warning('Cantidad inválida', 'La cantidad debe ser un número mayor a 0.');
+      return;
+    }
+
+    // Validar si el componente ya existe en la lista actual
+    const yaExiste = this.materiales().some(
+      (m) => m.ItemCode?.toString().trim().toUpperCase() === item.ItemCode.trim().toUpperCase()
+    );
+
+    if (yaExiste) {
+      this.sweetAlert.warning(
+        'Componente duplicado',
+        `El componente "${item.ItemCode} - ${item.ItemName}" ya forma parte de esta lista de materiales.`
+      );
+      return;
+    }
+
+    this.guardandoNuevoItem.set(true);
+
+    this.listaMaterialesService
+      .insertProductTreeLine(treeCode, item.ItemCode, cantidad, almacen)
+      .pipe(finalize(() => this.guardandoNuevoItem.set(false)))
+      .subscribe({
+        next: (res: any) => {
+          this.guardandoNuevoItem.set(false);
+          this.cerrarModalAgregar(true);
+          this.sweetAlert.success('Componete agregado', res?.message || 'El componente fue agregado exitosamente.');
+          this.recargarDetalle(treeCode);
+        },
+        error: (err) => {
+          console.error('Error al agregar componente:', err);
+          const errorMsg =
+            err?.error?.message ||
+            err?.error?.error ||
+            err?.message ||
+            'Ocurrió un error al agregar el componente a la lista.';
+          this.sweetAlert.error('Error al agregar componente', errorMsg);
+        },
+      });
+  }
+
+  recargarDetalle(treeCode: string): void {
+    this.cargandoDetalle.set(true);
+    this.listaMaterialesService
+      .getListaMaterialesPorProducto(treeCode)
+      .pipe(finalize(() => this.cargandoDetalle.set(false)))
+      .subscribe({
+        next: (res: any) => {
+          const info = res?.data;
+          this.detalleListaMateriales.set(info ?? null);
+          const rawLines = info?.materiales ?? info?.ProductTreeLines ?? [];
+          const lines: ProductTreeLines[] = rawLines.map((line: any, index: number) => ({
+            ...line,
+            ChildNum: line.ChildNum !== undefined && line.ChildNum !== null ? Number(line.ChildNum) : index,
+          }));
+          this.materiales.set(lines);
+        },
+        error: (err) => {
+          console.error('Error al recargar lista de materiales:', err);
+        },
+      });
+  }
+
   onLimpiar(): void {
     this.detalleSubscription?.unsubscribe();
     this.cargandoDetalle.set(false);
@@ -262,5 +402,6 @@ export class ListaMateriales implements OnDestroy {
     this.cancelarEdicion();
     this.guardandoChildNum.set(null);
     this.eliminandoChildNum.set(null);
+    this.cerrarModalAgregar();
   }
 }

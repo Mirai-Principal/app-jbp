@@ -64,6 +64,15 @@
             <mat-icon>inventory_2</mat-icon>
             Materiales / Componentes ({{ materiales().length }})
           </h3>
+          <button
+            mat-flat-button
+            type="button"
+            class="btn-toggle-add"
+            (click)="abrirModalAgregar()"
+          >
+            <mat-icon>add_circle</mat-icon>
+            <span>Agregar Material</span>
+          </button>
         </div>
 
         <!-- Tabla reutilizable desde shared/table -->
@@ -160,4 +169,111 @@
       </mat-card-content>
     </mat-card>
   }
+
+  <!-- Modal reutilizable para agregar nuevo material/componente -->
+  <app-modal
+    [isOpen]="mostrarModalAgregar()"
+    title="Agregar Material / Componente"
+    [subtitle]="detalleListaMateriales() ? 'Lista: ' + (detalleListaMateriales()!.ProductDescription || detalleListaMateriales()!.TreeCode) : ''"
+    [closeOnBackdropClick]="true"
+    [loading]="guardandoNuevoItem()"
+    maxWidth="720px"
+    (close)="cerrarModalAgregar()"
+    (backdropClick)="cerrarModalAgregar()"
+  >
+    @if (mostrarModalAgregar()) {
+      <div class="modal-add-material-container">
+        <!-- Buscador de material usando BuscadorUniversal -->
+        <div class="search-material-wrapper">
+          <app-buscador-universal
+            [searchFn]="buscarItemsFn"
+            primaryKey="ItemCode"
+            titleKey="ItemName"
+            label="Buscar material / componente"
+            placeholder="Escribe el código o descripción del material..."
+            [subtitleKey]="subtituloItem"
+            (itemSeleccionado)="onItemSeleccionado($event)"
+            (limpiado)="onLimpiarItemSeleccionado()"
+          >
+          </app-buscador-universal>
+        </div>
+
+        <!-- Panel con detalles del material y campos al seleccionar -->
+        @if (itemSeleccionado()) {
+          <div class="selected-material-panel">
+            <div class="material-details-strip">
+              <div class="material-code-badge">
+                <mat-icon>check_circle</mat-icon>
+                <span>{{ itemSeleccionado()!.ItemCode }}</span>
+              </div>
+              <div class="material-info">
+                <span class="material-name">{{ itemSeleccionado()!.ItemName }}</span>
+                @if (itemSeleccionado()!.InventoryUOM) {
+                  <span class="material-uom">Unidad: <strong>{{ itemSeleccionado()!.InventoryUOM }}</strong></span>
+                }
+              </div>
+            </div>
+
+            <div class="material-form-fields">
+              <div class="field-item">
+                <label class="field-label" for="modal-add-qty">Cantidad <span class="required">*</span></label>
+                <input
+                  id="modal-add-qty"
+                  type="number"
+                  class="form-control-custom"
+                  [(ngModel)]="nuevaCantidad"
+                  placeholder="Ej: 1.00"
+                  min="0.000001"
+                  step="any"
+                  [disabled]="guardandoNuevoItem()"
+                  (keydown.enter)="guardarNuevoComponente()"
+                />
+              </div>
+
+              <div class="field-item">
+                <label class="field-label" for="modal-add-whs">Almacén </label>
+                <input
+                  id="modal-add-whs"
+                  type="text"
+                  class="form-control-custom readonly-input"
+                  [value]="detalleListaMateriales()?.Warehouse || '-'"
+                  readonly
+                  disabled
+                  matTooltip="El almacén se asigna automáticamente desde el producto principal"
+                />
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Acciones del Modal -->
+        <div class="modal-footer-actions">
+          <button
+            mat-stroked-button
+            type="button"
+            class="btn-modal-cancel"
+            (click)="cerrarModalAgregar()"
+            [disabled]="guardandoNuevoItem()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            mat-flat-button
+            type="button"
+            class="btn-modal-confirm"
+            (click)="guardarNuevoComponente()"
+            [disabled]="guardandoNuevoItem() || !itemSeleccionado() || !nuevaCantidad || nuevaCantidad <= 0"
+          >
+            @if (guardandoNuevoItem()) {
+              <mat-progress-spinner matButtonIcon mode="indeterminate" diameter="18" strokeWidth="2.5"></mat-progress-spinner>
+            } @else {
+              <mat-icon>add</mat-icon>
+            }
+            <span>{{ guardandoNuevoItem() ? 'Guardando...' : 'Agregar a la lista' }}</span>
+          </button>
+        </div>
+      </div>
+    }
+  </app-modal>
 </div>

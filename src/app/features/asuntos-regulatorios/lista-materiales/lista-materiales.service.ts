@@ -2,7 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GetUrlEndpointService } from '../../../core/services/get-url-endpoint.service';
 import { Observable } from 'rxjs';
-import { listaMateriales } from './lista-materiales.model';
+import { map } from 'rxjs/operators';
+import { Item, listaMateriales } from './lista-materiales.model';
 
 @Injectable({
   providedIn: 'root',
@@ -34,5 +35,20 @@ export class ListaMaterialesService {
         return this.http.delete<void>(url);
     }
 
+    searchItems(material: string): Observable<Item[]> {
+        const url = this.endpoint.service_layer + `items?search=${material}`;
+        return this.http.get<{ data: Item[] } | Item[]>(url).pipe(
+            map((res: any) => res?.data ?? res ?? [])
+        );
+    }
 
+    insertProductTreeLine(treeCode: string, itemCode: string, quantity: number, warehouse?: string): Observable<any> {
+        const url = this.endpoint.service_layer + `lista-materiales/${treeCode}`;
+        const body: any = {
+            ItemCode: itemCode,
+            Quantity: quantity,
+            ...(warehouse ? { Warehouse: warehouse } : {})
+        };
+        return this.http.post<any>(url, body);
+    }
 }
