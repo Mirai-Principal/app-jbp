@@ -6,8 +6,14 @@
 
 <div class="container">
     <mat-card>
-        <mat-card-header>
+        <mat-card-header class="card-header-actions">
             <mat-card-title>FOR-ARH-011 Base de Datos de Reportes RAM, FT, EM</mat-card-title>
+            <div class="header-actions">
+                <button mat-flat-button class="btn-excel" (click)="exportarExcel()" [disabled]="isLoading() || reacciones().length === 0" title="Exportar reporte a archivo Excel">
+                    <mat-icon>table_view</mat-icon>
+                    Exportar a Excel
+                </button>
+            </div>
         </mat-card-header>
         <mat-card-content>
             <div class="table-container">
