@@ -33,6 +33,7 @@
                             <th>Notificador</th>
                             <th>Mail</th>
                             <th>Teléfono</th>
+                            <th class="action-column">Reporte</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,6 +65,12 @@
                             <td>{{item.notificador}}</td>
                             <td>{{item.notificadorMail}}</td>
                             <td>{{item.notificadorTelefono}}</td>
+                            <td class="action-column">
+                                <button mat-flat-button class="btn-pdf-row" (click)="exportarPdfRegistro(item)" title="Descargar reporte PDF de {{item.idStr}}">
+                                    <mat-icon>picture_as_pdf</mat-icon>
+                                    PDF
+                                </button>
+                            </td>
                         </tr>
                         @if(isExpanded(item.id)) {
                         <tr class="expanded-row">

@@ -11,6 +11,8 @@ import { LoaderPage } from "../../shared/loader-page/loader-page";
 import { SweetAlertService } from '../../shared/alert/services/sweet-alert.service';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-reacciones-reporte',
@@ -196,6 +198,202 @@ export class ReaccionesReporte {
     }
   }
 
+  async exportarPdfRegistro(item: ReaccionesReporteResponse): Promise<void> {
+    try {
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const codRegistro = item.idStr || String(item.id);
+
+      // Encabezado Institucional
+      doc.setFillColor(63, 81, 181);
+      doc.rect(0, 0, pageWidth, 28, 'F');
+
+      const logoImg = await this.cargarImagen('logoOriginal.png');
+      let textStartX = 14;
+      if (logoImg) {
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(12, 3, 28, 22, 2, 2, 'F');
+        doc.addImage(logoImg, 'PNG', 13.5, 4, 25, 20);
+        textStartX = 44;
+      }
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.text('REPORTE DE REACCIONES ADVERSAS', textStartX, 12);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.text('FOR-ARH-011', textStartX, 19);
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.text(`Cód. Registro: ${codRegistro}`, pageWidth - 14, 12, { align: 'right' });
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Fecha Registro: ${item.fechaRegistro || '-'}`, pageWidth - 14, 19, { align: 'right' });
+
+      let currentY = 36;
+
+      // 1. Datos Generales del Paciente y Notificador
+      doc.setTextColor(44, 62, 80);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.text('1. Datos del Paciente y Notificador', 14, currentY);
+      currentY += 3;
+
+      const otraEnfTexto = item.padeceOtraEnfermedad
+        ? `Sí${item.otraEnfermedad ? ' - ' + item.otraEnfermedad : ''}`
+        : 'No';
+
+      autoTable(doc, {
+        startY: currentY,
+        theme: 'grid',
+        styles: { fontSize: 9, cellPadding: 2.5, textColor: [44, 62, 80] },
+        columnStyles: {
+          0: { fontStyle: 'bold', fillColor: [245, 247, 250], cellWidth: 42 },
+          1: { cellWidth: 49 },
+          2: { fontStyle: 'bold', fillColor: [245, 247, 250], cellWidth: 42 },
+          3: { cellWidth: 49 }
+        },
+        body: [
+          ['Nombres:', item.nombres || '-', 'Apellidos:', item.apellidos || '-'],
+          ['Rango de Edad:', item.rangoEdad || '-', 'Sexo:', item.sexo || '-'],
+          ['Altura (Cm):', item.alturaCm != null ? `${item.alturaCm} cm` : '-', 'Peso (Kg):', item.pesoKg != null ? `${item.pesoKg} kg` : '-'],
+          ['Quién Padeció:', item.quienPadecioEnfermedad || '-', 'Otra Enfermedad:', otraEnfTexto],
+          ['Notificador:', item.notificador || '-', 'Teléfono:', item.notificadorTelefono || '-'],
+          ['Correo Notificador:', { content: item.notificadorMail || '-', colSpan: 3 }]
+        ]
+      });
+
+      currentY = (doc as any).lastAutoTable.finalY + 8;
+
+      // 2. Medicamentos Involucrados
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(44, 62, 80);
+      doc.text('2. Medicamentos Reportados', 14, currentY);
+      currentY += 3;
+
+      const meds = item.medicamentos || [];
+      if (meds.length > 0) {
+        autoTable(doc, {
+          startY: currentY,
+          theme: 'grid',
+          headStyles: { fillColor: [63, 81, 181], textColor: 255, fontSize: 8, fontStyle: 'bold' },
+          styles: { fontSize: 7.5, cellPadding: 2, overflow: 'linebreak' },
+          head: [[
+            'Medicamento', 'Lote', 'F. Venc.', 'Uso', 'Posología',
+            'Frecuencia', 'Vía', '¿Qué pasó?', 'F. Uso', 'Dejó de usar', 'Reac. Previa'
+          ]],
+          body: meds.map(m => [
+            m.medicamento || '-',
+            m.lote || '-',
+            m.fechaVencimiento || '-',
+            m.paraQueUtilizo || '-',
+            m.posologia || '-',
+            m.cantidadFrecuencia || '-',
+            m.viaAdministracion || '-',
+            m.quePasoConMedicamento || '-',
+            m.fechaUtilizacion || '-',
+            m.cuandoDejoUsar || '-',
+            m.haVueltoReaccion ? 'Sí' : 'No'
+          ])
+        });
+        currentY = (doc as any).lastAutoTable.finalY + 8;
+      } else {
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(9);
+        doc.setTextColor(120, 120, 120);
+        doc.text('No se registraron medicamentos asociados.', 14, currentY + 4);
+        currentY += 10;
+      }
+
+      // 3. Reacciones Adversas
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(44, 62, 80);
+      doc.text('3. Reacciones Adversas Presentadas', 14, currentY);
+      currentY += 3;
+
+      const reaccionesList = item.reaccionesStr || [];
+      if (reaccionesList.length > 0) {
+        autoTable(doc, {
+          startY: currentY,
+          theme: 'grid',
+          headStyles: { fillColor: [220, 53, 69], textColor: 255, fontSize: 8.5, fontStyle: 'bold' },
+          styles: { fontSize: 8.5, cellPadding: 2.5 },
+          head: [['#', 'Reacción Adversa Reportada']],
+          columnStyles: { 0: { cellWidth: 15, halign: 'center' } },
+          body: reaccionesList.map((r, idx) => [String(idx + 1), r])
+        });
+        currentY = (doc as any).lastAutoTable.finalY + 8;
+      } else {
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(9);
+        doc.setTextColor(120, 120, 120);
+        doc.text('Sin reacciones adversas listadas.', 14, currentY + 4);
+        currentY += 10;
+      }
+
+      // 4. Información y Evolución de la Reacción
+      if (currentY > 250) {
+        doc.addPage();
+        currentY = 20;
+      }
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(44, 62, 80);
+      doc.text('4. Información y Evolución de la Reacción', 14, currentY);
+      currentY += 3;
+
+      const infos = item.informacionesReaccion || [];
+      if (infos.length > 0) {
+        autoTable(doc, {
+          startY: currentY,
+          theme: 'grid',
+          headStyles: { fillColor: [63, 81, 181], textColor: 255, fontSize: 8.5, fontStyle: 'bold' },
+          styles: { fontSize: 8.5, cellPadding: 2.5 },
+          head: [[
+            'Síntomas', 'Estado Persona', 'Fecha Inicio',
+            'Fecha Fin', 'Tratamiento', 'Descripción Tratamiento'
+          ]],
+          body: infos.map(info => [
+            info.sintomas || '-',
+            info.estadoPersonaAfectada || '-',
+            info.fechaInicio || '-',
+            info.fechaFin || '-',
+            info.siguiioTratamiento ? 'Sí' : 'No',
+            info.tratamiento || '-'
+          ])
+        });
+      } else {
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(9);
+        doc.setTextColor(120, 120, 120);
+        doc.text('Sin detalles adicionales de evolución.', 14, currentY + 4);
+      }
+
+      // Pie de página con numeración
+      const totalPages = doc.getNumberOfPages();
+      const fechaImpresion = new Date().toLocaleString('es-EC');
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text(`Generado el: ${fechaImpresion}`, 14, 290);
+        doc.text(`Página ${i} de ${totalPages}`, pageWidth - 14, 290, { align: 'right' });
+      }
+
+      const nombreArchivo = `Reporte_${codRegistro}.pdf`;
+      doc.save(nombreArchivo);
+    } catch (error) {
+      console.error('Error al generar PDF del registro:', error);
+      this.sweetAlert.error('Error', 'Ocurrió un error al generar el PDF del registro.');
+    }
+  }
+
   private calcularAnchoColumnas(data: any[]): { wch: number }[] {
     if (!data || data.length === 0) return [];
     const keys = Object.keys(data[0]);
@@ -209,6 +407,16 @@ export class ReaccionesReporte {
         }
       }
       return { wch: Math.min(Math.max(maxLen + 3, 12), 50) };
+    });
+  }
+
+  private cargarImagen(url: string): Promise<HTMLImageElement | null> {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      img.src = url;
     });
   }
 
