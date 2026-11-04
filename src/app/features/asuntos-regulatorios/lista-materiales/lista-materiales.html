@@ -56,6 +56,38 @@
                 <span class="summary-value">{{ detalleListaMateriales()!.Warehouse }}</span>
               </div>
             }
+            <div class="summary-item summary-item-approval">
+              <span class="summary-label">Aprobado Asuntos Reg.:</span>
+              <div
+                class="switch-approval"
+                [class.approved]="esAprobado()"
+                [class.disabled]="actualizandoAprobacion()"
+                (click)="!actualizandoAprobacion() && confirmarCambioAprobacion()"
+                role="switch"
+                [attr.aria-checked]="esAprobado()"
+                tabindex="0"
+                (keydown.enter)="!actualizandoAprobacion() && confirmarCambioAprobacion()"
+                (keydown.space)="!actualizandoAprobacion() && confirmarCambioAprobacion()"
+                [matTooltip]="esAprobado() ? 'Aprobado (SI). Clic para cambiar a NO' : 'No Aprobado (NO). Clic para cambiar a SI'"
+              >
+                <div class="switch-track">
+                  <div class="switch-thumb">
+                    @if (actualizandoAprobacion()) {
+                      <mat-progress-spinner mode="indeterminate" diameter="14" strokeWidth="2"></mat-progress-spinner>
+                    } @else {
+                      <mat-icon>{{ esAprobado() ? 'check' : 'close' }}</mat-icon>
+                    }
+                  </div>
+                </div>
+              </div>
+              <span
+                class="approval-badge"
+                [class.badge-approved]="esAprobado()"
+                [class.badge-pending]="!esAprobado()"
+              >
+                {{ esAprobado() ? 'Aprobado' : 'No Aprobado' }}
+              </span>
+            </div>
           </div>
         }
 

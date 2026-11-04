@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCard, MatCardContent } from '@angular/material/card';
@@ -50,6 +50,14 @@ export class ListaMateriales implements OnDestroy {
   readonly detalleListaMateriales = signal<listaMateriales['data'] | null>(null);
   readonly materiales = signal<ProductTreeLines[]>([]);
   readonly cargandoDetalle = signal<boolean>(false);
+  readonly actualizandoAprobacion = signal<boolean>(false);
+
+  readonly esAprobado = computed<boolean>(() => {
+    const estado = this.detalleListaMateriales()?.U_JB_APROBADO_ASUNTOS_REGULATORIOS;
+    if (!estado) return false;
+    const norm = String(estado).trim().toUpperCase();
+    return norm === 'SI' || norm === 'Y' || norm === 'S';
+  });
 
   // Estados de edición en línea
   readonly editandoChildNum = signal<number | null>(null);
@@ -393,9 +401,71 @@ export class ListaMateriales implements OnDestroy {
       });
   }
 
+  confirmarCambioAprobacion(): void {
+    const treeCode = this.productoSeleccionado()?.TreeCode;
+    if (!treeCode) {
+      this.sweetAlert.error('Error', 'No hay un producto seleccionado.');
+      return;
+    }
+
+    if (this.actualizandoAprobacion()) return;
+
+    const actual = this.esAprobado() ? 'SI' : 'NO';
+    const nuevoEstado: 'SI' | 'NO' = actual === 'SI' ? 'NO' : 'SI';
+    const accion = nuevoEstado === 'SI' ? 'Aprobar' : 'No aprobar';
+    const alertType = nuevoEstado === 'SI' ? 'info' : 'warning';
+    const mensaje =
+      nuevoEstado === 'SI'
+        ? `¿Estás seguro de que deseas marcar como APROBADA la lista de materiales "${treeCode}"?`
+        : `¿Estás seguro de que deseas cambiar a NO APROBADA la lista de materiales "${treeCode}"?`;
+
+    this.sweetAlert
+      .confirm({
+        title: `¿${accion} lista de materiales?`,
+        message: mensaje,
+        type: alertType,
+        confirmButtonText: `Sí, ${accion.toLowerCase()}`,
+        cancelButtonText: 'Cancelar',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.cambiarAprobacion(treeCode, nuevoEstado);
+        }
+      });
+  }
+
+  private cambiarAprobacion(treeCode: string, nuevoEstado: 'SI' | 'NO'): void {
+    this.actualizandoAprobacion.set(true);
+
+    this.listaMaterialesService
+      .updateAprobarCambios(treeCode, nuevoEstado)
+      .pipe(finalize(() => this.actualizandoAprobacion.set(false)))
+      .subscribe({
+        next: (res: any) => {
+          this.detalleListaMateriales.update((current) =>
+            current ? { ...current, U_JB_APROBADO_ASUNTOS_REGULATORIOS: nuevoEstado } : current
+          );
+          this.sweetAlert.success(
+            'Estado actualizado',
+            res?.message || `El estado de aprobación se actualizó a "${nuevoEstado}".`
+          );
+        },
+        error: (err) => {
+          console.error('Error al actualizar aprobación:', err);
+          const errorMsg =
+            err?.error?.message ||
+            err?.error?.error ||
+            err?.message ||
+            'Ocurrió un error al actualizar el estado de aprobación.';
+          this.sweetAlert.error('Error al actualizar', errorMsg);
+        },
+      });
+  }
+
   onLimpiar(): void {
     this.detalleSubscription?.unsubscribe();
     this.cargandoDetalle.set(false);
+    this.actualizandoAprobacion.set(false);
     this.productoSeleccionado.set(null);
     this.detalleListaMateriales.set(null);
     this.materiales.set([]);

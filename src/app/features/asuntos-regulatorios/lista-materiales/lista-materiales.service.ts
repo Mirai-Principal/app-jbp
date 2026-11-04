@@ -6,14 +6,14 @@ import { map } from 'rxjs/operators';
 import { Item, listaMateriales } from './lista-materiales.model';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class ListaMaterialesService {
 
     private readonly http = inject(HttpClient);
     private readonly endpoint = inject(GetUrlEndpointService);
 
-    
+
     searchMaterial(producto: string): Observable<listaMateriales> {
         const url = this.endpoint.service_layer + `lista-materiales/buscar-producto?producto=${producto}`;
         return this.http.get<listaMateriales>(url);
@@ -50,5 +50,13 @@ export class ListaMaterialesService {
             ...(warehouse ? { Warehouse: warehouse } : {})
         };
         return this.http.post<any>(url, body);
+    }
+
+    updateAprobarCambios(treeCode: string, U_JB_APROBADO_ASUNTOS_REGULATORIOS: 'SI' | 'NO') {
+        const url = this.endpoint.service_layer + `lista-materiales/${treeCode}/aprobar-cambios`;
+        const body: any = {
+            U_JB_APROBADO_ASUNTOS_REGULATORIOS
+        };
+        return this.http.patch<any>(url, body);
     }
 }
