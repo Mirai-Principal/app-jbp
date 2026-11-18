@@ -1,7 +1,7 @@
-<app-header title="Claves de Impresora" icon="print" />
+<app-header title="Claves de Impresoras" icon="print" />
 
 @if (isLoading()) {
-  <app-loader-page message="Cargando códigos de impresora..." icon="print" />
+  <app-loader-page message="Cargando claves de impresoras..." icon="print" />
 }
 
 <div class="container">
@@ -84,6 +84,17 @@
           </span>
         } @else if (column.columnDef === 'TIPO_IMPRESORA') {
           <span class="printer-badge">{{ element.TIPO_IMPRESORA }}</span>
+        } @else if (column.columnDef === 'ACCIONES') {
+          <button
+            mat-icon-button
+            color="warn"
+            type="button"
+            (click)="eliminarRegistro(element)"
+            aria-label="Eliminar registro"
+            title="Eliminar"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
         } @else {
           {{ element[column.columnDef] }}
         }

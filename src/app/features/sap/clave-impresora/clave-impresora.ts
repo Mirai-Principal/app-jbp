@@ -59,6 +59,7 @@ export class ClaveImpresora implements OnInit {
     { columnDef: 'CODIGO', header: 'Código' },
     { columnDef: 'USERNAME', header: 'Usuario' },
     { columnDef: 'TIPO_IMPRESORA', header: 'Tipo de Impresora' },
+    { columnDef: 'ACCIONES', header: 'Acciones' },
   ];
 
   protected readonly displayedColumns: string[] = this.columns.map((c) => c.columnDef);
@@ -113,6 +114,49 @@ export class ClaveImpresora implements OnInit {
     this.sweetAlert.success('Clave generada', msg);
     this.pageIndex.set(0);
     this.loadRegistros();
+  }
+
+  eliminarRegistro(item: ClaveImpresoraItem): void {
+    this.sweetAlert
+      .confirm({
+        title: '¿Eliminar registro?',
+        message: `¿Estás seguro de eliminar la clave (${item.CODIGO}) del usuario "${item.USERNAME}"?`,
+        type: 'warning',
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
+
+        this.isLoading.set(true);
+        this.miCuentaService
+          .codigoImpresoraDelete(item.CODIGO)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (res) => {
+              this.isLoading.set(false);
+              this.sweetAlert.success(
+                'Eliminado',
+                res?.message || 'Registro eliminado correctamente.'
+              );
+              if (this.registros().length === 1 && this.pageIndex() > 0) {
+                this.pageIndex.update((p) => p - 1);
+              }
+              this.loadRegistros();
+            },
+            error: (err: any) => {
+              this.isLoading.set(false);
+              console.error('Error al eliminar clave de impresora:', err);
+              const msg =
+                err?.error?.message ||
+                err?.error?.error ||
+                err?.message ||
+                'No se pudo eliminar el registro de impresora.';
+              this.sweetAlert.error('Error', msg);
+            },
+          });
+      });
   }
 
   loadRegistros(): void {

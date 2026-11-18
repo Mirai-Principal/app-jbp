@@ -92,7 +92,7 @@ export class NavbarMenuService {
                 icon: 'corporate_fare',
                 children: [
                     { name: 'Mi Cuenta', icon: 'person', url: '/mi-cuenta' },
-                    { name: 'Clave Impresora', icon: 'print', url: '/sap/clave-impresora', visible: modulos.tics },
+                    { name: 'Claves de Impresoras', icon: 'print', url: '/sap/claves-impresoras', visible: modulos.tics },
                     { name: 'Desbloquear Usuario', icon: 'lock', url: '/sap/desbloquear-usuario' },
                     {
                         name: 'Asuntos regulatorios',

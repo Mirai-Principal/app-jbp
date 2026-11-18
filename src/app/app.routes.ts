@@ -50,7 +50,7 @@ export const routes: Routes = [
     { path: 'sap/desbloquear-usuario', component: UnlockUser, title: 'Desbloquear Usuario SAP', canActivate: [AuthGuard] },
     { path: 'lista-de-materiales', component: ListaMateriales, title: 'Lista de Materiales', canActivate: [AuthGuard] },
     { path: 'mi-cuenta', component: MiCuenta, title: 'Mi Cuenta', canActivate: [AuthGuard] },
-    { path: 'sap/clave-impresora', component: ClaveImpresora, title: 'Clave de Impresora', canActivate: [AuthGuard, ticsGuard] },
+    { path: 'sap/claves-impresoras', component: ClaveImpresora, title: 'Claves de Impresoras', canActivate: [AuthGuard, ticsGuard] },
     { path: 'unauthorized', component: Unauthorized, title: 'No Autorizado', canActivate: [AuthGuard] },
 
     // Ruta para manejar páginas no encontradas

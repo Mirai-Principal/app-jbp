@@ -23,6 +23,11 @@ export class MiCuentaServices {
     return this.http.put<Respuesta>(url, { Username, Impresora });
   }
 
+  codigoImpresoraDelete(codigo: number): Observable<Respuesta> {
+    const url = `${this.getUrlEndpointService.getUrlFromEndPointName('user')}/codigoImpresoraDelete/${codigo}`;
+    return this.http.delete<Respuesta>(url);
+  }
+
   getAllCodigoImpresora(
     pageIndex: number = 0,
     pageSize: number = 10,
