@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   MatCard,
@@ -11,8 +11,10 @@ import {
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { finalize, skip } from 'rxjs/operators';
 import { UserService } from '../../../core/services/user.service';
 import { Header } from '../../../shared/header/header';
+import { MiCuentaService } from './mi-cuenta.service';
 
 export interface CurrentUserInfo {
   Nombre?: string;
@@ -38,44 +40,58 @@ export interface CurrentUserInfo {
   templateUrl: './mi-cuenta.html',
   styleUrl: './mi-cuenta.scss',
 })
-export class MiCuenta {
+export class MiCuenta implements OnInit {
   private readonly userService = inject(UserService);
+  private readonly miCuentaService = inject(MiCuentaService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  protected readonly userData = signal<CurrentUserInfo | null>(this.loadUserFromStorage());
-
-  protected readonly userInitials = computed(() => {
-    const nombre = this.userData()?.Nombre?.trim();
-    if (!nombre) return 'U';
-    const parts = nombre.split(/\s+/);
-    if (parts.length >= 2) {
-      return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-    }
-    return nombre.slice(0, 2).toUpperCase();
-  });
+  protected readonly userData = signal<CurrentUserInfo | null>(
+    this.normalizeUser(this.userService.currentUserValue)
+  );
+  protected readonly codigoImpresora = signal<string | null>(null);
+  protected readonly isLoadingCodigo = signal<boolean>(false);
 
   constructor() {
-    this.userService.currentUser.pipe(takeUntilDestroyed()).subscribe(() => {
-      this.userData.set(this.loadUserFromStorage());
-    });
+    this.userService.currentUser
+      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe((user) => {
+        this.userData.set(this.normalizeUser(user));
+        this.cargarCodigoImpresora();
+      });
   }
 
-  private loadUserFromStorage(): CurrentUserInfo | null {
-    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
-      return null;
+  ngOnInit(): void {
+    this.cargarCodigoImpresora();
+  }
+
+  cargarCodigoImpresora(): void {
+    const username = this.userData()?.UserName?.trim();
+    if (!username) {
+      this.codigoImpresora.set(null);
+      return;
     }
 
-    try {
-      const raw = localStorage.getItem('currentUser');
-      if (!raw) return null;
+    this.isLoadingCodigo.set(true);
+    this.miCuentaService
+      .getCodigoImpresoraByUser(username)
+      .pipe(
+        finalize(() => this.isLoadingCodigo.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (res) => {
+          this.codigoImpresora.set(res?.codigoImpresora ?? null);
+        },
+        error: () => {
+          this.codigoImpresora.set(null);
+        },
+      });
+  }
 
-      const parsed = JSON.parse(raw);
-      if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
-        return parsed as CurrentUserInfo;
-      }
-      return null;
-    } catch (error) {
-      console.error('Error al leer currentUser de localStorage:', error);
-      return null;
+  private normalizeUser(user: any): CurrentUserInfo | null {
+    if (user && typeof user === 'object' && Object.keys(user).length > 0) {
+      return user as CurrentUserInfo;
     }
+    return null;
   }
 }
