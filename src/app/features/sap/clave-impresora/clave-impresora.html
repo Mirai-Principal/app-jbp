@@ -6,6 +6,33 @@
 
 <div class="container">
   <mat-card>
+    <div header-actions class="ayuda">
+      <app-help-modal buttonText="¿Cómo usar?" icon="help_outline">
+        <ul>
+          <li>
+            En la tabla se muestran las claves de impresora asignadas a cada usuario (<strong>Código</strong>, <strong>Usuario</strong> y <strong>Tipo de Impresora</strong>).
+          </li>
+          <li>
+            Usa el buscador <strong>'Buscar por usuario...'</strong> para filtrar progresivamente los registros por <em>username</em>.
+          </li>
+          <li>
+            Presiona el botón <strong>'Nuevo usuario'</strong> para abrir el formulario, ingresar el <em>username</em> y seleccionar el tipo de impresora (<strong>Color</strong> o <strong>Blanco y Negro</strong>). El sistema generará automáticamente un código aleatorio único de 4 dígitos.
+          </li>
+          <li>
+            Si el usuario ingresado ya tiene un código asignado, el sistema mostrará un aviso y no creará un registro duplicado.
+          </li>
+          <li>
+            Para quitar una clave asignada, haz clic en el ícono de papelera en la columna <strong>Acciones</strong> y confirma la eliminación.
+          </li>
+          <li>
+            Cada usuario puede consultar su código asignado desde la opción <strong>Mi Cuenta</strong> del menú.
+          </li>
+        </ul>
+        <hr>
+        <p>En caso de error informar a quien corresponda adjuntando una captura de pantalla</p>
+      </app-help-modal>
+    </div>
+
     <mat-card-content>
       <div class="toolbar">
         <div class="stats-chips">

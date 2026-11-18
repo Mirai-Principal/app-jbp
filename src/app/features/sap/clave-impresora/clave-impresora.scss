@@ -41,6 +41,12 @@ mat-card {
     }
 }
 
+.ayuda {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.75rem;
+}
+
 .toolbar {
     display: flex;
     justify-content: space-between;

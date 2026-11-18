@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { SweetAlertService } from '../../../shared/alert/services/sweet-alert.service';
 import { Header } from '../../../shared/header/header';
+import { HelpModal } from '../../../shared/help-modal/help-modal';
 import { LoaderPage } from '../../../shared/loader-page/loader-page';
 import { ModalService } from '../../../shared/modal/services/modal.service';
 import { Table, TableColumn } from '../../../shared/table/table';
@@ -25,6 +26,7 @@ import { MiCuentaServices } from './clave-impresora.service';
     CommonModule,
     FormsModule,
     Header,
+    HelpModal,
     LoaderPage,
     Table,
     ClaveImpresoraModal,
