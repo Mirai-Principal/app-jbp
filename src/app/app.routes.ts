@@ -4,6 +4,7 @@ import { DirectorioTelefonico } from './features/directorio-telefonico/directori
 import { DescargasApps } from './features/descargas-apps/descargas-apps';
 import { AuthGuard } from './core/guards/auth.guard';
 import { noAuthGuard } from './core/guards/no-auth.guard';
+import { ticsGuard } from './core/guards/tics.guard';
 import { Dashboard } from './features/dashboard/dashboard';
 import { Error } from './features/error/error';
 import { UpdateNumFacturaExportacion } from './features/ventas/update-num-factura-exportacion/update-num-factura-exportacion';
@@ -23,6 +24,8 @@ import { Unauthorized } from './features/unauthorized/unauthorized';
 import { Usuarios } from './features/sap/usuarios/usuarios';
 import { UnlockUser } from './features/sap/unlock-user/unlock-user';
 import { ListaMateriales } from './features/asuntos-regulatorios/lista-materiales/lista-materiales';
+import { MiCuenta } from './features/sap/mi-cuenta/mi-cuenta';
+import { ClaveImpresora } from './features/sap/clave-impresora/clave-impresora';
 
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
@@ -46,6 +49,8 @@ export const routes: Routes = [
     { path: 'sap/usuarios', component: Usuarios, title: 'Usuarios SAP', canActivate: [AuthGuard] },
     { path: 'sap/desbloquear-usuario', component: UnlockUser, title: 'Desbloquear Usuario SAP', canActivate: [AuthGuard] },
     { path: 'lista-de-materiales', component: ListaMateriales, title: 'Lista de Materiales', canActivate: [AuthGuard] },
+    { path: 'mi-cuenta', component: MiCuenta, title: 'Mi Cuenta', canActivate: [AuthGuard] },
+    { path: 'sap/clave-impresora', component: ClaveImpresora, title: 'Clave de Impresora', canActivate: [AuthGuard, ticsGuard] },
     { path: 'unauthorized', component: Unauthorized, title: 'No Autorizado', canActivate: [AuthGuard] },
 
     // Ruta para manejar páginas no encontradas

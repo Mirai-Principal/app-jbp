@@ -36,7 +36,18 @@
 
     @if (showPaginator) {
     <div class="paginator-container">
+        @if (serverSidePagination) {
+        <mat-paginator
+            [length]="totalItems"
+            [pageIndex]="pageIndex"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="pageChange.emit($event)"
+            showFirstLastButtons>
+        </mat-paginator>
+        } @else {
         <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
+        }
     </div>
     }
 </div>

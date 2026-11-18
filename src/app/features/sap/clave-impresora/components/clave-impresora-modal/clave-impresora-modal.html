@@ -1,0 +1,54 @@
+<app-modal
+  [isOpen]="isOpen"
+  title="Generar clave para un usuario"
+  subtitle="Ingresa el usuario y selecciona el tipo de impresora"
+  [loading]="isSaving()"
+  [closeOnBackdropClick]="!isSaving()"
+  maxWidth="480px"
+  (close)="onCancel()"
+  (backdropClick)="onCancel()"
+>
+  <form [formGroup]="form" (ngSubmit)="onSave()" class="modal-form">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Usuario (Username)</mat-label>
+      <mat-icon matPrefix>person</mat-icon>
+      <input
+        matInput
+        formControlName="username"
+        placeholder="Ej. jperez"
+        autocomplete="off"
+      />
+      @if (form.get('username')?.hasError('required')) {
+        <mat-error>El nombre de usuario es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Tipo de Impresora</mat-label>
+      <mat-icon matPrefix>print</mat-icon>
+      <mat-select formControlName="impresora">
+        @for (tipo of tiposImpresora; track tipo.value) {
+          <mat-option [value]="tipo.value">{{ tipo.label }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('impresora')?.hasError('required')) {
+        <mat-error>El tipo de impresora es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="modal-actions">
+      <button mat-button type="button" (click)="onCancel()" [disabled]="isSaving()">
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="form.invalid || isSaving()"
+      >
+        <mat-icon>save</mat-icon>
+        {{ isSaving() ? 'Generando...' : 'Generar Clave' }}
+      </button>
+    </div>
+  </form>
+</app-modal>

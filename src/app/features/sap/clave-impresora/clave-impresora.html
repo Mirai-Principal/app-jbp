@@ -1,0 +1,99 @@
+<app-header title="Claves de Impresora" icon="print" />
+
+@if (isLoading()) {
+  <app-loader-page message="Cargando códigos de impresora..." icon="print" />
+}
+
+<div class="container">
+  <mat-card>
+    <mat-card-content>
+      <div class="toolbar">
+        <div class="stats-chips">
+          <div class="stat-chip total">
+            <mat-icon>print</mat-icon>
+            <span class="stat-label">Total registros:</span>
+            <span class="stat-value">{{ total() }}</span>
+          </div>
+          @if (searchTerm().trim()) {
+            <div class="stat-chip filtered">
+              <mat-icon>filter_list</mat-icon>
+              <span class="stat-label">En página:</span>
+              <span class="stat-value">{{ registros().length }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="actions">
+          <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+            <mat-icon matPrefix>search</mat-icon>
+            <mat-label>Buscar por usuario...</mat-label>
+            <input
+              matInput
+              [ngModel]="searchTerm()"
+              (ngModelChange)="onSearchChange($event)"
+              placeholder="Username"
+            />
+            @if (searchTerm()) {
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="clearSearch()"
+                aria-label="Limpiar"
+              >
+                <mat-icon>clear</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+
+          <button
+            mat-flat-button
+            color="primary"
+            type="button"
+            class="btn-refresh"
+            (click)="openInsertModal()"
+          >
+            <mat-icon>add</mat-icon>
+            Nuevo usuario
+          </button>
+        </div>
+      </div>
+
+      <app-table
+        [data]="registros()"
+        [columns]="columns"
+        [displayedColumns]="displayedColumns"
+        [showPaginator]="true"
+        [serverSidePagination]="true"
+        [totalItems]="total()"
+        [pageIndex]="pageIndex()"
+        [pageSize]="pageSize()"
+        [pageSizeOptions]="[10, 20, 50]"
+        (pageChange)="onPageChange($event)"
+        [cellTemplate]="customCell"
+      >
+      </app-table>
+
+      <ng-template #customCell let-column="column" let-element="element">
+        @if (column.columnDef === 'CODIGO') {
+          <span class="code-badge">{{ element.CODIGO }}</span>
+        } @else if (column.columnDef === 'USERNAME') {
+          <span class="user-code">
+            <mat-icon class="user-code-icon">account_circle</mat-icon>
+            {{ element.USERNAME }}
+          </span>
+        } @else if (column.columnDef === 'TIPO_IMPRESORA') {
+          <span class="printer-badge">{{ element.TIPO_IMPRESORA }}</span>
+        } @else {
+          {{ element[column.columnDef] }}
+        }
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<app-clave-impresora-modal
+  [isOpen]="modalService.isOpen()"
+  (closeModal)="modalService.closeModal()"
+  (saved)="onClaveGenerada($event)"
+/>

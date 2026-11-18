@@ -1,0 +1,183 @@
+@use '../../../shared/styles/colors' as *;
+
+.container {
+    margin: auto;
+    max-width: 100%;
+    padding: 1.25rem;
+    box-sizing: border-box;
+
+    @media (max-width: 768px) {
+        padding: 0;
+    }
+}
+
+mat-card {
+    background-color: $background-content;
+    border-radius: $border-radius;
+    box-shadow: 0 4px 12px $primary-alpha-10;
+    overflow: hidden;
+    padding: 1.5rem;
+
+    // Ensure card doesn't overflow on mobile
+    @media (max-width: 768px) {
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        width: 100%;
+        max-width: 100vw; // Ensure it doesn't exceed viewport width
+        box-sizing: border-box; // Include padding and border in the element's total width and height
+        overflow: hidden; // Prevent content from spilling out
+        padding: 0.75rem;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0.75rem; // Add some padding on very small screens
+        min-width: 100vw;
+    }
+
+    @media (max-width: 360px) {
+        padding: 0.5rem; // Even less padding on extra small screens
+        min-width: 100vw;
+    }
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $gray-200;
+
+    .stats-chips {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+
+        .stat-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+
+            mat-icon {
+                font-size: 1.15rem;
+                width: 1.15rem;
+                height: 1.15rem;
+            }
+
+            &.total {
+                background-color: $primary-100;
+                color: $primary-dark;
+                border: 1px solid $primary-200;
+            }
+
+            &.filtered {
+                background-color: $gray-100;
+                color: $gray-700;
+                border: 1px solid $gray-300;
+            }
+
+            .stat-value {
+                font-weight: 700;
+            }
+        }
+    }
+
+    .actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+
+        .search-field {
+            min-width: 260px;
+
+            @media (max-width: 576px) {
+                width: 100%;
+                min-width: 100%;
+            }
+        }
+
+        .btn-refresh {
+            background: $primary;
+            color: $white;
+            border-radius: $border-radius;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            height: 48px;
+            padding: 0 1.25rem;
+            font-weight: 500;
+            transition: background $transition-fast, box-shadow $transition-fast;
+
+            &:hover:not(:disabled) {
+                background: $primary-dark;
+                box-shadow: 0 4px 10px $primary-alpha-30;
+            }
+
+            &:disabled {
+                background: $gray-200;
+                color: $gray-500;
+            }
+        }
+    }
+}
+
+.code-badge {
+    display: inline-block;
+    background-color: $primary-100;
+    color: $primary-dark;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.user-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    color: $primary-dark;
+
+    .user-code-icon {
+        font-size: 1.15rem;
+        width: 1.15rem;
+        height: 1.15rem;
+        color: $primary;
+    }
+}
+
+.printer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.28rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+
+    mat-icon {
+        font-size: 1rem;
+        width: 1rem;
+        height: 1rem;
+    }
+
+    &.printer-color {
+        background-color: $primary-100;
+        color: $primary-dark;
+        border: 1px solid $primary-200;
+    }
+
+    &.printer-bw {
+        background-color: $gray-100;
+        color: $gray-700;
+        border: 1px solid $gray-300;
+    }
+}

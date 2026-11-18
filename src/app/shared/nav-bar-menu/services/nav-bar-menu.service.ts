@@ -91,6 +91,8 @@ export class NavbarMenuService {
                 name: 'SAP',
                 icon: 'corporate_fare',
                 children: [
+                    { name: 'Mi Cuenta', icon: 'person', url: '/mi-cuenta' },
+                    { name: 'Clave Impresora', icon: 'print', url: '/sap/clave-impresora', visible: modulos.tics },
                     { name: 'Desbloquear Usuario', icon: 'lock', url: '/sap/desbloquear-usuario' },
                     {
                         name: 'Asuntos regulatorios',

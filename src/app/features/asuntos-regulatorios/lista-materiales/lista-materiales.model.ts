@@ -20,6 +20,7 @@ export interface ProductTreeLines {
     ItemCode: string;
     ParentItem: string;
     ItemName: string;
+    ItemType: string;
     Quantity: number;
     Warehouse: string;
     ChildNum?: number;

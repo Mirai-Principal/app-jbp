@@ -1,9 +1,9 @@
-import { Component, Input, ViewChild, AfterViewInit, OnChanges, TemplateRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, OnChanges, TemplateRef } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatIcon } from "@angular/material/icon";
 
@@ -27,6 +27,11 @@ export class Table implements AfterViewInit, OnChanges {
   @Input() selectAll: (checked: boolean) => void = () => { };
   @Input() showPaginator: boolean = true;
   @Input() pageSizeOptions: number[] = [10, 15, 20];
+  @Input() serverSidePagination: boolean = false;
+  @Input() totalItems: number = 0;
+  @Input() pageIndex: number = 0;
+  @Input() pageSize: number = 10;
+  @Output() pageChange = new EventEmitter<PageEvent>();
   @Input() cellTemplate: TemplateRef<{ column: TableColumn; element: any }> | null = null;
 
   dataSource = new MatTableDataSource<any>([]);
@@ -49,12 +54,16 @@ export class Table implements AfterViewInit, OnChanges {
   private updateDataSource() {
     if (this.dataSource) {
       this.dataSource.data = this.data || [];
-      // Use setTimeout to ensure paginator is available after DOM update
-      setTimeout(() => {
-        if (this.paginator) {
-          this.dataSource.paginator = this.paginator;
-        }
-      });
+      if (!this.serverSidePagination) {
+        // Use setTimeout to ensure paginator is available after DOM update
+        setTimeout(() => {
+          if (this.paginator) {
+            this.dataSource.paginator = this.paginator;
+          }
+        });
+      } else {
+        this.dataSource.paginator = null;
+      }
     }
   }
 }

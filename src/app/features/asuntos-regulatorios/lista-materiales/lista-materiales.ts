@@ -170,6 +170,10 @@ export class ListaMateriales implements OnDestroy {
             )
           );
           this.cancelarEdicion();
+          // actualiza estado a no aprobado
+          this.detalleListaMateriales.update((current) =>
+            current ? { ...current, U_JB_APROBADO_ASUNTOS_REGULATORIOS: 'NO' } : current
+          );
           this.sweetAlert.success('Cantidad actualizada', res?.message);
         },
         error: (err) => {
@@ -231,6 +235,10 @@ export class ListaMateriales implements OnDestroy {
               next: (res: any) => {
                 this.materiales.update((items) =>
                   items.filter((item) => item.ChildNum !== childNum)
+                );
+                // actualiza estado a no aprobado
+                this.detalleListaMateriales.update((current) =>
+                  current ? { ...current, U_JB_APROBADO_ASUNTOS_REGULATORIOS: 'NO' } : current
                 );
                 this.sweetAlert.success('Eliminado', res?.message);
               },
@@ -457,7 +465,7 @@ export class ListaMateriales implements OnDestroy {
             err?.error?.error ||
             err?.message ||
             'Ocurrió un error al actualizar el estado de aprobación.';
-          this.sweetAlert.error('Error al actualizar', errorMsg);
+          this.sweetAlert.error('Error al actualizar aprobación', errorMsg);
         },
       });
   }

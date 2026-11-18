@@ -1,0 +1,80 @@
+<app-header title="Mi Cuenta" icon="account_circle" />
+
+<div class="container">
+  <div class="panel-wrapper">
+    <mat-card class="account-card">
+      @if (userData(); as user) {
+        <mat-card-header class="account-header">
+          <div mat-card-avatar class="account-avatar" aria-hidden="true">
+            <span>{{ userInitials() }}</span>
+          </div>
+          <mat-card-title class="account-title">
+            {{ user.Nombre || 'Usuario' }}
+          </mat-card-title>
+          <mat-card-subtitle class="account-subtitle">
+            {{ user.UserName || 'Sin usuario asignado' }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-divider />
+
+        <mat-card-content class="account-content">
+          <div class="section-header">
+            <mat-icon class="section-icon">badge</mat-icon>
+            <h2 class="mat-title-medium section-title">Datos del Usuario</h2>
+          </div>
+
+          <mat-list class="user-info-list">
+            <mat-list-item class="user-info-item">
+              <mat-icon matListItemIcon class="info-icon">person</mat-icon>
+              <div matListItemTitle class="info-label">Nombre</div>
+              <div matListItemLine class="info-value">
+                {{ user.Nombre || 'No registrado' }}
+              </div>
+            </mat-list-item>
+
+            <mat-divider [inset]="true" />
+
+            <mat-list-item class="user-info-item">
+              <mat-icon matListItemIcon class="info-icon">account_circle</mat-icon>
+              <div matListItemTitle class="info-label">UserName</div>
+              <div matListItemLine class="info-value">
+                {{ user.UserName || 'No registrado' }}
+              </div>
+            </mat-list-item>
+
+            <mat-divider [inset]="true" />
+
+            <mat-list-item class="user-info-item">
+              <mat-icon matListItemIcon class="info-icon">print</mat-icon>
+              <div matListItemTitle class="info-label">Código de Impresora</div>
+              <div matListItemLine class="info-value">
+                {{ user.codigoImpresora || 'No asignado' }}
+              </div>
+            </mat-list-item>
+
+            <mat-divider [inset]="true" />
+
+            <mat-list-item class="user-info-item">
+              <mat-icon matListItemIcon class="info-icon">mail</mat-icon>
+              <div matListItemTitle class="info-label">Correo</div>
+              <div matListItemLine class="info-value">
+                {{ user.correo || 'No registrado' }}
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      } @else {
+        <mat-card-content class="empty-state">
+          <div class="empty-icon-circle">
+            <mat-icon>person_off</mat-icon>
+          </div>
+          <h3 class="mat-title-medium empty-title">Sin información de usuario</h3>
+          <p class="mat-body-medium empty-description">
+            No se encontraron datos guardados en la sesión actual.
+          </p>
+        </mat-card-content>
+      }
+    </mat-card>
+  </div>
+</div>
