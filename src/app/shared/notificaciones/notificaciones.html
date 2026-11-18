@@ -1,0 +1,47 @@
+@if (notificacionActual(); as notif) {
+  <app-modal
+    [isOpen]="isOpen()"
+    [title]="notif.titulo"
+    [subtitle]="notif.subtitulo || ''"
+    [maxWidth]="'560px'"
+    (close)="cerrarNotificacion()"
+    (backdropClick)="cerrarNotificacion()"
+  >
+    <div class="notificacion-body">
+      @if (notif.imagen) {
+        <div class="notificacion-imagen-wrapper">
+          <img [src]="notif.imagen" [alt]="notif.titulo" class="notificacion-imagen" />
+        </div>
+      }
+
+      <div class="notificacion-mensaje">
+        <mat-icon class="mensaje-icon">info</mat-icon>
+        <p class="mensaje-texto">{{ notif.descripcion }}</p>
+      </div>
+
+      <div class="notificacion-acciones">
+        <button
+          mat-stroked-button
+          type="button"
+          class="btn-cerrar"
+          (click)="cerrarNotificacion()"
+        >
+          <mat-icon>check</mat-icon>
+          <span>Entendido</span>
+        </button>
+
+        @if (notif.rutaAccion) {
+          <button
+            mat-flat-button
+            type="button"
+            class="btn-accion"
+            (click)="irAAccion(notif.rutaAccion)"
+          >
+            <mat-icon>arrow_forward</mat-icon>
+            <span>{{ notif.textoAccion || 'Ver ahora' }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  </app-modal>
+}

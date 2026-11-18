@@ -1,0 +1,97 @@
+@use '../styles/colors' as *;
+
+.notificacion-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.notificacion-imagen-wrapper {
+    border-radius: $border-radius;
+    overflow: hidden;
+    border: 1px solid $gray-200;
+    background-color: $gray-100;
+    box-shadow: 0 4px 12px $primary-alpha-10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .notificacion-imagen {
+        width: 100%;
+        height: auto;
+        max-height: 320px;
+        object-fit: contain;
+        display: block;
+    }
+}
+
+.notificacion-mensaje {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background-color: $primary-100;
+    border-left: 4px solid $primary;
+    border-radius: 6px;
+
+    .mensaje-icon {
+        color: $primary-dark;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .mensaje-texto {
+        margin: 0;
+        color: $gray-800;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        font-weight: 500;
+    }
+}
+
+.notificacion-acciones {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-top: 4px;
+
+    button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: $border-radius;
+        font-weight: 600;
+        height: 40px;
+        padding: 0 16px;
+    }
+
+    .btn-cerrar {
+        color: $gray-700;
+        border-color: $gray-300;
+
+        &:hover {
+            background-color: $gray-100;
+        }
+    }
+
+    .btn-accion {
+        background-color: $primary;
+        color: $white;
+        transition: background-color $transition-fast;
+
+        &:hover {
+            background-color: $primary-dark;
+        }
+    }
+
+    @media (max-width: 480px) {
+        flex-direction: column-reverse;
+        align-items: stretch;
+
+        button {
+            justify-content: center;
+        }
+    }
+}

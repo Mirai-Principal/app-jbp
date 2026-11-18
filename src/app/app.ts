@@ -2,12 +2,13 @@ import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavBarMenu } from "./shared/nav-bar-menu/nav-bar-menu";
+import { Notificaciones } from "./shared/notificaciones/notificaciones";
 import { UserService } from './core/services/user.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavBarMenu],
+  imports: [CommonModule, RouterOutlet, NavBarMenu, Notificaciones],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
