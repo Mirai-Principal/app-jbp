@@ -30,7 +30,7 @@ export class NavbarMenuService {
                 visible: true
             },
             {
-                name: 'Dashboard',
+                name: 'Dashboards',
                 icon: 'dashboard',
                 url: '/dashboard',
                 visible: modulos.Dashboards
@@ -92,7 +92,6 @@ export class NavbarMenuService {
                 icon: 'corporate_fare',
                 children: [
                     { name: 'Mi Cuenta', icon: 'person', url: '/mi-cuenta' },
-                    { name: 'Claves de Impresoras', icon: 'print', url: '/sap/claves-impresoras', visible: modulos.tics },
                     { name: 'Desbloquear Usuario', icon: 'lock', url: '/sap/desbloquear-usuario' },
                     {
                         name: 'Asuntos regulatorios',
@@ -104,6 +103,15 @@ export class NavbarMenuService {
                     },
                 ],
                 visible: true
+            },
+            {
+                name: 'Configuración',
+                icon: 'settings',
+                children: [
+                    { name: 'Claves de Impresoras', icon: 'print', url: '/sap/claves-impresoras', visible: modulos.tics },
+                       
+                ],
+                visible: modulos.tics
             }
         ]);
     }

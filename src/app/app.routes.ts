@@ -26,12 +26,14 @@ import { UnlockUser } from './features/sap/unlock-user/unlock-user';
 import { ListaMateriales } from './features/asuntos-regulatorios/lista-materiales/lista-materiales';
 import { MiCuenta } from './features/sap/mi-cuenta/mi-cuenta';
 import { ClaveImpresora } from './features/sap/clave-impresora/clave-impresora';
+import { Inicio } from './features/inicio/inicio';
 
 export const routes: Routes = [
     { path: '', component: Login, title: 'Login', canActivate: [noAuthGuard] },
     { path: 'login', component: Login, title: 'Login', canActivate: [noAuthGuard] },
     { path: 'bodega-ventas-apps', component: DescargasApps, title: 'Descarga de Aplicaciones Móviles' },
     { path: 'directorio', component: DirectorioTelefonico, title: 'Directorio' },
+    { path: 'inicio', component: Inicio, title: 'Inicio', canActivate: [AuthGuard] },
     { path: 'dashboard', component: Dashboard, title: 'Dashboard', canActivate: [AuthGuard] },
     { path: 'actualizar-numero-factura-exportacion', component: UpdateNumFacturaExportacion, title: 'Actualizar número de factura de exportación', canActivate: [AuthGuard] },
     { path: 'entregas-urbano', component: EntregasUrbano, title: 'Entregas Urbano', canActivate: [AuthGuard] },
