@@ -105,7 +105,7 @@ export class NavbarMenuService {
                 visible: true
             },
             {
-                name: '',
+                name: 'Configuración',
                 icon: 'settings',
                 children: [
                     { name: 'Claves de Impresoras', icon: 'print', url: '/sap/claves-impresoras', visible: modulos.tics },

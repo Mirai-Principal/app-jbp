@@ -1,5 +1,5 @@
 // sidebar.component.ts
-import { Component, signal, computed, HostListener, inject, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild, computed, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarMenuService } from './services/nav-bar-menu.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,10 +19,22 @@ import { entorno } from '../../assets/conf';
   templateUrl: './nav-bar-menu.html',
   styleUrls: ['./nav-bar-menu.scss']
 })
-export class NavBarMenu {
+export class NavBarMenu implements AfterViewInit, OnDestroy {
   private router = inject(Router);
   private navbarState = inject(NavBarStateService);
   private elementRef = inject(ElementRef<HTMLElement>);
+
+  @ViewChild('topbarContainer') private topbarContainer?: ElementRef<HTMLElement>;
+  @ViewChild('brandEl') private brandEl?: ElementRef<HTMLElement>;
+  @ViewChild('navEl') private navEl?: ElementRef<HTMLElement>;
+  @ViewChild('navUserEl') private navUserEl?: ElementRef<HTMLElement>;
+  @ViewChild('navItemsEl') private navItemsEl?: ElementRef<HTMLElement>;
+  @ViewChild('navFooterEl') private navFooterEl?: ElementRef<HTMLElement>;
+  @ViewChild('measureWrapperEl') private measureWrapperEl?: ElementRef<HTMLElement>;
+
+  private resizeObserver?: ResizeObserver;
+  private recalcRafId: number | null = null;
+  private isViewReady = false;
 
   // nombre de la empresa
   protected readonly companyName = enviroment.empresaNombre;
@@ -35,6 +47,27 @@ export class NavBarMenu {
   private userService = inject(UserService);
 
   protected readonly menu = this.menuService.menu;
+  protected readonly visibleMenuItems = computed(() =>
+    this.menu().filter(item => this.isVisible(item))
+  );
+  private readonly maxVisibleItems = signal<number>(Number.MAX_SAFE_INTEGER);
+
+  protected readonly primaryItems = computed(() => {
+    const items = this.visibleMenuItems();
+    if (this.isMobile()) return items;
+    return items.slice(0, this.maxVisibleItems());
+  });
+
+  protected readonly overflowItems = computed(() => {
+    const items = this.visibleMenuItems();
+    if (this.isMobile()) return [];
+    return items.slice(this.maxVisibleItems());
+  });
+
+  protected readonly isOverflowActive = computed(() =>
+    this.overflowItems().some(item => this.isActive(item.url) || this.isParentActive(item))
+  );
+
   expandedItems = signal<Set<string>>(new Set());
   nestedLeftItems = signal<Set<string>>(new Set());
   rightAlignedItems = signal<Set<string>>(new Set());
@@ -53,6 +86,14 @@ export class NavBarMenu {
     // Initialize mobile state
     this.navbarState.setIsMobile(window.innerWidth <= this.mobileBreakpoint);
 
+    effect(() => {
+      this.visibleMenuItems();
+      this.isMobile();
+      if (this.isViewReady) {
+        this.scheduleRecalculate();
+      }
+    });
+
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
@@ -66,6 +107,137 @@ export class NavBarMenu {
         }
 
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.isViewReady = true;
+
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => this.scheduleRecalculate());
+      const targets = [
+        this.topbarContainer?.nativeElement,
+        this.brandEl?.nativeElement,
+        this.navUserEl?.nativeElement,
+        this.navFooterEl?.nativeElement
+      ];
+      targets.forEach(el => {
+        if (el) this.resizeObserver?.observe(el);
+      });
+    }
+
+    if (typeof document !== 'undefined' && 'fonts' in document) {
+      document.fonts.ready.then(() => this.scheduleRecalculate());
+    }
+
+    this.scheduleRecalculate();
+  }
+
+  ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
+    if (this.recalcRafId !== null) {
+      cancelAnimationFrame(this.recalcRafId);
+      this.recalcRafId = null;
+    }
+  }
+
+  private scheduleRecalculate(): void {
+    if (this.recalcRafId !== null) {
+      cancelAnimationFrame(this.recalcRafId);
+    }
+    this.recalcRafId = requestAnimationFrame(() => {
+      this.recalcRafId = null;
+      this.recalculateOverflow();
+    });
+  }
+
+  private recalculateOverflow(): void {
+    const visibleItems = this.visibleMenuItems();
+
+    if (this.isMobile() || visibleItems.length === 0) {
+      if (this.maxVisibleItems() !== Number.MAX_SAFE_INTEGER) {
+        this.maxVisibleItems.set(Number.MAX_SAFE_INTEGER);
+      }
+      return;
+    }
+
+    const containerEl = this.topbarContainer?.nativeElement;
+    const brandEl = this.brandEl?.nativeElement;
+    const navEl = this.navEl?.nativeElement;
+    const navUserEl = this.navUserEl?.nativeElement;
+    const navItemsEl = this.navItemsEl?.nativeElement;
+    const navFooterEl = this.navFooterEl?.nativeElement;
+    const measureWrapperEl = this.measureWrapperEl?.nativeElement;
+
+    if (!containerEl || !brandEl || !navEl || !navItemsEl || !navFooterEl || !measureWrapperEl) {
+      return;
+    }
+
+    const measureNodes = Array.from(
+      measureWrapperEl.querySelectorAll<HTMLElement>('[data-measure-item]')
+    );
+
+    if (measureNodes.length !== visibleItems.length) {
+      return;
+    }
+
+    const containerStyle = getComputedStyle(containerEl);
+    const navStyle = getComputedStyle(navEl);
+    const navItemsStyle = getComputedStyle(navItemsEl);
+
+    const paddingX = (parseFloat(containerStyle.paddingLeft) || 0) + (parseFloat(containerStyle.paddingRight) || 0);
+    const topbarGap = parseFloat(containerStyle.columnGap || containerStyle.gap) || 16;
+    const navGap = parseFloat(navStyle.columnGap || navStyle.gap) || 12;
+    const itemGap = parseFloat(navItemsStyle.columnGap || navItemsStyle.gap) || 6;
+
+    const containerInnerWidth = containerEl.clientWidth - paddingX;
+    const brandWidth = brandEl.getBoundingClientRect().width;
+    const userWidth = navUserEl ? navUserEl.getBoundingClientRect().width : 0;
+    const footerWidth = navFooterEl.getBoundingClientRect().width;
+    const topbarGapsCount = 2;
+    const navGapsCount = userWidth > 0 ? 1 : 0;
+    const safetyMargin = 10;
+
+    const availableForItems =
+      containerInnerWidth -
+      brandWidth -
+      topbarGapsCount * topbarGap -
+      userWidth -
+      footerWidth -
+      navGapsCount * navGap -
+      safetyMargin;
+
+    const itemWidths = measureNodes.map(el => el.getBoundingClientRect().width);
+    const totalWidth = itemWidths.reduce(
+      (sum, width, idx) => sum + width + (idx > 0 ? itemGap : 0),
+      0
+    );
+
+    let nextVisibleCount = itemWidths.length;
+
+    if (totalWidth > availableForItems) {
+      const moreMeasureEl = measureWrapperEl.querySelector<HTMLElement>('[data-measure-more]');
+      const moreWidth = moreMeasureEl ? moreMeasureEl.getBoundingClientRect().width : 84;
+      const budget = availableForItems - moreWidth;
+
+      let used = 0;
+      let fitCount = 0;
+      for (let i = 0; i < itemWidths.length; i++) {
+        const nextUsed = used + itemWidths[i] + itemGap;
+        if (nextUsed <= budget) {
+          used = nextUsed;
+          fitCount++;
+        } else {
+          break;
+        }
+      }
+
+      nextVisibleCount = Math.max(0, Math.min(fitCount, itemWidths.length - 1));
+    }
+
+    if (this.maxVisibleItems() !== nextVisibleCount) {
+      this.maxVisibleItems.set(nextVisibleCount);
+      this.rightAlignedItems.set(new Set());
+    }
   }
 
   onNavLinkClick() {
@@ -286,6 +458,7 @@ export class NavBarMenu {
       this.nestedLeftItems.set(new Set());
     }
     this.rightAlignedItems.set(new Set());
+    this.scheduleRecalculate();
   }
 
   // sidebar.component.ts

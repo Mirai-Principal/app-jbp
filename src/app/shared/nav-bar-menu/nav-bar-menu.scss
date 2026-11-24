@@ -13,6 +13,7 @@
 }
 
 .topbar-container {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -85,15 +86,34 @@
 .nav {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 12px;
     flex-wrap: nowrap;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .nav-user {
+    display: inline-flex;
+    align-items: center;
     color: $gray-600;
     font-weight: 600;
     padding: 0 8px;
     white-space: nowrap;
+    flex: 0 0 auto;
+    max-width: 240px;
+    overflow: hidden;
+}
+
+.nav-user-greeting {
+    flex: 0 0 auto;
+}
+
+.nav-user-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
 }
 
 .nav-items {
@@ -101,6 +121,29 @@
     align-items: center;
     gap: 6px;
     flex-wrap: nowrap;
+    min-width: 0;
+
+    >* {
+        flex: 0 0 auto;
+    }
+}
+
+.nav-measure-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    >* {
+        flex: 0 0 auto;
+    }
 }
 
 .nav-link {
@@ -174,14 +217,14 @@
 
     // Estilos para nivel anidado
     &.nested {
-        .dropdown-menu.nested-menu {
+        >.dropdown-menu.nested-menu {
             top: 0;
             left: 100%;
             margin-left: 0;
         }
 
         &.open-left {
-            .dropdown-menu.nested-menu {
+            >.dropdown-menu.nested-menu {
                 left: auto;
                 right: 100%;
                 margin-left: 0;
@@ -197,11 +240,32 @@
             display: block;
         }
     }
+}
 
-    .nav-dropdown.nested:hover {
-        .dropdown-menu.nested-menu {
-            display: block;
-        }
+@media (min-width: 1025px) and (max-width: 1380px) {
+    .topbar-container {
+        gap: 10px;
+        padding: 10px 12px;
+    }
+
+    .nav {
+        gap: 8px;
+    }
+
+    .nav-user {
+        max-width: 150px;
+        padding: 0 4px;
+        font-size: 0.9rem;
+    }
+
+    .nav-user-greeting {
+        display: none;
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+    .nav-user {
+        max-width: 115px;
     }
 }
 
@@ -238,12 +302,28 @@
     cursor: pointer;
     width: 100%;
     text-align: left;
+
+    .caret {
+        margin-left: auto;
+    }
+}
+
+.more-trigger {
+    gap: 4px;
+    padding: 8px 8px;
+
+    &.active {
+        .caret {
+            color: $white;
+        }
+    }
 }
 
 .nav-footer {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex: 0 0 auto;
 }
 
 .logout-btn {
@@ -275,9 +355,33 @@
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
+    .topbar-container {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 8px;
+    }
+
     .toggler {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
+        grid-column: 1;
+        justify-self: start;
+    }
+
+    .brand {
+        grid-column: 2;
+        justify-self: center;
+    }
+
+    .nav-footer {
+        grid-column: 3;
+        justify-self: end;
+    }
+
+    .logout-btn {
+        padding: 6px 8px;
         justify-content: center;
     }
 
@@ -307,9 +411,18 @@
     }
 
     .nav-user {
-        display: block;
+        display: flex;
         padding: 0;
         margin-bottom: 4px;
+        max-width: none;
+    }
+
+    .nav-user-greeting {
+        display: inline;
+    }
+
+    .nav-user-name {
+        white-space: normal;
     }
 
     .nav-items {
@@ -317,8 +430,11 @@
         align-items: stretch;
     }
 
-    .nav-link,
-    .logout-btn {
+    .nav-measure-wrapper {
+        display: none;
+    }
+
+    .nav-link {
         width: 100%;
         justify-content: flex-start;
     }

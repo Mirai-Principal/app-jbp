@@ -1,6 +1,10 @@
 <header class="topbar">
-    <div class="topbar-container">
-        <a class="brand" routerLink="/directorio" (click)="onNavLinkClick()">
+    <div class="topbar-container" #topbarContainer>
+        <button class="toggler" type="button" (click)="toggleMobile()" aria-label="Toggle navigation">
+            <mat-icon>menu</mat-icon>
+        </button>
+
+        <a class="brand" #brandEl routerLink="/directorio" (click)="onNavLinkClick()">
             <img src="logoApp.png" [alt]="companyName" class="brand-logo" />
             @if (entorno === 'dev') {
             <span class="dev-badge" title="Modo Desarrollo">
@@ -9,18 +13,14 @@
             }
         </a>
 
-        <button class="toggler" type="button" (click)="toggleMobile()" aria-label="Toggle navigation">
-            <mat-icon>menu</mat-icon>
-        </button>
-
-        <nav class="nav" [class.open]="mobileOpen()">
-            <div class="nav-user">
-                <span>Bienvenid@ {{ usuario }}</span>
+        <nav class="nav" #navEl [class.open]="mobileOpen()">
+            <div class="nav-user" #navUserEl [title]="'Bienvenid@ ' + usuario">
+                <span class="nav-user-greeting">Bienvenid@&nbsp;</span>
+                <span class="nav-user-name">{{ usuario }}</span>
             </div>
 
-            <div class="nav-items">
-                @for (item of menu(); track item.name) {
-                @if (isVisible(item)) {
+            <div class="nav-items" #navItemsEl>
+                @for (item of primaryItems(); track getDropdownKey(item)) {
 
                 @if (!item.children) {
                     @if (item.external) {
@@ -104,15 +104,131 @@
                 }
 
                 }
+
+                @if (!isMobile() && overflowItems().length > 0) {
+                <div class="nav-dropdown more-dropdown align-right">
+                    <button class="nav-link nav-link-button more-trigger" type="button"
+                        [class.active]="isOverflowActive()" aria-label="Más opciones">
+                        <mat-icon class="nav-icon">more_horiz</mat-icon>
+                        <span class="nav-text">Más</span>
+                        <mat-icon class="caret">expand_more</mat-icon>
+                    </button>
+
+                    <div class="dropdown-menu">
+                        @for (item of overflowItems(); track getDropdownKey(item)) {
+                            @if (!item.children) {
+                                @if (item.external) {
+                                    <a class="dropdown-item" [href]="item.url" target="_blank" [attr.download]="item.download ? '' : null" (click)="onNavLinkClick()">
+                                        <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+                                        <span class="nav-text">{{ item.name }}</span>
+                                    </a>
+                                } @else {
+                                    <a class="dropdown-item" [routerLink]="item.url" [class.active]="isActive(item.url)"
+                                        (click)="onNavLinkClick()">
+                                        <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+                                        <span class="nav-text">{{ item.name }}</span>
+                                    </a>
+                                }
+                            }
+
+                            @if (item.children) {
+                            <div class="nav-dropdown nested open-left">
+                                <button class="dropdown-item dropdown-item-button" type="button"
+                                    [class.active]="isParentActive(item)">
+                                    <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+                                    <span class="nav-text">{{ item.name }}</span>
+                                    <mat-icon class="caret">chevron_left</mat-icon>
+                                </button>
+
+                                <div class="dropdown-menu nested-menu">
+                                    @for (sub of item.children; track sub.name) {
+                                        @if (isVisible(sub)) {
+                                            @if (!sub.children) {
+                                                @if (sub.external) {
+                                                    <a class="dropdown-item" [href]="sub.url" target="_blank" [attr.download]="sub.download ? '' : null" (click)="onNavLinkClick()">
+                                                        <mat-icon class="nav-icon">{{ sub.icon }}</mat-icon>
+                                                        <span class="nav-text">{{ sub.name }}</span>
+                                                    </a>
+                                                } @else {
+                                                    <a class="dropdown-item" [routerLink]="sub.url" [class.active]="isActive(sub.url)"
+                                                        (click)="onNavLinkClick()">
+                                                        <mat-icon class="nav-icon">{{ sub.icon }}</mat-icon>
+                                                        <span class="nav-text">{{ sub.name }}</span>
+                                                    </a>
+                                                }
+                                            }
+
+                                            @if (sub.children) {
+                                            <div class="nav-dropdown nested open-left">
+                                                <button class="dropdown-item dropdown-item-button" type="button"
+                                                    [class.active]="isParentActive(sub)">
+                                                    <mat-icon class="nav-icon">{{ sub.icon }}</mat-icon>
+                                                    <span class="nav-text">{{ sub.name }}</span>
+                                                    <mat-icon class="caret">chevron_left</mat-icon>
+                                                </button>
+
+                                                <div class="dropdown-menu nested-menu">
+                                                    @for (nested of sub.children; track nested.name) {
+                                                        @if (isVisible(nested)) {
+                                                            @if (nested.external) {
+                                                                <a class="dropdown-item" [href]="nested.url" target="_blank" [attr.download]="nested.download ? '' : null" (click)="onNavLinkClick()">
+                                                                    <mat-icon class="nav-icon">{{ nested.icon }}</mat-icon>
+                                                                    <span class="nav-text">{{ nested.name }}</span>
+                                                                </a>
+                                                            } @else {
+                                                                <a class="dropdown-item" [routerLink]="nested.url" [class.active]="isActive(nested.url)"
+                                                                    (click)="onNavLinkClick()">
+                                                                    <mat-icon class="nav-icon">{{ nested.icon }}</mat-icon>
+                                                                    <span class="nav-text">{{ nested.name }}</span>
+                                                                </a>
+                                                            }
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            }
+                        }
+                    </div>
+                </div>
                 }
             </div>
 
-            <div class="nav-footer">
-                <button class="logout-btn" type="button" (click)="logout()">
-                    <mat-icon class="nav-icon">logout</mat-icon>
-                </button>
-            </div>
         </nav>
+
+        <div class="nav-footer" #navFooterEl>
+            <button class="logout-btn" type="button" (click)="logout()" title="Cerrar sesión" aria-label="Cerrar sesión">
+                <mat-icon class="nav-icon">logout</mat-icon>
+            </button>
+        </div>
+
+        <div class="nav-measure-wrapper" #measureWrapperEl aria-hidden="true">
+            @for (item of visibleMenuItems(); track getDropdownKey(item)) {
+                @if (item.children) {
+                    <button type="button" tabindex="-1" class="nav-link nav-link-button" data-measure-item>
+                        <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+                        @if (item.name) {
+                        <span class="nav-text">{{ item.name }}</span>
+                        }
+                        <mat-icon class="caret">expand_more</mat-icon>
+                    </button>
+                } @else {
+                    <span class="nav-link" data-measure-item>
+                        <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+                        <span class="nav-text">{{ item.name }}</span>
+                    </span>
+                }
+            }
+            <button type="button" tabindex="-1" class="nav-link nav-link-button more-trigger" data-measure-more>
+                <mat-icon class="nav-icon">more_horiz</mat-icon>
+                <span class="nav-text">Más</span>
+                <mat-icon class="caret">expand_more</mat-icon>
+            </button>
+        </div>
     </div>
 </header>
 
