@@ -37,6 +37,7 @@ export class NavBarMenu {
   protected readonly menu = this.menuService.menu;
   expandedItems = signal<Set<string>>(new Set());
   nestedLeftItems = signal<Set<string>>(new Set());
+  rightAlignedItems = signal<Set<string>>(new Set());
 
   // Use shared service signals
   protected readonly collapsed = this.navbarState.collapsed;
@@ -135,7 +136,11 @@ export class NavBarMenu {
 
     if (!this.isMobile()) {
       if (item.children) {
-        this.updateNestedDirection(item.name, event?.currentTarget as HTMLElement | null);
+        if (ancestors.length === 0) {
+          this.updateDropdownAlignment(this.getDropdownKey(item), event?.currentTarget as HTMLElement | null);
+        } else {
+          this.updateNestedDirection(item.name, event?.currentTarget as HTMLElement | null);
+        }
       }
       return;
     }
@@ -157,6 +162,45 @@ export class NavBarMenu {
 
   isExpanded(name: string) {
     return this.expandedItems().has(name);
+  }
+
+  getDropdownKey(item: MenuItem): string {
+    return item.name || item.icon || '';
+  }
+
+  alignsRight(key: string): boolean {
+    return this.rightAlignedItems().has(key);
+  }
+
+  onDropdownHover(key: string, event: MouseEvent) {
+    if (this.isMobile()) return;
+    this.updateDropdownAlignment(key, event.currentTarget as HTMLElement | null);
+  }
+
+  private updateDropdownAlignment(key: string, triggerElement: HTMLElement | null) {
+    if (!triggerElement || this.isMobile()) return;
+
+    const host = triggerElement.classList.contains('nav-dropdown')
+      ? triggerElement
+      : triggerElement.closest('.nav-dropdown');
+
+    if (!host) return;
+
+    const dropdown = host.querySelector(':scope > .dropdown-menu') as HTMLElement | null;
+    if (!dropdown) return;
+
+    const hostRect = host.getBoundingClientRect();
+    const menuWidth = dropdown.offsetWidth || 240;
+    const shouldAlignRight = hostRect.left + menuWidth + 8 > window.innerWidth;
+    const current = new Set(this.rightAlignedItems());
+
+    if (shouldAlignRight) {
+      current.add(key);
+    } else {
+      current.delete(key);
+    }
+
+    this.rightAlignedItems.set(current);
   }
 
   opensToLeft(name: string) {
@@ -241,6 +285,7 @@ export class NavBarMenu {
     if (wasMobile !== isNowMobile) {
       this.nestedLeftItems.set(new Set());
     }
+    this.rightAlignedItems.set(new Set());
   }
 
   // sidebar.component.ts
@@ -249,6 +294,7 @@ export class NavBarMenu {
     // si usas signals o estado global
     this.expandedItems.set(new Set());
     this.nestedLeftItems.set(new Set());
+    this.rightAlignedItems.set(new Set());
     // opcional: cerrar menú en mobile
     this.navbarState.setMobileOpen(false);
 

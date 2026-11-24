@@ -1,14 +1,10 @@
 <header class="topbar">
     <div class="topbar-container">
         <a class="brand" routerLink="/directorio" (click)="onNavLinkClick()">
-            <span class="brand-text">{{ companyName }}</span>
+            <img src="logoApp.png" [alt]="companyName" class="brand-logo" />
             @if (entorno === 'dev') {
             <span class="dev-badge" title="Modo Desarrollo">
                 <mat-icon class="dev-icon">bug_report</mat-icon> DEV
-            </span>
-            } @else if(entorno === 'servicesnube'){
-            <span class="dev-badge" title="Modo Nube">
-                <mat-icon class="dev-icon">cloud_done</mat-icon> NUBE
             </span>
             }
         </a>
@@ -42,9 +38,11 @@
                 }
 
                 @if (item.children) {
-                <div class="nav-dropdown" [class.open]="isExpanded(item.name)">
+                <div class="nav-dropdown" [class.open]="isExpanded(item.name)"
+                    [class.align-right]="alignsRight(getDropdownKey(item))"
+                    (mouseenter)="onDropdownHover(getDropdownKey(item), $event)">
                     <button class="nav-link nav-link-button" type="button" [class.active]="isParentActive(item)"
-                        (click)="toggle(item)">
+                        (click)="toggle(item, [], $event)">
                         <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
                         <span class="nav-text">{{ item.name }}</span>
                         <mat-icon class="caret">{{ isExpanded(item.name) ? 'expand_less' : 'expand_more' }}</mat-icon>
@@ -112,7 +110,6 @@
             <div class="nav-footer">
                 <button class="logout-btn" type="button" (click)="logout()">
                     <mat-icon class="nav-icon">logout</mat-icon>
-                    <span class="nav-text">Logout</span>
                 </button>
             </div>
         </nav>

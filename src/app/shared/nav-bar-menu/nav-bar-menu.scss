@@ -34,6 +34,13 @@
     gap: 8px;
     white-space: nowrap;
     flex: 0 0 auto;
+
+    .brand-logo {
+        height: 34px;
+        width: auto;
+        object-fit: contain;
+        display: block;
+    }
 }
 
 .dev-badge {
@@ -99,8 +106,8 @@
 .nav-link {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
+    gap: 1px;
+    padding: 8px 5px;
     border-radius: $border-radius;
     text-decoration: none;
     color: $gray-700;
@@ -158,6 +165,11 @@
 
     &.open>.dropdown-menu {
         display: block;
+    }
+
+    &.align-right>.dropdown-menu {
+        left: auto;
+        right: 0;
     }
 
     // Estilos para nivel anidado
