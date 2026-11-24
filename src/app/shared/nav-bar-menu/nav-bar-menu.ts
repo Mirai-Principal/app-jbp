@@ -43,14 +43,14 @@ export class NavBarMenu {
   protected readonly mobileOpen = this.navbarState.mobileOpen;
   protected readonly isMobile = this.navbarState.isMobile;
 
+  private readonly mobileBreakpoint = 1024;
+
   // ruta actual 
   currentRoute = signal(this.router.url);
 
   constructor() {
     // Initialize mobile state
-
-    // Initialize mobile state
-    this.navbarState.setIsMobile(window.innerWidth < 992);
+    this.navbarState.setIsMobile(window.innerWidth <= this.mobileBreakpoint);
 
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
@@ -224,7 +224,7 @@ export class NavBarMenu {
   @HostListener('window:resize')
   onResize() {
     const wasMobile = this.isMobile();
-    const isNowMobile = window.innerWidth < 992;
+    const isNowMobile = window.innerWidth <= this.mobileBreakpoint;
 
     this.navbarState.setIsMobile(isNowMobile);
 

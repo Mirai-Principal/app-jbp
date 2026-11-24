@@ -179,7 +179,7 @@
     }
 }
 
-@media (min-width: 993px) {
+@media (min-width: 1025px) {
     .nav-dropdown:hover {
         >.dropdown-menu {
             display: block;
@@ -262,7 +262,7 @@
 }
 
 /* RESPONSIVE */
-@media (max-width: 1400px) {
+@media (max-width: 1024px) {
     .toggler {
         display: inline-flex;
         align-items: center;
